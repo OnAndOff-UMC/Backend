@@ -18,4 +18,12 @@ public class MemoirSeparate extends BaseEntity {
     @Column(length = 500)
     private String answer;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memoir_id")
+    private Memoir memoir;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memoir_question_id")
+    private MemoirQuestion memoirQuestion;
+
 }

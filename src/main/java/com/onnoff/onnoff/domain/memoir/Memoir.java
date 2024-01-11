@@ -5,6 +5,9 @@ import com.onnoff.onnoff.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -24,5 +27,8 @@ public class Memoir extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "memoir", cascade = CascadeType.ALL)
+    private List<MemoirSeparate> memoirSeparateList = new ArrayList<>();
 
 }
