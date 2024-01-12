@@ -49,7 +49,9 @@ public class User extends BaseEntity {
     private LocalDateTime inactive_date;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
-    private Boolean receive_push_notification;
+    //@Column(columnDefinition = "BOOLEAN DEFAULT false") h2 테스트 전용
+
+    private boolean receive_push_notification;
 
     private String fcm_token;
 
