@@ -34,26 +34,26 @@ public class User extends BaseEntity {
 
     private String email;
 
-    private String field_of_work;
+    @Column(length = 30)
+    private String fieldOfWork;
 
     // private String profile_image;
-
+    @Column(length = 30)
     private String job;
 
-    private String experience_year;
+    private String experienceYear;
 
     @Column(columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private LocalDateTime inactive_date;
+    private LocalDateTime inactiveDate;
 
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     //@Column(columnDefinition = "BOOLEAN DEFAULT false") h2 테스트 전용
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean receivePushNotification;
 
-    private boolean receive_push_notification;
-
-    private String fcm_token;
+    private String fcmToken;
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
