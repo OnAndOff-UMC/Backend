@@ -1,4 +1,4 @@
-package com.onnoff.onnoff.domain.memoir;
+package com.onnoff.onnoff.domain.off.memoir.entity;
 
 import com.onnoff.onnoff.domain.common.BaseEntity;
 import jakarta.persistence.*;

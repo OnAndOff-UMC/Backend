@@ -1,33 +1,28 @@
-package com.onnoff.onnoff.domain.feed;
+package com.onnoff.onnoff.domain.off.feedImage.entity;
 
 import com.onnoff.onnoff.domain.common.BaseEntity;
 import com.onnoff.onnoff.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Feed extends BaseEntity {
+public class FeedImage extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate date;
+    @Column(nullable = false, length = 1024)
+    private String imageKey;
 
-    @Column(nullable = false, length = 30)
-    private String content;
-
-    @Column(columnDefinition = "boolean default false")
-    private Boolean checked;
+    @Column(nullable = false)
+    private Integer location;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 }
