@@ -32,6 +32,6 @@ public class Memoir extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "memoir", cascade = CascadeType.ALL)
-    private List<MemoirSeparate> memoirSeparateList = new ArrayList<>();
+    private List<MemoirAnswer> memoirAnswerList = new ArrayList<>();
 
 }
