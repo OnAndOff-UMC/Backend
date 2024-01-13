@@ -20,7 +20,7 @@ public class Feed extends BaseEntity {
 
     private LocalDate date;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 30)
     private String content;
 
     @Column(columnDefinition = "boolean default false")
