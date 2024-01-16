@@ -1,6 +1,8 @@
 package com.onnoff.onnoff.domain.user;
 
 import com.onnoff.onnoff.domain.common.BaseEntity;
+import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
+import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
 import com.onnoff.onnoff.domain.user.enums.Status;
 import jakarta.persistence.*;
@@ -12,6 +14,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -67,9 +70,9 @@ public class User extends BaseEntity {
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //    private List<FeedImage> feedImageList = new ArrayList<>();
 //
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // OFF 관련 엔티티는 클래스명 확정 나면 수정해야 할 수도
-//    private List<Resolution> ResolutionList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<Worklog> WorklogList = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Resolution> resolutionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Worklog> worklogList = new ArrayList<>();
 }
