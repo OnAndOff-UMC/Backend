@@ -39,7 +39,7 @@ public class MemoirServiceImpl implements MemoirService {
     @Override
     @Transactional
     public Memoir writeMemoir(MemoirRequestDTO.WriteDTO request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(()  -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         if (memoirRepository.findByUserAndDate(user, request.getDate()).isPresent()) {
             throw new GeneralException(ErrorStatus.MEMOIR_EXIST);
         }
@@ -49,7 +49,7 @@ public class MemoirServiceImpl implements MemoirService {
         List<MemoirAnswer> newMemoirAnswerList = request.getMemoirAnswerList().stream()
                 .map(memoirAnswer -> MemoirAnswer.builder()
                         .answer(memoirAnswer.getAnswer())
-                        .memoirQuestion(memoirQuestionRepository.findById(memoirAnswer.getQuestionId()).orElseThrow(()  -> new GeneralException(ErrorStatus.QUESTION_NOT_FOUND)))
+                        .memoirQuestion(memoirQuestionRepository.findById(memoirAnswer.getQuestionId()).orElseThrow(() -> new GeneralException(ErrorStatus.QUESTION_NOT_FOUND)))
                         .memoir(newMemoir)
                         .build())
                 .collect(Collectors.toList());
@@ -65,5 +65,24 @@ public class MemoirServiceImpl implements MemoirService {
     public Memoir getMemoir(Long userId, LocalDate date) {
         User user = userRepository.findById(userId).orElseThrow(()  -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         return memoirRepository.findByUserAndDate(user, date).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public Memoir updateMemoir(MemoirRequestDTO.UpdateDTO request) {
+        Memoir memoir = memoirRepository.findById(request.getMemoirId()).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
+
+        memoir.setIcon(request.getIcon());
+        memoir.setBookmarked(request.getBookmarked());
+
+        for (MemoirRequestDTO.UpdateAnswerDTO memoirAnswer: request.getMemoirAnswerList()) {
+            MemoirAnswer findMemoirAnswer = memoirAnswerRepository.findById(memoirAnswer.getAnswerId()).orElseThrow(() -> new GeneralException(ErrorStatus.ANSWER_NOT_FOUND));
+            if (findMemoirAnswer.getMemoir() != memoir) {
+                throw new GeneralException(ErrorStatus.ANSWER_BAD_MATCH);
+            }
+            findMemoirAnswer.setAnswer(memoirAnswer.getAnswer());
+        }
+
+        return memoirRepository.save(memoir);
     }
 }

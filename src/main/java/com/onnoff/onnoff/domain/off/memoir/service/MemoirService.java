@@ -15,4 +15,7 @@ public interface MemoirService {
     Memoir writeMemoir(MemoirRequestDTO.WriteDTO request);
 
     Memoir getMemoir(Long userId, LocalDate date);
+
+    @Transactional
+    Memoir updateMemoir(MemoirRequestDTO.UpdateDTO request);
 }

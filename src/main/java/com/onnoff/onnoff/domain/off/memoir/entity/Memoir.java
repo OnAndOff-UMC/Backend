@@ -36,6 +36,14 @@ public class Memoir extends BaseEntity {
     @OneToMany(mappedBy = "memoir", cascade = CascadeType.ALL)
     private List<MemoirAnswer> memoirAnswerList = new ArrayList<>();
 
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public void setBookmarked(Boolean bookmarked) {
+        this.bookmarked = bookmarked;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }

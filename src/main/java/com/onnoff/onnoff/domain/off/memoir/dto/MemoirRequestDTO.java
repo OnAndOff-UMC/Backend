@@ -28,4 +28,24 @@ public class MemoirRequestDTO {
         @Size(max = 500)
         String answer;
     }
+
+    @Getter
+    public static class UpdateDTO {
+        @NotNull
+        Long memoirId;
+        @Size(max = 255)
+        String icon;
+        @NotNull
+        Boolean bookmarked;
+        @NotEmpty
+        List<@Valid UpdateAnswerDTO> memoirAnswerList;
+    }
+
+    @Getter
+    public static class UpdateAnswerDTO {
+        @NotNull
+        Long answerId;
+        @Size(max = 500)
+        String answer;
+    }
 }

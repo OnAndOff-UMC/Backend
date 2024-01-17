@@ -45,4 +45,11 @@ public class MemoirController {
         }
         return ApiResponse.onSuccess(MemoirConverter.toResultDTO(memoir));
     }
+
+    @PatchMapping("/memoirs")
+    @Operation(summary = "회고 수정 API",description = "기존의 회고를 수정하는 API입니다.")
+    public ApiResponse<MemoirResponseDTO.ResultDTO> updateMemoir(@RequestBody @Valid MemoirRequestDTO.UpdateDTO request){
+        Memoir memoir = memoirService.updateMemoir(request);
+        return ApiResponse.onSuccess(MemoirConverter.toResultDTO(memoir));
+    }
 }
