@@ -1,15 +1,18 @@
 package com.onnoff.onnoff.domain.off.memoir.controller;
 
 import com.onnoff.onnoff.apiPayload.ApiResponse;
+import com.onnoff.onnoff.domain.off.memoir.converter.MemoirConverter;
 import com.onnoff.onnoff.domain.off.memoir.converter.MemoirQuestionConverter;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirQuestionResponseDTO;
+import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
+import com.onnoff.onnoff.domain.off.memoir.dto.MemoirResponseDTO;
+import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
 import com.onnoff.onnoff.domain.off.memoir.service.MemoirService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +27,12 @@ public class MemoirController {
     public ApiResponse<List<MemoirQuestionResponseDTO.GetResultDTO>> getMemoirQuestion(@RequestParam(name = "userId") Long userId){
         List<MemoirQuestion> memoirQuestionList = memoirService.getMemoirQuestion(userId);
         return ApiResponse.onSuccess(MemoirQuestionConverter.toGetResultDTO(memoirQuestionList));
+    }
+
+    @PostMapping("/memoirs")
+    @Operation(summary = "회고 작성 API",description = "새로운 회고를 작성하는 API입니다.")
+    public ApiResponse<MemoirResponseDTO.ResultDTO> writeMemoir(@RequestBody @Valid MemoirRequestDTO.WriteDTO request){
+        Memoir memoir = memoirService.writeMemoir(request);
+        return ApiResponse.onSuccess(MemoirConverter.toResultDTO(memoir));
     }
 }
