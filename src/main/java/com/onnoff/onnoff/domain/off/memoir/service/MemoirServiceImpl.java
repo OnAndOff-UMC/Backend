@@ -39,6 +39,11 @@ public class MemoirServiceImpl implements MemoirService {
     @Override
     @Transactional
     public Memoir writeMemoir(MemoirRequestDTO.WriteDTO request) {
+        User user = userRepository.findById(request.getUserId()).orElseThrow(()  -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        if (memoirRepository.findByUserAndDate(user, request.getDate()).isPresent()) {
+            throw new GeneralException(ErrorStatus.MEMOIR_EXIST);
+        }
+
         Memoir newMemoir = MemoirConverter.toMemoir(request);
 
         List<MemoirAnswer> newMemoirAnswerList = request.getMemoirAnswerList().stream()
@@ -49,7 +54,7 @@ public class MemoirServiceImpl implements MemoirService {
                         .build())
                 .collect(Collectors.toList());
 
-        newMemoir.setUser(userRepository.findById(request.getUserId()).orElseThrow(()  -> new GeneralException(ErrorStatus.USER_NOT_FOUND)));
+        newMemoir.setUser(user);
         newMemoir.setMemoirAnswerList(newMemoirAnswerList);
 
         return memoirRepository.save(newMemoir);

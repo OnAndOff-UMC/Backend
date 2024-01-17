@@ -19,7 +19,10 @@ public enum ErrorStatus implements BaseErrorCode {
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자가 없습니다."),
 
     // 회고 질문 관련 에러
-    QUESTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "QUESTION4001", "해당하는 회고 질문이 없습니다.");
+    QUESTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "QUESTION4001", "해당하는 회고 질문이 없습니다."),
+
+    // 회고 관련 에러
+    MEMOIR_EXIST(HttpStatus.BAD_REQUEST, "MEMOIR4001", "이미 해당 날짜에 작성된 회고가 있습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
