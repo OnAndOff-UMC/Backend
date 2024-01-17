@@ -5,6 +5,7 @@ import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface MemoirService {
@@ -12,4 +13,6 @@ public interface MemoirService {
 
     @Transactional
     Memoir writeMemoir(MemoirRequestDTO.WriteDTO request);
+
+    Memoir getMemoir(Long userId, LocalDate date);
 }

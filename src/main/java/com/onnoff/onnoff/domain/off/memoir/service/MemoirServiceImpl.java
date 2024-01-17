@@ -10,11 +10,13 @@ import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirAnswerRepository;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirQuestionRepository;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirRepository;
+import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,5 +53,12 @@ public class MemoirServiceImpl implements MemoirService {
         newMemoir.setMemoirAnswerList(newMemoirAnswerList);
 
         return memoirRepository.save(newMemoir);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Memoir getMemoir(Long userId, LocalDate date) {
+        User user = userRepository.findById(userId).orElseThrow(()  -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        return memoirRepository.findByUserAndDate(user, date).orElse(null);
     }
 }
