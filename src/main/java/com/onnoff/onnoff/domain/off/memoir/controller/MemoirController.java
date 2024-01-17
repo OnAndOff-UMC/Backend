@@ -2,8 +2,6 @@ package com.onnoff.onnoff.domain.off.memoir.controller;
 
 import com.onnoff.onnoff.apiPayload.ApiResponse;
 import com.onnoff.onnoff.domain.off.memoir.converter.MemoirConverter;
-import com.onnoff.onnoff.domain.off.memoir.converter.MemoirQuestionConverter;
-import com.onnoff.onnoff.domain.off.memoir.dto.MemoirQuestionResponseDTO;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirResponseDTO;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
@@ -24,9 +22,9 @@ public class MemoirController {
 
     @GetMapping("/memoir-questions")
     @Operation(summary = "회고 질문 조회 API",description = "회고 질문 목록을 조회하는 API입니다. Query String으로 사용자 아이디를 입력해 주세요.")
-    public ApiResponse<List<MemoirQuestionResponseDTO.GetResultDTO>> getMemoirQuestion(@RequestParam(name = "userId") Long userId){
+    public ApiResponse<List<MemoirResponseDTO.GetQuestionResultDTO>> getMemoirQuestion(@RequestParam(name = "userId") Long userId){
         List<MemoirQuestion> memoirQuestionList = memoirService.getMemoirQuestion(userId);
-        return ApiResponse.onSuccess(MemoirQuestionConverter.toGetResultDTO(memoirQuestionList));
+        return ApiResponse.onSuccess(MemoirConverter.toGetQuestionResultDTOList(memoirQuestionList));
     }
 
     @PostMapping("/memoirs")

@@ -14,11 +14,33 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class GetQuestionResultDTO{
+        Long questionId;
+        String question;
+        String summary;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ResultDTO {
         Long memoirId;
         LocalDate date;
         String icon;
         Boolean bookmarked;
-        List<MemoirAnswerResponseDTO.ResultDTO> memoirAnswerList;
+        List<AnswerResultDTO> memoirAnswerList;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AnswerResultDTO{
+        Long answerId;
+        String question;
+        String summary;
+        String answer;
+    }
+
 }

@@ -18,6 +18,14 @@ public class MemoirRequestDTO {
         @Size(max = 255)
         String icon;
         @NotEmpty
-        List<MemoirAnswerRequestDTO.@Valid WriteDTO> memoirAnswerList;
+        List<@Valid WriteAnswerDTO> memoirAnswerList;
+    }
+
+    @Getter
+    public static class WriteAnswerDTO {
+        @NotNull
+        Long questionId;
+        @Size(max = 500)
+        String answer;
     }
 }
