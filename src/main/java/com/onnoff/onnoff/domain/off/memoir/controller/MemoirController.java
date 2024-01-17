@@ -1,9 +1,28 @@
 package com.onnoff.onnoff.domain.off.memoir.controller;
 
+import com.onnoff.onnoff.apiPayload.ApiResponse;
+import com.onnoff.onnoff.domain.off.memoir.converter.MemoirQuestionConverter;
+import com.onnoff.onnoff.domain.off.memoir.dto.MemoirQuestionResponseDTO;
+import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
+import com.onnoff.onnoff.domain.off.memoir.service.MemoirService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.util.List;
+
+@RestController
 @RequiredArgsConstructor
 public class MemoirController {
+
+    private final MemoirService memoirService;
+
+    @GetMapping("/memoir-questions")
+    @Operation(summary = "회고 질문 조회 API",description = "회고 질문 목록을 조회하는 API입니다. Query String으로 사용자 아이디를 입력해 주세요.")
+    public ApiResponse<List<MemoirQuestionResponseDTO.GetResultDTO>> getMemoirQuestion(@RequestParam(name = "userId") Long userId){
+        List<MemoirQuestion> memoirQuestionList = memoirService.getMemoirQuestion(userId);
+        return ApiResponse.onSuccess(MemoirQuestionConverter.toGetResultDTO(memoirQuestionList));
+    }
 }
