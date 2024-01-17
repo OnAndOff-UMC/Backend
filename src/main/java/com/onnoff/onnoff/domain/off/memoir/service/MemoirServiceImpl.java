@@ -85,4 +85,12 @@ public class MemoirServiceImpl implements MemoirService {
 
         return memoirRepository.save(memoir);
     }
+
+    @Override
+    @Transactional
+    public Memoir deleteMemoir(Long memoirId) {
+        Memoir memoir = memoirRepository.findById(memoirId).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
+        memoirRepository.delete(memoir);
+        return memoir;
+    }
 }

@@ -18,4 +18,7 @@ public interface MemoirService {
 
     @Transactional
     Memoir updateMemoir(MemoirRequestDTO.UpdateDTO request);
+
+    @Transactional
+    Memoir deleteMemoir(Long memoirId);
 }
