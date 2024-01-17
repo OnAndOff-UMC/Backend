@@ -14,7 +14,7 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class GetQuestionResultDTO{
+    public static class QuestionResultDTO{
         Long questionId;
         String question;
         String summary;

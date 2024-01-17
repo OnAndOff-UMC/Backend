@@ -23,9 +23,9 @@ public class MemoirController {
 
     @GetMapping("/memoir-questions")
     @Operation(summary = "회고 질문 조회 API",description = "회고 질문 목록을 조회하는 API입니다. Query String으로 사용자 아이디를 입력해 주세요.")
-    public ApiResponse<List<MemoirResponseDTO.GetQuestionResultDTO>> getMemoirQuestion(@RequestParam(name = "userId") Long userId){
+    public ApiResponse<List<MemoirResponseDTO.QuestionResultDTO>> getMemoirQuestion(@RequestParam(name = "userId") Long userId){
         List<MemoirQuestion> memoirQuestionList = memoirService.getMemoirQuestion(userId);
-        return ApiResponse.onSuccess(MemoirConverter.toGetQuestionResultDTOList(memoirQuestionList));
+        return ApiResponse.onSuccess(MemoirConverter.toQuestionResultDTOList(memoirQuestionList));
     }
 
     @PostMapping("/memoirs")

@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 public class MemoirConverter {
 
-    public static List<MemoirResponseDTO.GetQuestionResultDTO> toGetQuestionResultDTOList(List<MemoirQuestion> memoirQuestionList) {
+    public static List<MemoirResponseDTO.QuestionResultDTO> toQuestionResultDTOList(List<MemoirQuestion> memoirQuestionList) {
         return memoirQuestionList.stream()
-                .map(x -> MemoirResponseDTO.GetQuestionResultDTO.builder()
+                .map(x -> MemoirResponseDTO.QuestionResultDTO.builder()
                         .questionId(x.getId())
                         .question(x.getQuestion())
                         .summary(x.getSummary())
