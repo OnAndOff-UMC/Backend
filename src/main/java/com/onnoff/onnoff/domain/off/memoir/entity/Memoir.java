@@ -25,7 +25,7 @@ public class Memoir extends BaseEntity {
     private String icon;
 
     @Column(columnDefinition = "boolean default false")
-    private Boolean bookmarked;
+    private Boolean isBookmarked;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -34,4 +34,19 @@ public class Memoir extends BaseEntity {
     @OneToMany(mappedBy = "memoir", cascade = CascadeType.ALL)
     private List<MemoirAnswer> memoirAnswerList = new ArrayList<>();
 
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public void setIsBookmarked(Boolean isBookmarked) {
+        this.isBookmarked = isBookmarked;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setMemoirAnswerList(List<MemoirAnswer> memoirAnswerList) {
+        this.memoirAnswerList = memoirAnswerList;
+    }
 }

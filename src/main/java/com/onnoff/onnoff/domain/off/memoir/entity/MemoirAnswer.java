@@ -26,4 +26,7 @@ public class MemoirAnswer extends BaseEntity {
     @JoinColumn(name = "memoir_question_id")
     private MemoirQuestion memoirQuestion;
 
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
 }
