@@ -21,7 +21,7 @@ public class Resolution extends BaseEntity {
 
     @Column(length = 30)
     private String content;
-
+    @Column(name = "order_num")
     private Integer order;
 
     @ManyToOne(fetch = FetchType.LAZY)

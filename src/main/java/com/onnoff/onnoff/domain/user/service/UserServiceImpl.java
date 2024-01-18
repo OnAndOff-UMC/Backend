@@ -28,4 +28,8 @@ public class UserServiceImpl implements UserService{
         );
         return user;
     }
+    @Override
+    public boolean isExistByOauthId(Long oauthId) {
+        return userRepository.findById(oauthId).isPresent();
+    }
 }
