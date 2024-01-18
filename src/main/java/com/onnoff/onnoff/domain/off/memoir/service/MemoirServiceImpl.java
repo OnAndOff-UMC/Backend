@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,10 +73,17 @@ public class MemoirServiceImpl implements MemoirService {
     public Memoir updateMemoir(MemoirRequestDTO.UpdateDTO request) {
         Memoir memoir = memoirRepository.findById(request.getMemoirId()).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
 
-        memoir.setIcon(request.getIcon());
-        memoir.setIsBookmarked(request.getIsBookmarked());
+        if (request.getIcon() != null) {
+            memoir.setIcon(request.getIcon());
+        }
 
-        for (MemoirRequestDTO.UpdateAnswerDTO memoirAnswer: request.getMemoirAnswerList()) {
+        if (request.getIsBookmarked() != null) {
+            memoir.setIsBookmarked(request.getIsBookmarked());
+        }
+
+        List<MemoirRequestDTO.UpdateAnswerDTO> requestMemoirAnswerList = request.getMemoirAnswerList() == null ? new ArrayList<>() : request.getMemoirAnswerList();
+
+        for (MemoirRequestDTO.UpdateAnswerDTO memoirAnswer: requestMemoirAnswerList) {
             MemoirAnswer findMemoirAnswer = memoirAnswerRepository.findById(memoirAnswer.getAnswerId()).orElseThrow(() -> new GeneralException(ErrorStatus.ANSWER_NOT_FOUND));
             if (findMemoirAnswer.getMemoir() != memoir) {
                 throw new GeneralException(ErrorStatus.ANSWER_BAD_MATCH);

@@ -35,9 +35,7 @@ public class MemoirRequestDTO {
         Long memoirId;
         @Size(max = 255)
         String icon;
-        @NotNull
         Boolean isBookmarked;
-        @NotEmpty
         List<@Valid UpdateAnswerDTO> memoirAnswerList;
     }
 
