@@ -4,7 +4,6 @@ import com.onnoff.onnoff.domain.common.BaseEntity;
 import com.onnoff.onnoff.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import java.util.List;
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 public class Memoir extends BaseEntity {
 
