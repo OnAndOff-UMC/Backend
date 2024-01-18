@@ -25,7 +25,7 @@ public class MemoirConverter {
         return Memoir.builder()
                 .date(request.getDate())
                 .icon(request.getIcon())
-                .bookmarked(false)
+                .isBookmarked(false)
                 .build();
     }
 
@@ -34,7 +34,7 @@ public class MemoirConverter {
                 .memoirId(memoir.getId())
                 .date(memoir.getDate())
                 .icon(memoir.getIcon())
-                .bookmarked(memoir.getBookmarked())
+                .isBookmarked(memoir.getIsBookmarked())
                 .memoirAnswerList(toAnswerResultDTOList(memoir.getMemoirAnswerList()))
                 .build();
     }

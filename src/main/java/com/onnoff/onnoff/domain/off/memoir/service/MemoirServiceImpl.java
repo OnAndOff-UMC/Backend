@@ -73,7 +73,7 @@ public class MemoirServiceImpl implements MemoirService {
         Memoir memoir = memoirRepository.findById(request.getMemoirId()).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
 
         memoir.setIcon(request.getIcon());
-        memoir.setBookmarked(request.getBookmarked());
+        memoir.setIsBookmarked(request.getIsBookmarked());
 
         for (MemoirRequestDTO.UpdateAnswerDTO memoirAnswer: request.getMemoirAnswerList()) {
             MemoirAnswer findMemoirAnswer = memoirAnswerRepository.findById(memoirAnswer.getAnswerId()).orElseThrow(() -> new GeneralException(ErrorStatus.ANSWER_NOT_FOUND));

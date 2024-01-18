@@ -28,7 +28,7 @@ public class MemoirResponseDTO {
         Long memoirId;
         LocalDate date;
         String icon;
-        Boolean bookmarked;
+        Boolean isBookmarked;
         List<AnswerResultDTO> memoirAnswerList;
     }
 

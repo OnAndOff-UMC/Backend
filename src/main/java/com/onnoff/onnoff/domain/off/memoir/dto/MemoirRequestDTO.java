@@ -36,7 +36,7 @@ public class MemoirRequestDTO {
         @Size(max = 255)
         String icon;
         @NotNull
-        Boolean bookmarked;
+        Boolean isBookmarked;
         @NotEmpty
         List<@Valid UpdateAnswerDTO> memoirAnswerList;
     }
