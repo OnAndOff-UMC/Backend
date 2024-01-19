@@ -3,12 +3,14 @@ package com.onnoff.onnoff.auth.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.onnoff.onnoff.apiPayload.ApiResponse;
-import com.onnoff.onnoff.auth.client.dto.KakaoOauth2DTO;
-import com.onnoff.onnoff.auth.dto.LoginResponseDTO;
+import com.onnoff.onnoff.apiPayload.code.BaseCode;
+import com.onnoff.onnoff.apiPayload.code.status.SuccessStatus;
+import com.onnoff.onnoff.auth.feignClient.dto.KakaoOauth2DTO;
 import com.onnoff.onnoff.auth.service.LoginService;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.converter.UserConverter;
 import com.onnoff.onnoff.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -42,32 +44,34 @@ public class LoginController {
      */
     @GetMapping("/oauth2/login/kakao")
     public ResponseEntity<String> getAccessToken(@RequestParam(name = "code") String code){
-        log.info("code = {}", code);
-        loginService.getAccessToken(code);
-        return ResponseEntity.ok("토큰 get");
+        String accessToken = loginService.getAccessToken(code);
+        return ResponseEntity.ok("http://localhost:8080/oauth2/kakao/token/validate?accessToken="+accessToken);
     }
     /*
     1. 토큰 유효성 검증
     2. 사용자 정보 얻어오기
-    3. DB조회 및 추가
+    3. DB 조회 및 추가
      */
     // 나중에 accessToken RequestBody로 받도록 수정
+
+    @Operation(summary = "토큰 검증 API",description = "토큰을 검증 하고 이에 대한 결과를 응답합니다. 추가 정보 입력 여부도 같이 응답합니다.")
     @GetMapping("/oauth2/kakao/token/validate")
-    public ApiResponse<Object> validateToken(@RequestParam String accessToken) throws JsonProcessingException {
+    public ApiResponse<Object> validateToken(@RequestParam(name = "accessToken") String accessToken) throws JsonProcessingException {
         accessToken = "Bearer " + accessToken;
         // 토큰 검증
         loginService.validate(accessToken);
         // ok -> 유저 정보 가져오기, error -> 에러 응답 코드 반환
         KakaoOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = loginService.getUserInfo(accessToken);
-        // 유저 정보에 DB 조회하고 정보 있으면 응답만, 없으면 저장까지 이 두 경우의 성공 응답코드 다르게
+        // 유저 정보에 DB 조회하고 정보 있으면 응답만, 없으면 저장까지, 추가정보 입력 여부에 따라서 응답 다르게
         Long oauthId = userInfoResponseDTO.getId();
         if( userService.isExistByOauthId(oauthId)){
-            return ApiResponse.onSuccess(new Object()); //응답 DTO 만들어야함
+            User user = userService.getUserByOauthId(oauthId);
+            return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(user));
         }
         else{
             User user = UserConverter.toUser(userInfoResponseDTO);
             userService.create(user);
+            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, UserConverter.toLoginDTO(user));
         }
-        return null;
     }
 }

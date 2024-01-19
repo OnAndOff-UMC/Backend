@@ -3,10 +3,9 @@ package com.onnoff.onnoff.auth.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.onnoff.onnoff.apiPayload.ApiResponse;
-import com.onnoff.onnoff.auth.client.KakaoApiClient;
-import com.onnoff.onnoff.auth.client.KakaoOauth2Client;
-import com.onnoff.onnoff.auth.client.dto.KakaoOauth2DTO;
+import com.onnoff.onnoff.auth.feignClient.client.KakaoApiClient;
+import com.onnoff.onnoff.auth.feignClient.client.KakaoOauth2Client;
+import com.onnoff.onnoff.auth.feignClient.dto.KakaoOauth2DTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,24 +24,21 @@ public class LoginService {
     /*
         테스트 용으로 만든거, 실제로는 프론트에서 처리해서 액세스 토큰만 가져다 줌
     */
-    public void getAccessToken(String code){
+    public String getAccessToken(String code){
         KakaoOauth2DTO.TokenResponseDTO tokenResponseDTO = kakaoOauth2Client.getAccessToken("authorization_code",
                 "32c0787d1b1e9fcabcc24af247903ba8",
                 "http://localhost:8080/oauth2/login/kakao",
                 code);
-        log.info("token = {}", tokenResponseDTO.getAccessToken());
+        return tokenResponseDTO.getAccessToken();
     }
     /*
         토큰 유효성 검증, 유효하지 않으면 예외를 뱉도록, 아직 예외 처리는 구현 안됨
      */
     public ResponseEntity<String> validate(String accessToken){
-        try{
-            KakaoOauth2DTO.TokenValidateResponseDTO responseDTO = kakaoApiClient.getTokenValidate(accessToken);
-            log.info("validate response = {}", responseDTO);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+
+        KakaoOauth2DTO.TokenValidateResponseDTO responseDTO = kakaoApiClient.getTokenValidate(accessToken);
+        log.info("validate response = {}", responseDTO);
+
         return null;
     }
 
