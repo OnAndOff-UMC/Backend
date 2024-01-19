@@ -19,12 +19,6 @@ public class ResolutionConverter {
                .build();
     }
 
-    public static Resolution toModifyResolution(ResolutionRequest.ResolutionDTO request){
-        return Resolution.builder()
-                .content(request.getContent())
-                .order(request.getOrder())
-                .build();
-    }
 
     //entity to response
     public static ResolutionResponse.AddResultDTO toAddResolutionResultDTO(Resolution resolution){
