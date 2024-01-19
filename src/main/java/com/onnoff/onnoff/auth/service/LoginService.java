@@ -32,20 +32,15 @@ public class LoginService {
         return tokenResponseDTO.getAccessToken();
     }
     /*
-        토큰 유효성 검증, 유효하지 않으면 예외를 뱉도록, 아직 예외 처리는 구현 안됨
+        토큰 유효성 검증, 유효하지 않으면 예외를 발생시키도록 처리, 예외는 CustomErrorDecoder에서 처리
      */
-    public ResponseEntity<String> validate(String accessToken){
-
+    public void validate(String accessToken){
         KakaoOauth2DTO.TokenValidateResponseDTO responseDTO = kakaoApiClient.getTokenValidate(accessToken);
-        log.info("validate response = {}", responseDTO);
-
-        return null;
     }
 
      /*
         토큰으로 유저정보를 가져오는 메서드
      */
-
     public KakaoOauth2DTO.UserInfoResponseDTO getUserInfo(String accessToken) throws JsonProcessingException {
         String emailProperty = "kakao_account.email";
         String nameProperty = "kakao_account.name";
@@ -55,7 +50,6 @@ public class LoginService {
         ObjectMapper objectMapper = new ObjectMapper();
         String propertyKeys = objectMapper.writeValueAsString(propertyKeysList);
         KakaoOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = kakaoApiClient.getUserInfo(accessToken, propertyKeys);
-        log.info("userInfoResponseDTO = {}", userInfoResponseDTO);
         return userInfoResponseDTO;
     }
 }
