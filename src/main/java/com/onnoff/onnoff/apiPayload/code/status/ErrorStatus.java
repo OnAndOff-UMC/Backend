@@ -17,7 +17,11 @@ public enum ErrorStatus implements BaseErrorCode {
 
 
     // 멤버 관려 에러
-    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자가 없습니다.");
+    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자가 없습니다."),
+
+    // 오늘의 다짐 관련 에러
+    RESOLUTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "RESOLUTION4001", "오늘의 다짐이 없습니다.")
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;
