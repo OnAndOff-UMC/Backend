@@ -51,6 +51,7 @@ public class LoginController {
     1. 토큰 유효성 검증
     2. 사용자 정보 얻어오기
     3. DB 조회 및 추가
+    4. 응답 헤더에 Jwt 토큰 추가
      */
     // 나중에 accessToken RequestBody로 받도록 수정
 
@@ -66,7 +67,11 @@ public class LoginController {
         Long oauthId = userInfoResponseDTO.getId();
         if( userService.isExistByOauthId(oauthId)){
             User user = userService.getUserByOauthId(oauthId);
-            return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(user));
+            if(user.isInfoSet()){
+                return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(user));
+            }
+            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, UserConverter.toLoginDTO(user));
+
         }
         else{
             User user = UserConverter.toUser(userInfoResponseDTO);
