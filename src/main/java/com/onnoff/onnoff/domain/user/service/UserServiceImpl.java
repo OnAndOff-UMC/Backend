@@ -1,5 +1,7 @@
 package com.onnoff.onnoff.domain.user.service;
 
+import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
+import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +26,20 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUser(Long id) {
         User user = userRepository.findById(id).orElseThrow( () ->
-                new IllegalArgumentException("유저가 존재하지 않습니다.")
+                new GeneralException(ErrorStatus.USER_NOT_FOUND)
         );
         return user;
     }
     @Override
     public boolean isExistByOauthId(Long oauthId) {
         return userRepository.findById(oauthId).isPresent();
+    }
+
+    @Override
+    public User getUserByOauthId(Long oauthId) {
+        User user = userRepository.findByOauthId(oauthId).orElseThrow( () ->
+                new GeneralException(ErrorStatus.USER_NOT_FOUND)
+        );
+        return user;
     }
 }

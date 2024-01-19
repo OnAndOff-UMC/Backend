@@ -12,4 +12,6 @@ public interface UserService {
     public User getUser(Long id);
 
     public boolean isExistByOauthId(Long oauthId);
+
+    public User getUserByOauthId(Long oauthId);
 }
