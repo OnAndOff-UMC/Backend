@@ -1,16 +1,15 @@
-package com.onnoff.onnoff.auth.client;
+package com.onnoff.onnoff.auth.feignClient.client;
 
-import com.onnoff.onnoff.auth.client.dto.KakaoOauth2DTO;
+import com.onnoff.onnoff.auth.feignClient.config.FeignConfig;
+import com.onnoff.onnoff.auth.feignClient.dto.KakaoOauth2DTO;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /*
  토큰 유효성 검증하고 사용자 정보 가져오는 client
  */
-@FeignClient(name = "kakao-api-client", url = "https://kapi.kakao.com")
+@FeignClient(name = "kakao-api-client", url = "https://kapi.kakao.com", configuration = FeignConfig.class)
 public interface KakaoApiClient {
     @GetMapping("v1/user/access_token_info")
     KakaoOauth2DTO.TokenValidateResponseDTO getTokenValidate(@RequestHeader("Authorization") String accessToken);
