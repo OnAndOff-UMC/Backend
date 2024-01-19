@@ -27,7 +27,8 @@ public class ResolutionController {
     }
 
     @PostMapping("/")
-    public ApiResponse<ResolutionResponse.AddResultDTO> addResolution(@RequestParam(name = "userId") Long userId, @RequestParam(name = "date") LocalDate date,
+    public ApiResponse<ResolutionResponse.AddResultDTO> addResolution(@RequestParam(name = "userId") Long userId,
+                                                                      @RequestParam(name = "date") LocalDate date,
                                                                       @RequestBody @Valid ResolutionRequest.AddResolutionDTO request){
         Resolution resolution = resolutionService.addResolution(userId, date, request);
         return ApiResponse.onSuccess(ResolutionConverter.toAddResolutionResultDTO(resolution));
@@ -35,7 +36,8 @@ public class ResolutionController {
 
     @PostMapping("/modify")
     public ApiResponse<ResolutionResponse.ResolutionViewDTO> modifyResolution(@RequestParam(name = "userId") Long userId,
-                                                                              @RequestParam(name = "date") LocalDate date, @RequestBody @Valid List<ResolutionRequest.ResolutionDTO> requestList){
+                                                                              @RequestParam(name = "date") LocalDate date,
+                                                                              @RequestBody List< ResolutionRequest.@Valid ResolutionDTO> requestList){
         resolutionService.modifyResolution(userId, date, requestList);
         return ApiResponse.onSuccess(null);
     }
