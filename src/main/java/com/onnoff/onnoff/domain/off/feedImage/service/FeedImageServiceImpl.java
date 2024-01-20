@@ -46,6 +46,10 @@ public class FeedImageServiceImpl implements FeedImageService {
             throw new GeneralException(ErrorStatus.FEED_IMAGE_EXIST);
         }
 
+        if (location < 1 | location > 9) {
+            throw new GeneralException(ErrorStatus.FEED_IMAGE_LOCATION_INVALID);
+        }
+
         FeedImage feedImage = FeedImage.builder()
                 .user(user)
                 .location(location)
