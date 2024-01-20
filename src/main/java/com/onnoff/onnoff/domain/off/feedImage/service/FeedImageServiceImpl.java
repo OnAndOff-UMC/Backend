@@ -79,6 +79,17 @@ public class FeedImageServiceImpl implements FeedImageService {
         return FeedImageConverter.toResultDTO(feedImage, amazonS3Client.getUrl(bucket, feedImage.getImageKey()).toString());
     }
 
+    @Override
+    @Transactional
+    public Long deleteFeedImage(Long feedImageId) {
+        FeedImage feedImage = feedImageRepository.findById(feedImageId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_IMAGE_NOT_FOUND));
+
+        deleteImage(feedImage.getImageKey());
+        feedImageRepository.delete(feedImage);
+
+        return feedImage.getId();
+    }
+
     public String uploadImage(MultipartFile multipartFile) {
         String fileName = createFileName(multipartFile.getOriginalFilename());
 
