@@ -83,6 +83,15 @@ public class JwtUtil {
                         // 지정된 서명 알고리즘과 비밀 키를 사용하여 토큰을 서명한다.
                         .signWith(secretkey, SignatureAlgorithm.HS256)
                         .compact();
+    }
 
+    // 토큰에서 유저 id를추출한다.
+    public String getUserId(String token) {
+        return Jwts.parser()
+                .verifyWith(secretkey)
+                .build() // 비밀키를 설정하여 파서를 빌드.
+                .parseSignedClaims(token)// 주어진 토큰을 파싱하여 Claims 객체를 얻는다.
+                .getPayload()
+                .getSubject();
     }
 }
