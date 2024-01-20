@@ -9,11 +9,11 @@ import java.util.List;
 public interface FeedImageService {
 
     @Transactional
-    FeedImageResponseDTO.ResultDTO uploadFeedImage(Long userId, Integer location, MultipartFile multipartFile);
+    FeedImageResponseDTO.FeedImageResultDTO uploadFeedImage(Long userId, Integer location, MultipartFile multipartFile);
 
-    List<FeedImageResponseDTO.ResultDTO> getFeedImage(Long userId);
+    List<FeedImageResponseDTO.FeedImageResultDTO> getFeedImage(Long userId);
 
-    FeedImageResponseDTO.ResultDTO modifyFeedImage(Long feedImageId, MultipartFile multipartFile);
+    FeedImageResponseDTO.FeedImageResultDTO modifyFeedImage(Long feedImageId, MultipartFile multipartFile);
 
     @Transactional
     Long deleteFeedImage(Long feedImageId);

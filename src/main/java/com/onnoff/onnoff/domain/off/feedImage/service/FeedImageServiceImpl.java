@@ -40,7 +40,7 @@ public class FeedImageServiceImpl implements FeedImageService {
 
     @Override
     @Transactional
-    public FeedImageResponseDTO.ResultDTO uploadFeedImage(Long userId, Integer location, MultipartFile multipartFile) {
+    public FeedImageResponseDTO.FeedImageResultDTO uploadFeedImage(Long userId, Integer location, MultipartFile multipartFile) {
         User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         if (feedImageRepository.findByUserAndLocation(user, location).isPresent()) {
             throw new GeneralException(ErrorStatus.FEED_IMAGE_EXIST);
@@ -63,7 +63,7 @@ public class FeedImageServiceImpl implements FeedImageService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<FeedImageResponseDTO.ResultDTO> getFeedImage(Long userId) {
+    public List<FeedImageResponseDTO.FeedImageResultDTO> getFeedImage(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         List<FeedImage> feedImageList = feedImageRepository.findByUserOrderByLocationAsc(user);
 
@@ -74,7 +74,7 @@ public class FeedImageServiceImpl implements FeedImageService {
 
     @Override
     @Transactional
-    public FeedImageResponseDTO.ResultDTO modifyFeedImage(Long feedImageId, MultipartFile multipartFile) {
+    public FeedImageResponseDTO.FeedImageResultDTO modifyFeedImage(Long feedImageId, MultipartFile multipartFile) {
         FeedImage feedImage = feedImageRepository.findById(feedImageId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_IMAGE_NOT_FOUND));
 
         deleteImage(feedImage.getImageKey());

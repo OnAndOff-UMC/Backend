@@ -11,7 +11,7 @@ public class FeedImageResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ResultDTO {
+    public static class FeedImageResultDTO {
         Long feedImageId;
         Integer location;
         String imageUrl;
