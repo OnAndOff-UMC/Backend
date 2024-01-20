@@ -10,9 +10,9 @@ public interface ResolutionService {
 
     List<Resolution> getAll(Long userId, LocalDate date);
 
-    Resolution addResolution(Long userId, LocalDate date, ResolutionRequest.AddResolutionDTO request);
+    Resolution addResolution(Long userId, ResolutionRequest.AddResolutionDTO request);
 
-    void modifyResolution(Long userId, LocalDate date, List<ResolutionRequest.ResolutionDTO> requestList);
+    void modifyResolution(Long userId, ResolutionRequest.ModifyResolutionDTO request);
 
     void deleteResolution(Long userId, LocalDate date, Long resolutionId);
 }

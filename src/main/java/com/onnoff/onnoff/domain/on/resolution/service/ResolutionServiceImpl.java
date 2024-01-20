@@ -33,13 +33,13 @@ public class ResolutionServiceImpl implements ResolutionService{
 
     @Override
     @Transactional
-    public Resolution addResolution(Long userId, LocalDate date, ResolutionRequest.AddResolutionDTO request){
+    public Resolution addResolution(Long userId, ResolutionRequest.AddResolutionDTO request){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
-        Long order = resolutionRepository.countByUserAndDate(user, date);
+        Long order = resolutionRepository.countByUserAndDate(user, request.getDate());
 
-        Resolution resolution = ResolutionConverter.toAddResolution(date, order+1, request);
+        Resolution resolution = ResolutionConverter.toAddResolution(request.getDate(), order+1, request);
         resolution.setUser(user);
 
         return resolutionRepository.save(resolution);
@@ -47,8 +47,8 @@ public class ResolutionServiceImpl implements ResolutionService{
 
     @Override
     @Transactional
-    public void modifyResolution(Long userId, LocalDate date, List<ResolutionRequest.ResolutionDTO> requestList){
-        for(ResolutionRequest.ResolutionDTO request : requestList){
+    public void modifyResolution(Long userId, ResolutionRequest.ModifyResolutionDTO requestList){
+        for(ResolutionRequest.ResolutionDTO request : requestList.getResolutionDTOList()){
 
             Resolution resolutionToModify = resolutionRepository.findById(request.getResolutionId())
                     .orElseThrow(() -> new ResolutionHandler(ErrorStatus.RESOLUTION_NOT_FOUND));
