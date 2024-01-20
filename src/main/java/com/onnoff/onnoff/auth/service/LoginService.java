@@ -35,7 +35,7 @@ public class LoginService {
         토큰 유효성 검증, 유효하지 않으면 예외를 발생시키도록 처리, 예외는 CustomErrorDecoder에서 처리
      */
     public void validate(String accessToken){
-        KakaoOauth2DTO.TokenValidateResponseDTO responseDTO = kakaoApiClient.getTokenValidate(accessToken);
+        kakaoApiClient.getTokenValidate(accessToken);
     }
 
      /*
