@@ -3,8 +3,8 @@ package com.onnoff.onnoff.auth.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.onnoff.onnoff.apiPayload.ApiResponse;
-import com.onnoff.onnoff.apiPayload.code.BaseCode;
 import com.onnoff.onnoff.apiPayload.code.status.SuccessStatus;
+import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.auth.feignClient.dto.KakaoOauth2DTO;
 import com.onnoff.onnoff.auth.jwt.dto.JwtToken;
 import com.onnoff.onnoff.auth.jwt.service.JwtUtil;
@@ -95,5 +95,15 @@ public class LoginController {
             response.addHeader("Refresh-Token", token.getRefreshToken());
             return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, UserConverter.toLoginDTO(user));
         }
+    }
+
+    /*
+   테스트용 API
+    */
+    @Operation(summary = "UserContext Test  API",description = "jwt 토큰 검증 성공 시 유저 객체 저장한 거 조회 가능한지 테스트")
+    @GetMapping("/test")
+    public ResponseEntity<String> testAfterGetToken(){
+        log.info("authenticatedUser = {}", UserContext.getUser()); // 테스트 성공
+        return ResponseEntity.ok("");
     }
 }
