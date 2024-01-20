@@ -9,10 +9,7 @@ import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
 import com.onnoff.onnoff.domain.user.enums.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
@@ -25,6 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@ToString
 @DynamicInsert //Default 값 DB에 제대로 적용 시키기 위해서
 @Table(name = "users") // h2 DB에서 user가 예약어라 테이블명 살짝 변경
 public class User extends BaseEntity {
