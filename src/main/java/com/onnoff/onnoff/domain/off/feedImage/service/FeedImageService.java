@@ -12,4 +12,6 @@ public interface FeedImageService {
     FeedImageResponseDTO.ResultDTO uploadFeedImage(Long userId, Integer location, MultipartFile multipartFile);
 
     List<FeedImageResponseDTO.ResultDTO> getFeedImage(Long userId);
+
+    FeedImageResponseDTO.ResultDTO modifyFeedImage(Long feedImageId, MultipartFile multipartFile);
 }

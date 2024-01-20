@@ -25,4 +25,8 @@ public class FeedImage extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void setImageKey(String imageKey) {
+        this.imageKey = imageKey;
+    }
 }

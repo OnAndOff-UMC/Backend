@@ -2,6 +2,7 @@ package com.onnoff.onnoff.domain.off.feedImage.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
@@ -67,6 +68,17 @@ public class FeedImageServiceImpl implements FeedImageService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
+    public FeedImageResponseDTO.ResultDTO modifyFeedImage(Long feedImageId, MultipartFile multipartFile) {
+        FeedImage feedImage = feedImageRepository.findById(feedImageId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_IMAGE_NOT_FOUND));
+
+        deleteImage(feedImage.getImageKey());
+        feedImage.setImageKey(uploadImage(multipartFile));
+
+        return FeedImageConverter.toResultDTO(feedImage, amazonS3Client.getUrl(bucket, feedImage.getImageKey()).toString());
+    }
+
     public String uploadImage(MultipartFile multipartFile) {
         String fileName = createFileName(multipartFile.getOriginalFilename());
 
@@ -94,6 +106,10 @@ public class FeedImageServiceImpl implements FeedImageService {
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
         }
+    }
+
+    public void deleteImage(String fileName) {
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 
 }

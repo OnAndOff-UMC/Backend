@@ -29,4 +29,11 @@ public class FeedImageController {
     public ApiResponse<List<FeedImageResponseDTO.ResultDTO>> getFeedImage(@RequestParam(name = "userId") Long userId) {
         return ApiResponse.onSuccess(feedImageService.getFeedImage(userId));
     }
+
+    @PatchMapping("/feed-images/{feedImageId}")
+    @Operation(summary = "워라벨 피드 사진 수정 API",description = "워라벨 피드의 사진을 수정하는 API입니다.")
+    public ApiResponse<FeedImageResponseDTO.ResultDTO> modifyFeedImage(@PathVariable(name = "feedImageId") Long feedImageId,
+                                                                       @RequestPart(name = "image") MultipartFile multipartFile) {
+        return ApiResponse.onSuccess(feedImageService.modifyFeedImage(feedImageId, multipartFile));
+    }
 }
