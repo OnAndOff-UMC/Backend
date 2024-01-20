@@ -12,17 +12,19 @@ import com.onnoff.onnoff.domain.off.feedImage.entity.FeedImage;
 import com.onnoff.onnoff.domain.off.feedImage.repository.FeedImageRepository;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +54,17 @@ public class FeedImageServiceImpl implements FeedImageService {
         feedImageRepository.save(feedImage);
 
         return FeedImageConverter.toResultDTO(feedImage, amazonS3Client.getUrl(bucket, feedImage.getImageKey()).toString());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<FeedImageResponseDTO.ResultDTO> getFeedImage(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        List<FeedImage> feedImageList = feedImageRepository.findByUserOrderByLocationAsc(user);
+
+        return feedImageList.stream()
+                .map(feedImage -> FeedImageConverter.toResultDTO(feedImage, amazonS3Client.getUrl(bucket, feedImage.getImageKey()).toString()))
+                .collect(Collectors.toList());
     }
 
     public String uploadImage(MultipartFile multipartFile) {

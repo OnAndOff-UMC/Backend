@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class FeedImageController {
@@ -20,5 +22,11 @@ public class FeedImageController {
                                                                        @RequestParam(name = "location") Integer location,
                                                                        @RequestPart(name = "image") MultipartFile multipartFile) {
         return ApiResponse.onSuccess(feedImageService.uploadFeedImage(userId, location, multipartFile));
+    }
+
+    @GetMapping("/feed-images")
+    @Operation(summary = "워라벨 피드 사진 조회 API",description = "워라벨 피드의 사진을 조회하는 API입니다. Query String으로 사용자 아이디를 입력해 주세요.")
+    public ApiResponse<List<FeedImageResponseDTO.ResultDTO>> getFeedImage(@RequestParam(name = "userId") Long userId) {
+        return ApiResponse.onSuccess(feedImageService.getFeedImage(userId));
     }
 }
