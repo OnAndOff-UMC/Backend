@@ -61,7 +61,7 @@ public class LoginController {
     @Operation(summary = "토큰 검증 API",description = "토큰을 검증 하고 이에 대한 결과를 응답합니다. 추가 정보 입력 여부도 같이 응답합니다.")
     @ResponseBody
     @PostMapping("/oauth2/kakao/token/validate")
-    public ApiResponse<UserResponseDTO.LoginDTO> validateToken(HttpServletResponse response, @RequestBody String accessToken)  {
+    public ApiResponse<?> validateToken(HttpServletResponse response, @RequestBody String accessToken)  {
         accessToken = "Bearer " + accessToken;
         // 토큰 검증
         loginService.validate(accessToken);
@@ -82,7 +82,7 @@ public class LoginController {
             response.addHeader("Access-Token", token.getAccessToken());
             response.addHeader("Refresh-Token", token.getRefreshToken());
             if(user.isInfoSet()){
-                return ApiResponse.onSuccess(UserConverter.toLoginDTO(user));
+                return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(user));
             }
             return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, UserConverter.toLoginDTO(user));
         }

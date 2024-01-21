@@ -34,7 +34,7 @@ public class KakaoOauth2DTO {
         private LocalDateTime connectedAt;
         @JsonProperty("kakao_account")
         private KakaoAccountDTO kakaoAccount;
-        private SocialType socialType = SocialType.KAKAO;
+        private SocialType socialType;
     }
     @Getter
     @ToString
