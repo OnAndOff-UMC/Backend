@@ -62,7 +62,6 @@ public class LoginController {
     @ResponseBody
     @PostMapping("/oauth2/kakao/token/validate")
     public ApiResponse<?> validateToken(HttpServletResponse response, @RequestBody String accessToken)  {
-        accessToken = "Bearer " + accessToken;
         // 토큰 검증
         loginService.validate(accessToken);
         // ok -> 유저 정보 가져오기

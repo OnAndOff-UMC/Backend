@@ -35,13 +35,21 @@ public class LoginService {
         토큰 유효성 검증, 유효하지 않으면 예외를 발생시키도록 처리, 예외는 CustomErrorDecoder에서 처리
      */
     public void validate(String accessToken){
-        kakaoApiClient.getTokenValidate(accessToken);
+        String cleanedAccessToken = cleanAccessToken(accessToken);
+        kakaoApiClient.getTokenValidate(cleanedAccessToken);
     }
 
+    private String cleanAccessToken(String accessToken){
+        accessToken = accessToken.replaceAll("[\u0000-\u001F\u007F-\u00FF:]", ""); // 헤더에 있으면 안되는 값 대체
+        accessToken = accessToken.trim(); // 앞뒤 공백 제거
+        accessToken = "Bearer " + accessToken; // 토큰 기반 인증 형식
+        return accessToken;
+    }
      /*
         토큰으로 유저정보를 가져오는 메서드
      */
     public KakaoOauth2DTO.UserInfoResponseDTO getUserInfo(String accessToken) throws JsonProcessingException {
+        String cleanedAccessToken = cleanAccessToken(accessToken);
         String emailProperty = "kakao_account.email";
         String nameProperty = "kakao_account.name";
         List<String> propertyKeysList = Arrays.asList(emailProperty, nameProperty);
@@ -49,7 +57,7 @@ public class LoginService {
         // List -> JSON 형식으로 바꾸어 전달
         ObjectMapper objectMapper = new ObjectMapper();
         String propertyKeys = objectMapper.writeValueAsString(propertyKeysList);
-        KakaoOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = kakaoApiClient.getUserInfo(accessToken, propertyKeys);
+        KakaoOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = kakaoApiClient.getUserInfo(cleanedAccessToken, propertyKeys);
         return userInfoResponseDTO;
     }
 }
