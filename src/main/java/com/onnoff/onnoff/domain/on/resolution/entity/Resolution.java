@@ -21,10 +21,28 @@ public class Resolution extends BaseEntity {
 
     @Column(length = 30)
     private String content;
+  
     @Column(name = "order_num")
     private Integer order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void setUser(User user){
+        if(this.user != null){
+            user.getResolutionList().remove(this);
+        }
+        this.user = user;
+        user.getResolutionList().add(this);
+    }
+
+    public void setOrder(Integer order){
+        this.order = order;
+    }
+
+    public void modifyResolution(Integer order, String content){
+        this.order = order;
+        this.content = content;
+    }
 }
