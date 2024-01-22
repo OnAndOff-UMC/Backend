@@ -1,8 +1,7 @@
-package com.onnoff.onnoff.auth.client.dto;
+package com.onnoff.onnoff.auth.feignClient.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.onnoff.onnoff.apiPayload.ApiResponse;
-import com.onnoff.onnoff.auth.client.KakaoOauth2Client;
+import com.onnoff.onnoff.domain.user.enums.SocialType;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -35,6 +34,7 @@ public class KakaoOauth2DTO {
         private LocalDateTime connectedAt;
         @JsonProperty("kakao_account")
         private KakaoAccountDTO kakaoAccount;
+        private SocialType socialType = SocialType.KAKAO;
     }
     @Getter
     @ToString

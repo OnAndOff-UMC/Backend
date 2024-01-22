@@ -3,18 +3,23 @@ package com.onnoff.onnoff.auth.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.onnoff.onnoff.apiPayload.ApiResponse;
-import com.onnoff.onnoff.auth.client.dto.KakaoOauth2DTO;
-import com.onnoff.onnoff.auth.dto.LoginResponseDTO;
+import com.onnoff.onnoff.apiPayload.code.status.SuccessStatus;
+import com.onnoff.onnoff.auth.UserContext;
+import com.onnoff.onnoff.auth.feignClient.dto.KakaoOauth2DTO;
+import com.onnoff.onnoff.auth.jwt.dto.JwtToken;
+import com.onnoff.onnoff.auth.jwt.service.JwtUtil;
 import com.onnoff.onnoff.auth.service.LoginService;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.converter.UserConverter;
+import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
 import com.onnoff.onnoff.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
@@ -23,6 +28,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class LoginController {
     private final LoginService loginService;
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
 
     /*
@@ -42,32 +48,62 @@ public class LoginController {
      */
     @GetMapping("/oauth2/login/kakao")
     public ResponseEntity<String> getAccessToken(@RequestParam(name = "code") String code){
-        log.info("code = {}", code);
-        loginService.getAccessToken(code);
-        return ResponseEntity.ok("토큰 get");
+        String accessToken = loginService.getAccessToken(code);
+        return ResponseEntity.ok("http://localhost:8080/oauth2/kakao/token/validate?accessToken="+accessToken);
     }
     /*
     1. 토큰 유효성 검증
     2. 사용자 정보 얻어오기
-    3. DB조회 및 추가
+    3. DB 조회 및 추가
+    4. 응답 헤더에 Jwt 토큰 추가
      */
-    // 나중에 accessToken RequestBody로 받도록 수정
-    @GetMapping("/oauth2/kakao/token/validate")
-    public ApiResponse<Object> validateToken(@RequestParam String accessToken) throws JsonProcessingException {
+
+    @Operation(summary = "토큰 검증 API",description = "토큰을 검증 하고 이에 대한 결과를 응답합니다. 추가 정보 입력 여부도 같이 응답합니다.")
+    @ResponseBody
+    @PostMapping("/oauth2/kakao/token/validate")
+    public ApiResponse<UserResponseDTO.LoginDTO> validateToken(HttpServletResponse response, @RequestBody String accessToken)  {
         accessToken = "Bearer " + accessToken;
         // 토큰 검증
         loginService.validate(accessToken);
-        // ok -> 유저 정보 가져오기, error -> 에러 응답 코드 반환
-        KakaoOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = loginService.getUserInfo(accessToken);
-        // 유저 정보에 DB 조회하고 정보 있으면 응답만, 없으면 저장까지 이 두 경우의 성공 응답코드 다르게
+        // ok -> 유저 정보 가져오기
+        KakaoOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = null;
+        try {
+            userInfoResponseDTO = loginService.getUserInfo(accessToken);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        // 유저 정보에 DB 조회하고 정보 있으면 응답만, 없으면 저장까지, 추가정보 입력 여부에 따라서 응답 다르게
         Long oauthId = userInfoResponseDTO.getId();
         if( userService.isExistByOauthId(oauthId)){
-            return ApiResponse.onSuccess(new Object()); //응답 DTO 만들어야함
+            User user = userService.getUserByOauthId(oauthId);
+            // 응답헤더에 토큰 추가
+            JwtToken token = jwtUtil.generateToken(String.valueOf(user.getId()));
+            response.addHeader("Access-Token", token.getAccessToken());
+            response.addHeader("Refresh-Token", token.getRefreshToken());
+            if(user.isInfoSet()){
+                return ApiResponse.onSuccess(UserConverter.toLoginDTO(user));
+            }
+            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, UserConverter.toLoginDTO(user));
         }
         else{
             User user = UserConverter.toUser(userInfoResponseDTO);
-            userService.create(user);
+            Long id = userService.create(user);
+            // 응답헤더에 토큰 추가
+            JwtToken token = jwtUtil.generateToken(String.valueOf(id));
+            response.addHeader("Access-Token", token.getAccessToken());
+            response.addHeader("Refresh-Token", token.getRefreshToken());
+            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, UserConverter.toLoginDTO(user));
         }
-        return null;
+    }
+
+    /*
+   테스트용 API
+    */
+    @Operation(summary = "UserContext Test  API",description = "jwt 토큰 검증 성공 시 유저 객체 저장한 거 조회 가능한지 테스트")
+    @GetMapping("/test")
+    public ResponseEntity<String> testAfterGetToken(){
+        log.info("authenticatedUser = {}", UserContext.getUser()); // 테스트 성공
+        return ResponseEntity.ok("");
     }
 }
