@@ -27,7 +27,7 @@ import java.util.List;
 @Table(name = "users") // h2 DB에서 user가 예약어라 테이블명 살짝 변경
 public class User extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

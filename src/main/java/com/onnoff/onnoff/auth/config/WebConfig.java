@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
     public FilterRegistrationBean<JwtAuthFilter> jwtFilterRegistration() {
         FilterRegistrationBean<JwtAuthFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(new JwtAuthFilter(jwtTokenProvider)); // 필터 인스턴스 설정
-        registration.addUrlPatterns("/**");
+        registration.addUrlPatterns("/*"); //서블릿 컨택스트에서 /*는 모든 요청, /**는 인식되지 않음
         registration.setOrder(1); // 필터의 순서 설정. 값이 낮을수록 먼저 실행
         return registration;
     }
@@ -38,7 +38,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addWebRequestInterceptor(openEntityManagerInViewInterceptor);
 
         registry.addInterceptor(new UserInterceptor(userService, jwtUtil))
-                .addPathPatterns("/**")
+                .addPathPatterns("/**") // 스프링 경로는 /*와 /**이 다름
                 .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**", "/oauth2/**");
     }
 }
