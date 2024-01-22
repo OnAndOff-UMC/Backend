@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,6 +37,7 @@ public class UserInterceptor implements HandlerInterceptor {
         }
         catch (IllegalArgumentException exception){
             // jwt 필터에서 검증된 토큰이라 예외 안나겠지만 없지만 혹시 모르니
+            response.sendError(HttpStatus.UNAUTHORIZED.value());
             return false;
         }
     }
