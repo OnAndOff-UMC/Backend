@@ -1,5 +1,6 @@
 package com.onnoff.onnoff.domain.user.dto;
 
+import com.onnoff.onnoff.apiPayload.ApiResponse;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
 import com.onnoff.onnoff.domain.user.enums.Status;
 import lombok.AllArgsConstructor;
@@ -39,5 +40,21 @@ public class UserResponseDTO {
         private SocialType socialType;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
+    }
+
+    /**
+     * 스웨거 response에 제네릭 타입을 써주기 위한 클래스
+     */
+    public static class ApiResponseLoginDTO extends ApiResponse<LoginDTO> {
+
+        public ApiResponseLoginDTO(Boolean isSuccess, String code, String message, LoginDTO result) {
+            super(isSuccess, code, message, result);
+        }
+    }
+    public static class ApiResponseUserDetailDTO extends  ApiResponse<UserDetailDTO>{
+
+        public ApiResponseUserDetailDTO(Boolean isSuccess, String code, String message, UserDetailDTO result) {
+            super(isSuccess, code, message, result);
+        }
     }
 }

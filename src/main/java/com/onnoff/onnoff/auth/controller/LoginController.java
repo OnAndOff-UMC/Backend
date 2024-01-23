@@ -14,6 +14,9 @@ import com.onnoff.onnoff.domain.user.converter.UserConverter;
 import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
 import com.onnoff.onnoff.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +61,13 @@ public class LoginController {
     4. 응답 헤더에 Jwt 토큰 추가
      */
 
-    @Operation(summary = "토큰 검증 API",description = "토큰을 검증 하고 이에 대한 결과를 응답합니다. 추가 정보 입력 여부도 같이 응답합니다.")
+    @Operation(summary = "토큰 검증 API",description = "토큰을 검증 하고 이에 대한 결과를 응답합니다. 추가 정보 입력 여부도 같이 응답 합니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "202", description = "토큰 검증 성공," + " 추가 정보 기입이 필요합니다.",
+                    content = @Content(schema = @Schema(implementation = UserResponseDTO.ApiResponseLoginDTO.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "토큰 검증 성공",
+                    content = @Content(schema = @Schema(implementation = UserResponseDTO.ApiResponseUserDetailDTO.class)))
+    })
     @ResponseBody
     @PostMapping("/oauth2/kakao/token/validate")
     public ApiResponse<?> validateToken(HttpServletResponse response, @RequestBody String accessToken)  {
