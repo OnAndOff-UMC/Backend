@@ -24,7 +24,7 @@ public class Feed extends BaseEntity {
     private String content;
 
     @Column(columnDefinition = "boolean default false")
-    private Boolean checked;
+    private Boolean isChecked;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
