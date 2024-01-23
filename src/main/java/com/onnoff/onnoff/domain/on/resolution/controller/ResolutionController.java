@@ -28,17 +28,15 @@ public class ResolutionController {
 
     @PostMapping("/")
     public ApiResponse<ResolutionResponse.AddResultDTO> addResolution(@RequestParam(name = "userId") Long userId,
-                                                                      @RequestParam(name = "date") LocalDate date,
                                                                       @RequestBody @Valid ResolutionRequest.AddResolutionDTO request){
-        Resolution resolution = resolutionService.addResolution(userId, date, request);
+        Resolution resolution = resolutionService.addResolution(userId, request);
         return ApiResponse.onSuccess(ResolutionConverter.toAddResolutionResultDTO(resolution));
     }
 
-    @PostMapping("/modify")
+    @PutMapping("/")
     public ApiResponse<ResolutionResponse.ResolutionViewDTO> modifyResolution(@RequestParam(name = "userId") Long userId,
-                                                                              @RequestParam(name = "date") LocalDate date,
-                                                                              @RequestBody List< ResolutionRequest.@Valid ResolutionDTO> requestList){
-        resolutionService.modifyResolution(userId, date, requestList);
+                                                                              @RequestBody @Valid ResolutionRequest.ModifyResolutionDTO request){
+        resolutionService.modifyResolution(userId, request);
         return ApiResponse.onSuccess(null);
     }
 
