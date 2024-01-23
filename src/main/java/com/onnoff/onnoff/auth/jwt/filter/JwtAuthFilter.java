@@ -28,6 +28,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final static String[] ignorePrefix = {"/swagger-ui", "/v3/api-docs", "/oauth2"};
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("url ={}", request.getRequestURI());
         // 지정된 Path는 건너뛰기
         String currentPath = request.getServletPath();
         for(String ignorePath: ignorePrefix){
