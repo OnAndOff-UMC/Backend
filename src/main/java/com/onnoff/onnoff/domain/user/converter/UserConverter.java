@@ -3,6 +3,7 @@ package com.onnoff.onnoff.domain.user.converter;
 import com.onnoff.onnoff.auth.feignClient.dto.KakaoOauth2DTO;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
+import com.onnoff.onnoff.domain.user.enums.SocialType;
 
 public class UserConverter {
     public static User toUser(KakaoOauth2DTO.UserInfoResponseDTO response){
@@ -11,6 +12,7 @@ public class UserConverter {
                 .oauthId(response.getId())
                 .email(kakaoAccount.getEmail())
                 .name(kakaoAccount.getName())
+                .socialType(SocialType.KAKAO)
                 .build();
     }
 
