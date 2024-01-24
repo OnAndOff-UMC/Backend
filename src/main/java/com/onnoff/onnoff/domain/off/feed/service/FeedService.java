@@ -12,4 +12,6 @@ public interface FeedService {
     Feed addFeed(FeedRequestDTO.AddFeedDTO request);
 
     List<Feed> getFeed(Long userId, LocalDate date);
+
+    Feed modifyFeed(FeedRequestDTO.ModifyFeedDTO request);
 }

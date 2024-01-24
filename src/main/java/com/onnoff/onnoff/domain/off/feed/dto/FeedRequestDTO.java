@@ -1,6 +1,5 @@
 package com.onnoff.onnoff.domain.off.feed.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -21,5 +20,15 @@ public class FeedRequestDTO {
         @NotBlank
         @Size(max = 30)
         String content;
+    }
+
+    @Getter
+    public static class ModifyFeedDTO {
+        @NotNull
+        Long feedId;
+        LocalDate date;
+        @Size(max = 30)
+        String content;
+        Boolean isChecked;
     }
 }

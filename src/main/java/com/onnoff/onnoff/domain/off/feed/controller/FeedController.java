@@ -33,4 +33,11 @@ public class FeedController {
         List<Feed> feedList = feedService.getFeed(userId, date);
         return ApiResponse.onSuccess(feedList.stream().map(FeedConverter::toFeedResultDTO).toList());
     }
+
+    @PatchMapping("/feeds")
+    @Operation(summary = "워라벨 피드 수정 API", description = "기존의 워라벨 피드를 수정하는 API입니다.")
+    public ApiResponse<FeedResponseDTO.FeedResultDTO> modifyFeed(@RequestBody @Valid FeedRequestDTO.ModifyFeedDTO request) {
+        Feed feed = feedService.modifyFeed(request);
+        return ApiResponse.onSuccess(FeedConverter.toFeedResultDTO(feed));
+    }
 }

@@ -35,4 +35,15 @@ public class FeedServiceImpl implements FeedService {
         User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         return feedRepository.findAllByUserAndDateOrderByCreatedAtAsc(user, date);
     }
+
+    @Override
+    @Transactional
+    public Feed modifyFeed(FeedRequestDTO.ModifyFeedDTO request) {
+        Feed feed = feedRepository.findById(request.getFeedId()).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_NOT_FOUND));
+        if (request.getContent() != null && request.getContent().trim().isEmpty()) {
+            throw new GeneralException(ErrorStatus.FEED_NOT_BLANK);
+        }
+        feed.updateFeed(request.getDate(), request.getContent(), request.getIsChecked());
+        return feed;
+    }
 }
