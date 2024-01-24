@@ -19,7 +19,7 @@ public class FeedRequestDTO {
         @PastOrPresent
         LocalDate date;
         @NotBlank
-        @Size(max = 500)
+        @Size(max = 30)
         String content;
     }
 }
