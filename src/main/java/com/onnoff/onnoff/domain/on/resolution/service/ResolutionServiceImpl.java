@@ -39,7 +39,7 @@ public class ResolutionServiceImpl implements ResolutionService{
 
         Long order = resolutionRepository.countByUserAndDate(user, request.getDate());
 
-        Resolution resolution = ResolutionConverter.toAddResolution(request.getDate(), order+1, request);
+        Resolution resolution = ResolutionConverter.toAddResolution(order+1, request);
         resolution.setUser(user);
 
         return resolutionRepository.save(resolution);
