@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 public class ResolutionConverter {
     //request to entity
-    public static Resolution toAddResolution(LocalDate date, Long order, ResolutionRequest.AddResolutionDTO request){
+    public static Resolution toAddResolution(Long order, ResolutionRequest.AddResolutionDTO request){
        return  Resolution.builder()
-               .date(date)
+               .date(request.getDate())
                .order(order.intValue())
                .content(request.getContent())
                .build();
@@ -24,7 +24,7 @@ public class ResolutionConverter {
     public static ResolutionResponse.AddResultDTO toAddResolutionResultDTO(Resolution resolution){
         return ResolutionResponse.AddResultDTO.builder()
                 .resolutionId(resolution.getId())
-                .createdAt(LocalDateTime.now())
+                .createdAt(resolution.getCreatedAt())
                 .build();
     }
 
