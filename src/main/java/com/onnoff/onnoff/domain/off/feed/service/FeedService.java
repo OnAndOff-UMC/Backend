@@ -14,4 +14,6 @@ public interface FeedService {
     List<Feed> getFeed(Long userId, LocalDate date);
 
     Feed modifyFeed(FeedRequestDTO.ModifyFeedDTO request);
+
+    void deleteFeed(Long feedId);
 }

@@ -46,4 +46,11 @@ public class FeedServiceImpl implements FeedService {
         feed.updateFeed(request.getDate(), request.getContent(), request.getIsChecked());
         return feed;
     }
+
+    @Override
+    @Transactional
+    public void deleteFeed(Long feedId) {
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_NOT_FOUND));
+        feedRepository.delete(feed);
+    }
 }
