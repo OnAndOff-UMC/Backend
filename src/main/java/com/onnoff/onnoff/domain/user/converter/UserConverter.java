@@ -1,21 +1,28 @@
 package com.onnoff.onnoff.domain.user.converter;
 
-import com.onnoff.onnoff.auth.feignClient.dto.KakaoOauth2DTO;
+import com.onnoff.onnoff.auth.dto.LoginRequestDTO;
+import com.onnoff.onnoff.auth.feignClient.dto.kakao.KakaoOauth2DTO;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
 
 public class UserConverter {
     public static User toUser(KakaoOauth2DTO.UserInfoResponseDTO response){
-        KakaoOauth2DTO.KakaoAccountDTO kakaoAccount = response.getKakaoAccount();
         return User.builder()
-                .oauthId(response.getId())
-                .email(kakaoAccount.getEmail())
-                .name(kakaoAccount.getName())
+                .oauthId(response.getSub())
+                .email(response.getEmail())
+                .name(response.getName())
                 .socialType(SocialType.KAKAO)
                 .build();
     }
-
+    public static User toUser(LoginRequestDTO.AppleTokenValidateDTO request){
+        return User.builder()
+                .oauthId(request.getOauthId())
+                .email(request.getEmail())
+                .name(request.getFullName())
+                .socialType(SocialType.APPLE)
+                .build();
+    }
     public static UserResponseDTO.LoginDTO toLoginDTO(User user){
         return UserResponseDTO.LoginDTO.builder()
                 .id(user.getId())
