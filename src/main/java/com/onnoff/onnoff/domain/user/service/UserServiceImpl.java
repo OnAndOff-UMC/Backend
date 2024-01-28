@@ -16,8 +16,8 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     @Transactional
     @Override
-    public Long create(User user) {
-        return userRepository.save(user).getId();
+    public User create(User user) {
+        return userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
@@ -36,13 +36,13 @@ public class UserServiceImpl implements UserService{
     }
     @Transactional(readOnly = true)
     @Override
-    public boolean isExistByOauthId(Long oauthId) {
-        return userRepository.findById(oauthId).isPresent();
+    public boolean isExistByOauthId(String oauthId) {
+        return userRepository.findByOauthId(oauthId).isPresent();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public User getUserByOauthId(Long oauthId) {
+    public User getUserByOauthId(String oauthId) {
         User user = userRepository.findByOauthId(oauthId).orElseThrow( () ->
                 new GeneralException(ErrorStatus.USER_NOT_FOUND)
         );
