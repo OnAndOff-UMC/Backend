@@ -28,13 +28,19 @@ public class SocialTokenValidatorImpl implements SocialTokenValidator{
     private final KakaoOauth2Client kakaoOauth2Client;
     private final AppleAuthClient appleAuthClient;
     @Value("${kakao.iss}")
-    private static String kakaoIss;
-    @Value("${kakao.aud}")
-    private static String kakaoAud;
+    private String kakaoIss;
+    @Value("${kakao.client-id}")
+    private String kakaoAud;
     @Value("${apple.iss}")
-    private static String appleIss;
-    @Value("${apple.aud}")
-    private static String appleAud;
+    private String appleIss;
+    @Value("${apple.client-id}")
+    private String appleAud;
+
+    /**
+     *  1. 공개키(JWK) 목록 조회하여 맞는 공개키 정보 획득
+     *  2. 검증에 사용할 수 있는 공개키로 변환
+     *  3. 공개키로 ID토큰 검증
+     */
     @Override
     public void validate(String token, SocialType socialType) {
         JwkResponse.Jwk matchingJwk = getMatchingJwk(token, socialType);
@@ -51,9 +57,9 @@ public class SocialTokenValidatorImpl implements SocialTokenValidator{
     private Jwt<Header, Claims> verifyToken(String token, String iss, String aud, PublicKey publicKey) {
         try {
             return (Jwt<Header, Claims>) Jwts.parser()
-                    .requireAudience(aud)
-                    .requireIssuer(iss)
-                    .verifyWith(publicKey)
+                    .requireAudience(aud) //수신자 검증
+                    .requireIssuer(iss) // 발급자 검증
+                    .verifyWith(publicKey) // 시그니처 검증
                     .build()
                     .parse(token);
         }

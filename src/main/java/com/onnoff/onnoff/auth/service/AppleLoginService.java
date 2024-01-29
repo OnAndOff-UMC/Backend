@@ -36,25 +36,25 @@ import java.util.Map;
 public class AppleLoginService implements LoginService{
     private final AppleAuthClient appleAuthClient;
     private final SocialTokenValidator validator;
-    @Value("${apple.key.id")
-    private static String kid;
-    @Value("${apple.key.path")
-    private static String keyPath;
-    @Value("${apple.aud")
-    private static String aud;
-    @Value("${apple.iss")
-    private static String iss;
-    @Value("${apple.team-id")
-    private static String teamId;
-    @Value("${apple.redirect-uri")
-    private static String redirectUri;
+    @Value("${apple.key.id}")
+    private String kid;
+    @Value("${apple.key.path}")
+    private String keyPath;
+    @Value("${apple.client-id}")
+    private String clientId;
+    @Value("${apple.iss}")
+    private String iss;
+    @Value("${apple.team-id}")
+    private String teamId;
+    @Value("${apple.redirect-uri}")
+    private String redirectUri;
     @Override
     public TokenResponse getAccessTokenByCode(String code) {
         // client secret 만들기
         String clientSecret = createClientSecret();
         // 요청
         MultiValueMap<String, String> urlEncoded = TokenRequest.builder()
-                .clientId(aud)
+                .clientId(clientId)
                 .clientSecret(clientSecret)
                 .code("authorization_code_value")
                 .grantType("authorization_code")
@@ -74,8 +74,8 @@ public class AppleLoginService implements LoginService{
                     .setIssuer(teamId) // 토큰 발행자 = 우리 팀
                     .setIssuedAt(new Date(System.currentTimeMillis())) // 발행 시간 - UNIX 시간
                     .setExpiration(expirationDate) // 만료 시간
-                    .setAudience(iss)  // 내가 토큰을 발행하니까 애플을 aud로 반대로
-                    .setSubject(aud) // 토큰의 주체 = 우리 앱
+                    .setAudience(iss)  // 애플이 수신자
+                    .setSubject(clientId) // 토큰의 주체 = 우리 앱
                     .signWith(SignatureAlgorithm.ES256, getPrivateKey())
                     .compact();
         } catch (IOException e) {
@@ -90,7 +90,7 @@ public class AppleLoginService implements LoginService{
         String appleRefreshToken = user.getAppleRefreshToken();
         // 요청
         MultiValueMap<String, String> urlEncoded = TokenRequest.builder()
-                .clientId(aud)
+                .clientId(clientId)
                 .clientSecret(clientSecret)
                 .refreshToken(appleRefreshToken)
                 .grantType("refresh_token")

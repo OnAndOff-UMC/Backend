@@ -10,6 +10,7 @@ import com.onnoff.onnoff.auth.service.tokenValidator.SocialTokenValidator;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
@@ -20,15 +21,18 @@ public class KakaoLoginService implements LoginService{
     private final KakaoOauth2Client kakaoOauth2Client;
     private final KakaoApiClient kakaoApiClient;
     private final SocialTokenValidator validator;
-
+    @Value("${kakao.client-id}")
+    private String clientId;
+    @Value("${kakao.redirect-uri}")
+    private String redirectUri;
     /*
         테스트 용으로 만든거, 실제로는 프론트에서 처리해서 액세스 토큰만 가져다 줌
     */
     @Override
     public TokenResponse getAccessTokenByCode(String code){
         return kakaoOauth2Client.getAccessToken("authorization_code",
-                "32c0787d1b1e9fcabcc24af247903ba8",
-                "http://localhost:8080/oauth2/login/kakao",
+                clientId,
+                redirectUri,
                 code);
     }
     // id 토큰 유효성 검증
