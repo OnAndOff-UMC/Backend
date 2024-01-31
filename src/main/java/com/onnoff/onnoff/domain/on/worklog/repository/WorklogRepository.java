@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface WorklogRepository extends JpaRepository<Worklog, Long> {
     List<Worklog> findAllByUserAndDate(User user, LocalDate date);
+    Integer countByUserAndDate(User user, LocalDate date);
+    Integer countByUserAndDateAndIsChecked(User user, LocalDate date, Boolean t);
 }
