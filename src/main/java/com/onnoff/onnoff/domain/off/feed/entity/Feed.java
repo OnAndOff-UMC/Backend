@@ -24,10 +24,21 @@ public class Feed extends BaseEntity {
     private String content;
 
     @Column(columnDefinition = "boolean default false")
-    private Boolean checked;
+    private Boolean isChecked;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void updateFeed(LocalDate date, String content, Boolean isChecked) {
+        if (date != null) {
+            this.date = date;
+        }
+        if (content != null) {
+            this.content = content;
+        }
+        if (isChecked != null) {
+            this.isChecked = isChecked;
+        }
+    }
 }

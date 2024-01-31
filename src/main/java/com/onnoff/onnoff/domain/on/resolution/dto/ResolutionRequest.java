@@ -1,17 +1,32 @@
 package com.onnoff.onnoff.domain.on.resolution.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public class ResolutionRequest {
     @Getter
     public static class AddResolutionDTO{
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        LocalDate date;
         @NotBlank
         @Size(max = 30)
         String content;
+    }
+
+    @Getter
+    public static class ModifyResolutionDTO{
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        LocalDate date;
+        @Valid
+        List<ResolutionDTO> resolutionDTOList;
     }
     
 

@@ -27,4 +27,24 @@ public class Worklog extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void setUser(User user){
+        if(this.user != null){
+            user.getWorklogList().remove(this);
+        }
+        this.user = user;
+        user.getWorklogList().add(this);
+    }
+
+    public void setIsChecked(){
+        this.isChecked= this.isChecked.equals(false);
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }
