@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 public class LoginRequestDTO {
-    @Getter
-    public static class ServerTokenValidateDTO{
-        private String accessToken;
-        private String refreshToken;
-    }
+
     @Getter
     public static class AppleTokenValidateDTO{
         private String oauthId;

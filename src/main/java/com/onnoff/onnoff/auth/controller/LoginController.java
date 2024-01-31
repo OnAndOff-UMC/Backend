@@ -3,11 +3,14 @@ package com.onnoff.onnoff.auth.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.onnoff.onnoff.apiPayload.ApiResponse;
+import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
+import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.auth.dto.LoginRequestDTO;
 import com.onnoff.onnoff.auth.feignClient.dto.TokenResponse;
 import com.onnoff.onnoff.auth.feignClient.dto.kakao.KakaoOauth2DTO;
 import com.onnoff.onnoff.auth.jwt.dto.JwtToken;
+import com.onnoff.onnoff.auth.jwt.service.JwtTokenProvider;
 import com.onnoff.onnoff.auth.jwt.service.JwtUtil;
 import com.onnoff.onnoff.auth.service.AppleLoginService;
 import com.onnoff.onnoff.auth.service.KakaoLoginService;
@@ -15,6 +18,10 @@ import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.converter.UserConverter;
 import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
 import com.onnoff.onnoff.domain.user.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.InvalidClaimException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +39,7 @@ public class LoginController {
     private final KakaoLoginService kakaoLoginService;
     private final AppleLoginService appleLoginService;
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
     private final JwtUtil jwtUtil;
 
     @Value("${kakao.redirect-uri}")
@@ -58,7 +66,7 @@ public class LoginController {
     public ResponseEntity<String> getAccessToken(@RequestParam(name = "code") String code){
         TokenResponse tokenResponse = kakaoLoginService.getAccessTokenByCode(code);
         return ResponseEntity.ok("accessToken="+ tokenResponse.getAccessToken() +
-                "idToken=" + tokenResponse.getIdToken());
+                "\n\nidToken=" + tokenResponse.getIdToken());
     }
     /*
     1. ID 토큰 유효성 검증
@@ -67,7 +75,7 @@ public class LoginController {
     4. 응답 헤더에 Jwt 토큰 추가
      */
 
-    @Operation(summary = "토큰 검증 API",description = "토큰을 검증 하고 이에 대한 결과를 응답합니다. 추가 정보 입력 여부도 같이 응답 합니다.")
+    @Operation(summary = "소셜 토큰 검증 API",description = "토큰을 검증 하고 이에 대한 결과를 응답합니다. 추가 정보 입력 여부도 같이 응답 합니다.")
     @ResponseBody
     @PostMapping("/oauth2/kakao/token/validate")
     public ApiResponse<UserResponseDTO.LoginDTO> validateKakoToken(HttpServletResponse response, @RequestBody LoginRequestDTO.KakaoTokenValidateDTO requestDTO)  {
@@ -91,16 +99,14 @@ public class LoginController {
             user = UserConverter.toUser(userInfo);
             user = userService.create(user);
         }
-        // 응답헤더에 토큰 추가
+        // 응답본문에 토큰 추가
         JwtToken token = jwtUtil.generateToken(String.valueOf(user.getId()));
-        response.addHeader("Access-Token", token.getAccessToken());
-        response.addHeader("Refresh-Token", token.getRefreshToken());
-        return ApiResponse.onSuccess(UserConverter.toLoginDTO(user));
+        return ApiResponse.onSuccess(UserConverter.toLoginDTO(user, token.getAccessToken(), token.getRefreshToken()));
     }
 
     @ResponseBody
     @PostMapping("/oauth2/apple/token/validate")
-    public ApiResponse<?> validateAppleToken(HttpServletResponse response, @RequestBody LoginRequestDTO.AppleTokenValidateDTO requestDTO)  {
+    public ApiResponse<UserResponseDTO.LoginDTO> validateAppleToken(HttpServletResponse response, @RequestBody LoginRequestDTO.AppleTokenValidateDTO requestDTO)  {
         // 검증하기
         appleLoginService.validate(requestDTO.getIdentityToken());
         // 검증 성공 시 리프레시 토큰 발급받아 저장(기한 무제한, 회원탈퇴 시 필요)
@@ -118,15 +124,34 @@ public class LoginController {
         }
         // 응답헤더에 토큰 추가
         JwtToken token = jwtUtil.generateToken(String.valueOf(user.getId()));
-        response.addHeader("Access-Token", token.getAccessToken());
-        response.addHeader("Refresh-Token", token.getRefreshToken());
-        return ApiResponse.onSuccess(UserConverter.toLoginDTO(user));
+        return ApiResponse.onSuccess(UserConverter.toLoginDTO(user, token.getAccessToken(), token.getRefreshToken()));
     }
 
-    @GetMapping("/token/validate")
-    public ApiResponse<String> validateServerToken(@RequestParam(name = "code") String code){
-        TokenResponse tokenResponse = kakaoLoginService.getAccessTokenByCode(code);
-        return ApiResponse.onSuccess(null);
+    @Operation(summary = "서버 토큰 검증 API",description = "토큰의 유효성을 검증하고 액세스 토큰이 만료되었으면" +
+            "재발급, 리프레시 토큰까지 만료되었으면 오류 응답 추가. 정보 입력 여부도 같이 응답 합니다.")
+    @ResponseBody
+    @PostMapping("/token/validate")
+    public ApiResponse<UserResponseDTO.LoginDTO> validateServerToken(@RequestBody JwtToken tokenDTO){
+        String accessToken = tokenDTO.getAccessToken();
+        String refreshToken = tokenDTO.getRefreshToken();
+        if( jwtTokenProvider.verifyToken(accessToken) ){
+            // accessToken 유효
+            String userId = jwtUtil.getUserId(accessToken);
+            User user = userService.getUser(Long.valueOf(userId));
+            UserResponseDTO.LoginDTO loginDTO = UserConverter.toLoginDTO(user, accessToken, refreshToken);
+            return ApiResponse.onSuccess(loginDTO);
+        }
+        if (jwtTokenProvider.verifyToken(refreshToken)) {
+            //refreshToken 유효
+            String userId = jwtUtil.getUserId(refreshToken);
+            User user = userService.getUser(Long.valueOf(userId));
+
+            String newRefreshToken = jwtUtil.generateRefreshToken(jwtUtil.getUserId(refreshToken));
+            String newAccessToken = jwtUtil.generateAccessToken(jwtUtil.getUserId(refreshToken));
+            return ApiResponse.onSuccess(UserConverter.toLoginDTO(user, newAccessToken, newRefreshToken));
+        }
+        // 둘 다 유효하지 않은 경우
+        throw new GeneralException(ErrorStatus.INVALID_TOKEN_ERROR);
     }
     /*
    테스트용 API
