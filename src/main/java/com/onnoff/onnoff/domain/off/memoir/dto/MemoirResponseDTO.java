@@ -14,7 +14,7 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class QuestionResultDTO{
+    public static class MemoirQuestionResultDTO{
         Long questionId;
         String question;
         String summary;
@@ -24,19 +24,19 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ResultDTO {
+    public static class MemoirResultDTO {
         Long memoirId;
         LocalDate date;
         String icon;
         Boolean isBookmarked;
-        List<AnswerResultDTO> memoirAnswerList;
+        List<MemoirAnswerResultDTO> memoirAnswerList;
     }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AnswerResultDTO{
+    public static class MemoirAnswerResultDTO{
         Long answerId;
         String question;
         String summary;

@@ -11,11 +11,11 @@ import java.util.List;
 public interface MemoirService {
     List<MemoirQuestion> getMemoirQuestion();
 
-    Memoir writeMemoir(MemoirRequestDTO.WriteDTO request);
+    Memoir writeMemoir(MemoirRequestDTO.MemoirWriteDTO request);
 
     Memoir getMemoir(Long memoirId);
 
-    Memoir updateMemoir(MemoirRequestDTO.UpdateDTO request);
+    Memoir updateMemoir(MemoirRequestDTO.MemoirUpdateDTO request);
 
     Long deleteMemoir(Long memoirId);
 }

@@ -38,7 +38,7 @@ public class MemoirServiceImpl implements MemoirService {
 
     @Override
     @Transactional
-    public Memoir writeMemoir(MemoirRequestDTO.WriteDTO request) {
+    public Memoir writeMemoir(MemoirRequestDTO.MemoirWriteDTO request) {
         User user = UserContext.getUser();
         if (memoirRepository.findByUserAndDate(user, request.getDate()).isPresent()) {
             throw new GeneralException(ErrorStatus.MEMOIR_EXIST);
@@ -68,7 +68,7 @@ public class MemoirServiceImpl implements MemoirService {
 
     @Override
     @Transactional
-    public Memoir updateMemoir(MemoirRequestDTO.UpdateDTO request) {
+    public Memoir updateMemoir(MemoirRequestDTO.MemoirUpdateDTO request) {
         Memoir memoir = memoirRepository.findById(request.getMemoirId()).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
 
         if (request.getIcon() != null) {
@@ -79,9 +79,9 @@ public class MemoirServiceImpl implements MemoirService {
             memoir.setIsBookmarked(request.getIsBookmarked());
         }
 
-        List<MemoirRequestDTO.UpdateAnswerDTO> requestMemoirAnswerList = request.getMemoirAnswerList() == null ? new ArrayList<>() : request.getMemoirAnswerList();
+        List<MemoirRequestDTO.MemoirUpdateAnswerDTO> requestMemoirAnswerList = request.getMemoirAnswerList() == null ? new ArrayList<>() : request.getMemoirAnswerList();
 
-        for (MemoirRequestDTO.UpdateAnswerDTO memoirAnswer: requestMemoirAnswerList) {
+        for (MemoirRequestDTO.MemoirUpdateAnswerDTO memoirAnswer: requestMemoirAnswerList) {
             MemoirAnswer findMemoirAnswer = memoirAnswerRepository.findById(memoirAnswer.getAnswerId()).orElseThrow(() -> new GeneralException(ErrorStatus.ANSWER_NOT_FOUND));
             if (findMemoirAnswer.getMemoir() != memoir) {
                 throw new GeneralException(ErrorStatus.ANSWER_BAD_MATCH);
