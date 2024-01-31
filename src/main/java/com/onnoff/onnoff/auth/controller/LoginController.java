@@ -39,6 +39,7 @@ public class LoginController {
 
 
 
+
     /*
     테스트용 API, CORS 때문에 직접 호출하지 않고 redirect
      */
@@ -59,6 +60,7 @@ public class LoginController {
         TokenResponse tokenResponse = kakaoLoginService.getAccessTokenByCode(code);
         return ResponseEntity.ok("accessToken="+ tokenResponse.getAccessToken() +
                 "idToken=" + tokenResponse.getIdToken());
+
     }
     /*
     1. ID 토큰 유효성 검증
@@ -122,6 +124,7 @@ public class LoginController {
         response.addHeader("Refresh-Token", token.getRefreshToken());
         return ApiResponse.onSuccess(UserConverter.toLoginDTO(user));
     }
+
 
     @GetMapping("/token/validate")
     public ApiResponse<String> validateServerToken(@RequestParam(name = "code") String code){
