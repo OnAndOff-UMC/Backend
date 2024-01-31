@@ -13,7 +13,7 @@ public interface MemoirService {
 
     Memoir writeMemoir(MemoirRequestDTO.WriteDTO request);
 
-    Memoir getMemoir(LocalDate date);
+    Memoir getMemoir(Long memoirId);
 
     Memoir updateMemoir(MemoirRequestDTO.UpdateDTO request);
 
