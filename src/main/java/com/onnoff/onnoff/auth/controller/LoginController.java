@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,9 @@ public class LoginController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
+    @Value("${kakao.redirect-uri}")
+    private String redirectUri;
+
 
 
     /*
@@ -40,12 +44,12 @@ public class LoginController {
      */
     @GetMapping("/oauth2/authorize/kakao")
     public String login(){
-        String redirectUri = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
+        String toRedirectUri = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
                 .queryParam("response_type", "code")
                 .queryParam("client_id", "32c0787d1b1e9fcabcc24af247903ba8")
-                .queryParam("redirect_uri", "http://localhost:8080/oauth2/login/kakao")
+                .queryParam("redirect_uri", redirectUri)
                 .toUriString();
-        return "redirect:" + redirectUri;
+        return "redirect:" + toRedirectUri;
     }
     /*
     테스트용 API
@@ -53,7 +57,8 @@ public class LoginController {
     @GetMapping("/oauth2/login/kakao")
     public ResponseEntity<String> getAccessToken(@RequestParam(name = "code") String code){
         TokenResponse tokenResponse = kakaoLoginService.getAccessTokenByCode(code);
-        return ResponseEntity.ok("http://localhost:8080/oauth2/kakao/token/validate?accessToken="+ tokenResponse.getAccessToken());
+        return ResponseEntity.ok("accessToken="+ tokenResponse.getAccessToken() +
+                "idToken=" + tokenResponse.getIdToken());
     }
     /*
     1. ID 토큰 유효성 검증
@@ -116,6 +121,12 @@ public class LoginController {
         response.addHeader("Access-Token", token.getAccessToken());
         response.addHeader("Refresh-Token", token.getRefreshToken());
         return ApiResponse.onSuccess(UserConverter.toLoginDTO(user));
+    }
+
+    @GetMapping("/token/validate")
+    public ApiResponse<String> validateServerToken(@RequestParam(name = "code") String code){
+        TokenResponse tokenResponse = kakaoLoginService.getAccessTokenByCode(code);
+        return ApiResponse.onSuccess(null);
     }
     /*
    테스트용 API
