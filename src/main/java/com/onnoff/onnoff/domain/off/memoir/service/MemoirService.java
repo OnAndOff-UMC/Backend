@@ -17,5 +17,5 @@ public interface MemoirService {
 
     Memoir updateMemoir(MemoirRequestDTO.UpdateDTO request);
 
-    Memoir deleteMemoir(Long memoirId);
+    Long deleteMemoir(Long memoirId);
 }

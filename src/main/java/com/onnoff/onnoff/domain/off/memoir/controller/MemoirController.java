@@ -55,8 +55,7 @@ public class MemoirController {
 
     @DeleteMapping("/memoirs/{memoirId}")
     @Operation(summary = "회고 삭제 API",description = "기존의 회고를 삭제하는 API입니다.")
-    public ApiResponse<MemoirResponseDTO.ResultDTO> deleteMemoir(@PathVariable(name = "memoirId") Long memoirId){
-        Memoir memoir = memoirService.deleteMemoir(memoirId);
-        return ApiResponse.onSuccess(MemoirConverter.toResultDTO(memoir));
+    public ApiResponse<Long> deleteMemoir(@PathVariable(name = "memoirId") Long memoirId){
+        return ApiResponse.onSuccess(memoirService.deleteMemoir(memoirId));
     }
 }
