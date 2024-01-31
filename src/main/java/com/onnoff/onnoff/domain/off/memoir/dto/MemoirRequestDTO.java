@@ -29,11 +29,8 @@ public class MemoirRequestDTO {
 
     @Getter
     public static class MemoirUpdateDTO {
-        @NotNull
-        Long memoirId;
         @Size(max = 255)
         String icon;
-        Boolean isBookmarked;
         List<@Valid MemoirUpdateAnswerDTO> memoirAnswerList;
     }
 
