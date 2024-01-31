@@ -14,7 +14,7 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MemoirQuestionResultDTO{
+    public static class MemoirQuestionResultDTO {
         Long questionId;
         String question;
         String summary;
@@ -36,11 +36,20 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MemoirAnswerResultDTO{
+    public static class MemoirAnswerResultDTO {
         Long answerId;
         String question;
         String summary;
         String answer;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MemoirPreviewResultDTO {
+        Boolean written;
+        Long memoirId;
     }
 
 }

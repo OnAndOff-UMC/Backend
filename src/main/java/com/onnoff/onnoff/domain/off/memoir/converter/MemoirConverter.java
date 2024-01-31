@@ -1,5 +1,6 @@
 package com.onnoff.onnoff.domain.off.memoir.converter;
 
+import com.onnoff.onnoff.apiPayload.ApiResponse;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirResponseDTO;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
@@ -29,6 +30,20 @@ public class MemoirConverter {
                 .build();
     }
 
+    public static MemoirResponseDTO.MemoirPreviewResultDTO toMemoirPreviewResultDTO(Memoir memoir) {
+        if (memoir == null) {
+            return MemoirResponseDTO.MemoirPreviewResultDTO.builder()
+                    .memoirId(null)
+                    .written(false)
+                    .build();
+        } else {
+            return MemoirResponseDTO.MemoirPreviewResultDTO.builder()
+                    .memoirId(memoir.getId())
+                    .written(true)
+                    .build();
+        }
+    }
+
     public static MemoirResponseDTO.MemoirResultDTO toMemoirResultDTO(Memoir memoir) {
         return MemoirResponseDTO.MemoirResultDTO.builder()
                 .memoirId(memoir.getId())
@@ -49,4 +64,5 @@ public class MemoirConverter {
                         .build())
                 .collect(Collectors.toList());
     }
+
 }

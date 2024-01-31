@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +57,13 @@ public class MemoirServiceImpl implements MemoirService {
         newMemoir.setMemoirAnswerList(newMemoirAnswerList);
 
         return memoirRepository.save(newMemoir);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Memoir getMemoirPreview(LocalDate date) {
+        User user = UserContext.getUser();
+        return memoirRepository.findByUserAndDate(user, date).orElse(null);
     }
 
     @Override
