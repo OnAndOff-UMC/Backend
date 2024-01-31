@@ -1,4 +1,4 @@
-package com.onnoff.onnoff.auth.feignClient.dto;
+package com.onnoff.onnoff.auth.feignClient.dto.kakao;
 
 
 import lombok.Getter;

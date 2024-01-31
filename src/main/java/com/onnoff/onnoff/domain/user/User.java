@@ -31,7 +31,7 @@ public class User extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Long oauthId;  //토큰으로 얻어온 정보로 유저를 조회할 때 사용
+    private String oauthId;  //토큰으로 얻어온 정보로 유저를 조회할 때 사용
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean infoSet; //추가 정보 기입 여부
@@ -67,6 +67,8 @@ public class User extends BaseEntity {
 
     private String fcmToken;
 
+    private String appleRefreshToken;
+
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
@@ -84,4 +86,8 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Worklog> worklogList = new ArrayList<>();
+
+    public void setAppleRefreshToken(String appleRefreshToken) {
+        this.appleRefreshToken = appleRefreshToken;
+    }
 }

@@ -5,13 +5,13 @@ import com.onnoff.onnoff.domain.user.User;
 import java.util.List;
 
 public interface UserService {
-    public Long create(User user);
+    public User create(User user);
 
     public List<User> getUserList();
 
     public User getUser(Long id);
 
-    public boolean isExistByOauthId(Long oauthId);
+    public boolean isExistByOauthId(String oauthId);
 
-    public User getUserByOauthId(Long oauthId);
+    public User getUserByOauthId(String oauthId);
 }
