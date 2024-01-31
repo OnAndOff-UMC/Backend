@@ -3,23 +3,23 @@ package com.onnoff.onnoff.auth.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.onnoff.onnoff.apiPayload.ApiResponse;
-import com.onnoff.onnoff.apiPayload.code.status.SuccessStatus;
 import com.onnoff.onnoff.auth.UserContext;
-import com.onnoff.onnoff.auth.feignClient.dto.KakaoOauth2DTO;
+import com.onnoff.onnoff.auth.dto.LoginRequestDTO;
+import com.onnoff.onnoff.auth.feignClient.dto.TokenResponse;
+import com.onnoff.onnoff.auth.feignClient.dto.kakao.KakaoOauth2DTO;
 import com.onnoff.onnoff.auth.jwt.dto.JwtToken;
 import com.onnoff.onnoff.auth.jwt.service.JwtUtil;
-import com.onnoff.onnoff.auth.service.LoginService;
+import com.onnoff.onnoff.auth.service.AppleLoginService;
+import com.onnoff.onnoff.auth.service.KakaoLoginService;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.converter.UserConverter;
 import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
 import com.onnoff.onnoff.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +29,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
-    private final LoginService loginService;
+    private final KakaoLoginService kakaoLoginService;
+    private final AppleLoginService appleLoginService;
     private final UserService userService;
     private final JwtUtil jwtUtil;
+
+    @Value("${kakao.redirect-uri}")
+    private String redirectUri;
+
+
 
 
     /*
@@ -39,72 +45,92 @@ public class LoginController {
      */
     @GetMapping("/oauth2/authorize/kakao")
     public String login(){
-        String redirectUri = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
+        String toRedirectUri = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
                 .queryParam("response_type", "code")
                 .queryParam("client_id", "32c0787d1b1e9fcabcc24af247903ba8")
-                .queryParam("redirect_uri", "http://localhost:8080/oauth2/login/kakao")
+                .queryParam("redirect_uri", redirectUri)
                 .toUriString();
-        return "redirect:" + redirectUri;
+        return "redirect:" + toRedirectUri;
     }
     /*
     테스트용 API
      */
     @GetMapping("/oauth2/login/kakao")
     public ResponseEntity<String> getAccessToken(@RequestParam(name = "code") String code){
-        String accessToken = loginService.getAccessToken(code);
-        return ResponseEntity.ok("http://localhost:8080/oauth2/kakao/token/validate?accessToken="+accessToken);
+        TokenResponse tokenResponse = kakaoLoginService.getAccessTokenByCode(code);
+        return ResponseEntity.ok("accessToken="+ tokenResponse.getAccessToken() +
+                "idToken=" + tokenResponse.getIdToken());
+
     }
     /*
-    1. 토큰 유효성 검증
+    1. ID 토큰 유효성 검증
     2. 사용자 정보 얻어오기
     3. DB 조회 및 추가
     4. 응답 헤더에 Jwt 토큰 추가
      */
 
     @Operation(summary = "토큰 검증 API",description = "토큰을 검증 하고 이에 대한 결과를 응답합니다. 추가 정보 입력 여부도 같이 응답 합니다.")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "202", description = "토큰 검증 성공," + " 추가 정보 기입이 필요합니다.",
-                    content = @Content(schema = @Schema(implementation = UserResponseDTO.ApiResponseLoginDTO.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "토큰 검증 성공",
-                    content = @Content(schema = @Schema(implementation = UserResponseDTO.ApiResponseUserDetailDTO.class)))
-    })
     @ResponseBody
     @PostMapping("/oauth2/kakao/token/validate")
-    public ApiResponse<?> validateToken(HttpServletResponse response, @RequestBody String accessToken)  {
-        // 토큰 검증
-        loginService.validate(accessToken);
+    public ApiResponse<UserResponseDTO.LoginDTO> validateKakoToken(HttpServletResponse response, @RequestBody LoginRequestDTO.KakaoTokenValidateDTO requestDTO)  {
+        // identity 토큰 검증
+        kakaoLoginService.validate(requestDTO.getIdentityToken());
         // ok -> 유저 정보 가져오기
-        KakaoOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = null;
+        KakaoOauth2DTO.UserInfoResponseDTO userInfo;
         try {
-            userInfoResponseDTO = loginService.getUserInfo(accessToken);
+            userInfo = kakaoLoginService.getUserInfo(requestDTO.getAccessToken());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         // 유저 정보에 DB 조회하고 정보 있으면 응답만, 없으면 저장까지, 추가정보 입력 여부에 따라서 응답 다르게
-        Long oauthId = userInfoResponseDTO.getId();
+        String oauthId = userInfo.getSub();
+        User user;
         if( userService.isExistByOauthId(oauthId)){
-            User user = userService.getUserByOauthId(oauthId);
-            // 응답헤더에 토큰 추가
-            JwtToken token = jwtUtil.generateToken(String.valueOf(user.getId()));
-            response.addHeader("Access-Token", token.getAccessToken());
-            response.addHeader("Refresh-Token", token.getRefreshToken());
-            if(user.isInfoSet()){
-                return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(user));
-            }
-            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, UserConverter.toLoginDTO(user));
+            user = userService.getUserByOauthId(oauthId);
         }
         else{
-            User user = UserConverter.toUser(userInfoResponseDTO);
-            Long id = userService.create(user);
-            // 응답헤더에 토큰 추가
-            JwtToken token = jwtUtil.generateToken(String.valueOf(id));
-            response.addHeader("Access-Token", token.getAccessToken());
-            response.addHeader("Refresh-Token", token.getRefreshToken());
-            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, UserConverter.toLoginDTO(user));
+            user = UserConverter.toUser(userInfo);
+            user = userService.create(user);
         }
+        // 응답헤더에 토큰 추가
+        JwtToken token = jwtUtil.generateToken(String.valueOf(user.getId()));
+        response.addHeader("Access-Token", token.getAccessToken());
+        response.addHeader("Refresh-Token", token.getRefreshToken());
+        return ApiResponse.onSuccess(UserConverter.toLoginDTO(user));
     }
 
+    @ResponseBody
+    @PostMapping("/oauth2/apple/token/validate")
+    public ApiResponse<?> validateAppleToken(HttpServletResponse response, @RequestBody LoginRequestDTO.AppleTokenValidateDTO requestDTO)  {
+        // 검증하기
+        appleLoginService.validate(requestDTO.getIdentityToken());
+        // 검증 성공 시 리프레시 토큰 발급받아 저장(기한 무제한, 회원탈퇴 시 필요)
+        TokenResponse tokenResponse = appleLoginService.getAccessTokenByCode(requestDTO.getAuthorizationCode());
+        // 유저 정보 조회 및 저장
+        String oauthId = requestDTO.getOauthId();
+        User user;
+        if( userService.isExistByOauthId(oauthId)){
+            user = userService.getUserByOauthId(oauthId);
+        }
+        else{
+            user = UserConverter.toUser(requestDTO);
+            user.setAppleRefreshToken(tokenResponse.getRefreshToken());
+            user = userService.create(user);
+        }
+        // 응답헤더에 토큰 추가
+        JwtToken token = jwtUtil.generateToken(String.valueOf(user.getId()));
+        response.addHeader("Access-Token", token.getAccessToken());
+        response.addHeader("Refresh-Token", token.getRefreshToken());
+        return ApiResponse.onSuccess(UserConverter.toLoginDTO(user));
+    }
+
+
+    @GetMapping("/token/validate")
+    public ApiResponse<String> validateServerToken(@RequestParam(name = "code") String code){
+        TokenResponse tokenResponse = kakaoLoginService.getAccessTokenByCode(code);
+        return ApiResponse.onSuccess(null);
+    }
     /*
    테스트용 API
     */

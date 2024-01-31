@@ -3,7 +3,7 @@ package com.onnoff.onnoff.auth.feignClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
-import com.onnoff.onnoff.auth.feignClient.dto.ErrorResponseDTO;
+import com.onnoff.onnoff.auth.feignClient.dto.kakao.ErrorResponseDTO;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
