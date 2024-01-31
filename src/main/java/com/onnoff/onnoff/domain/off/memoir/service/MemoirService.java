@@ -9,16 +9,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface MemoirService {
-    List<MemoirQuestion> getMemoirQuestion(Long userId);
+    List<MemoirQuestion> getMemoirQuestion();
 
-    @Transactional
     Memoir writeMemoir(MemoirRequestDTO.WriteDTO request);
 
-    Memoir getMemoir(Long userId, LocalDate date);
+    Memoir getMemoir(LocalDate date);
 
-    @Transactional
     Memoir updateMemoir(MemoirRequestDTO.UpdateDTO request);
 
-    @Transactional
     Memoir deleteMemoir(Long memoirId);
 }

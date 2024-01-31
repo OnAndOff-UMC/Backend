@@ -12,8 +12,6 @@ public class MemoirRequestDTO {
     @Getter
     public static class WriteDTO {
         @NotNull
-        Long userId;
-        @NotNull
         LocalDate date;
         @Size(max = 255)
         String icon;

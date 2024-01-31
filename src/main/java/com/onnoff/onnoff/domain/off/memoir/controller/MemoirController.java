@@ -22,9 +22,9 @@ public class MemoirController {
     private final MemoirService memoirService;
 
     @GetMapping("/memoir-questions")
-    @Operation(summary = "회고 질문 조회 API",description = "회고 질문 목록을 조회하는 API입니다. Query String으로 사용자 아이디를 입력해 주세요.")
-    public ApiResponse<List<MemoirResponseDTO.QuestionResultDTO>> getMemoirQuestion(@RequestParam(name = "userId") Long userId){
-        List<MemoirQuestion> memoirQuestionList = memoirService.getMemoirQuestion(userId);
+    @Operation(summary = "회고 질문 조회 API",description = "회고 질문 목록을 조회하는 API입니다.")
+    public ApiResponse<List<MemoirResponseDTO.QuestionResultDTO>> getMemoirQuestion(){
+        List<MemoirQuestion> memoirQuestionList = memoirService.getMemoirQuestion();
         return ApiResponse.onSuccess(MemoirConverter.toQuestionResultDTOList(memoirQuestionList));
     }
 
@@ -36,9 +36,9 @@ public class MemoirController {
     }
 
     @GetMapping("/memoirs")
-    @Operation(summary = "회고 조회 API",description = "특정한 날짜의 회고를 조회하는 API입니다. Query String으로 사용자 아이디와 날짜를 입력해 주세요.")
-    public ApiResponse<MemoirResponseDTO.ResultDTO> writeMemoir(@RequestParam(name = "userId") Long userId, @RequestParam(name = "date") LocalDate date){
-        Memoir memoir = memoirService.getMemoir(userId, date);
+    @Operation(summary = "회고 조회 API",description = "특정한 날짜의 회고를 조회하는 API입니다. Query String으로 날짜를 입력해 주세요.")
+    public ApiResponse<MemoirResponseDTO.ResultDTO> getMemoir(@RequestParam(name = "date") LocalDate date){
+        Memoir memoir = memoirService.getMemoir(date);
 
         if (memoir == null) {
             return ApiResponse.onSuccess(null);

@@ -2,6 +2,7 @@ package com.onnoff.onnoff.domain.off.memoir.service;
 
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
+import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.off.memoir.converter.MemoirConverter;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
@@ -29,18 +30,16 @@ public class MemoirServiceImpl implements MemoirService {
     private final MemoirAnswerRepository memoirAnswerRepository;
     private final MemoirQuestionRepository memoirQuestionRepository;
 
-    private final UserRepository userRepository;
-
     @Override
     @Transactional(readOnly = true)
-    public List<MemoirQuestion> getMemoirQuestion(Long userId) {
+    public List<MemoirQuestion> getMemoirQuestion() {
         return memoirQuestionRepository.findAll();
     }
 
     @Override
     @Transactional
     public Memoir writeMemoir(MemoirRequestDTO.WriteDTO request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        User user = UserContext.getUser();
         if (memoirRepository.findByUserAndDate(user, request.getDate()).isPresent()) {
             throw new GeneralException(ErrorStatus.MEMOIR_EXIST);
         }
@@ -63,8 +62,8 @@ public class MemoirServiceImpl implements MemoirService {
 
     @Override
     @Transactional(readOnly = true)
-    public Memoir getMemoir(Long userId, LocalDate date) {
-        User user = userRepository.findById(userId).orElseThrow(()  -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+    public Memoir getMemoir(LocalDate date) {
+        User user = UserContext.getUser();
         return memoirRepository.findByUserAndDate(user, date).orElse(null);
     }
 
