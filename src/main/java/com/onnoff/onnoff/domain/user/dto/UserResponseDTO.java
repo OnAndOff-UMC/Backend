@@ -16,9 +16,9 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LoginDTO{
-        private Long id;
         private boolean infoSet;
-        private LocalDateTime createdAt;
+        private String accessToken;
+        private String refreshToken;
     }
 
     @Builder
