@@ -52,4 +52,15 @@ public class MemoirResponseDTO {
         Long memoirId;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BookmarkedMemoirResultDTO {
+        Long memoirId;
+        LocalDate date;
+        String icon;
+        Integer remain;
+    }
+
 }

@@ -73,6 +73,13 @@ public class MemoirServiceImpl implements MemoirService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Memoir> getBookmarkedMemoir() {
+        User user = UserContext.getUser();
+        return memoirRepository.findByUserAndIsBookmarkedOrderByDateDesc(user, true);
+    }
+
+    @Override
     @Transactional
     public Memoir modifyMemoir(Long memoirId, MemoirRequestDTO.MemoirUpdateDTO request) {
         Memoir memoir = memoirRepository.findById(memoirId).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));

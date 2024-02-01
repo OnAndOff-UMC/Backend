@@ -8,6 +8,7 @@ import com.onnoff.onnoff.domain.off.memoir.entity.MemoirAnswer;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MemoirConverter {
@@ -61,6 +62,19 @@ public class MemoirConverter {
                         .question(memoirAnswer.getMemoirQuestion().getQuestion())
                         .summary(memoirAnswer.getMemoirQuestion().getSummary())
                         .answer(memoirAnswer.getAnswer())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public static List<MemoirResponseDTO.BookmarkedMemoirResultDTO> toBookmarkedMemoirResultDTOList(List<Memoir> memoirList) {
+        AtomicInteger index = new AtomicInteger();
+
+        return memoirList.stream()
+                .map(memoir -> MemoirResponseDTO.BookmarkedMemoirResultDTO.builder()
+                        .memoirId(memoir.getId())
+                        .date(memoir.getDate())
+                        .icon(memoir.getIcon())
+                        .remain(index.getAndIncrement() % 2)
                         .build())
                 .collect(Collectors.toList());
     }

@@ -17,6 +17,8 @@ public interface MemoirService {
 
     Memoir getMemoir(Long memoirId);
 
+    List<Memoir> getBookmarkedMemoir();
+
     Memoir modifyMemoir(Long memoirId, MemoirRequestDTO.MemoirUpdateDTO request);
 
     Memoir bookmarkMemoir(Long memoirId);

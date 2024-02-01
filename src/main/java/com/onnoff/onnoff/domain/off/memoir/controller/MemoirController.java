@@ -35,7 +35,7 @@ public class MemoirController {
         return ApiResponse.onSuccess(MemoirConverter.toMemoirResultDTO(memoir));
     }
 
-    @GetMapping("/memoirs/preview")
+    @GetMapping("/memoirs/previews")
     @Operation(summary = "회고 미리보기 조회 API", description = "특정 날짜의 회고 미리보기를 조회하는 API입니다.")
     public ApiResponse<MemoirResponseDTO.MemoirPreviewResultDTO> getMemoirPreview(@RequestParam(name = "date") LocalDate date) {
         Memoir memoir = memoirService.getMemoirPreview(date);
@@ -47,6 +47,13 @@ public class MemoirController {
     public ApiResponse<MemoirResponseDTO.MemoirResultDTO> getMemoir(@PathVariable(name = "memoirId") Long memoirId) {
         Memoir memoir = memoirService.getMemoir(memoirId);
         return ApiResponse.onSuccess(MemoirConverter.toMemoirResultDTO(memoir));
+    }
+
+    @GetMapping("/memoirs/bookmarks")
+    @Operation(summary = "북마크 회고 조회 API", description = "북마크 상태의 회고를 조회하는 API입니다.")
+    public ApiResponse<List<MemoirResponseDTO.BookmarkedMemoirResultDTO>> getBookmarkedMemoir() {
+        List<Memoir> memoirList = memoirService.getBookmarkedMemoir();
+        return ApiResponse.onSuccess(MemoirConverter.toBookmarkedMemoirResultDTOList(memoirList));
     }
 
     @PatchMapping("/memoirs/{memoirId}")
