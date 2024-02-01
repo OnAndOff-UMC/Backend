@@ -36,6 +36,7 @@ public class UserInterceptor implements HandlerInterceptor {
             return true;
         }
         catch (IllegalArgumentException exception){
+            log.info("url={} 인터셉터 인증 실패", request.getRequestURI() );
             // jwt 필터에서 검증된 토큰이라 예외 안나겠지만 없지만 혹시 모르니
             response.sendError(HttpStatus.UNAUTHORIZED.value());
             return false;

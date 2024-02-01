@@ -23,11 +23,11 @@ public class UserConverter {
                 .socialType(SocialType.APPLE)
                 .build();
     }
-    public static UserResponseDTO.LoginDTO toLoginDTO(User user){
+    public static UserResponseDTO.LoginDTO toLoginDTO(User user, String accessToken, String refreshToken){
         return UserResponseDTO.LoginDTO.builder()
-                .id(user.getId())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .infoSet(user.isInfoSet())
-                .createdAt(user.getCreatedAt())
                 .build();
 
     }
