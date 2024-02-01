@@ -3,7 +3,6 @@ package com.onnoff.onnoff.domain.off.memoir.service;
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.auth.UserContext;
-import com.onnoff.onnoff.domain.off.memoir.converter.MemoirConverter;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirAnswer;
@@ -31,12 +30,6 @@ public class MemoirServiceImpl implements MemoirService {
     private final MemoirAnswerRepository memoirAnswerRepository;
     private final MemoirQuestionRepository memoirQuestionRepository;
     private final EmoticonRepository emoticonRepository;
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<MemoirQuestion> getMemoirQuestion() {
-        return memoirQuestionRepository.findAll();
-    }
 
     @Override
     @Transactional
@@ -121,5 +114,17 @@ public class MemoirServiceImpl implements MemoirService {
         memoirRepository.delete(memoir);
 
         return memoir.getId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MemoirQuestion> getMemoirQuestion() {
+        return memoirQuestionRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Emoticon> getEmoticon() {
+        return emoticonRepository.findAll();
     }
 }

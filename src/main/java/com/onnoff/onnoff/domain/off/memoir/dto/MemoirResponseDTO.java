@@ -14,16 +14,6 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MemoirQuestionResultDTO {
-        Long questionId;
-        String question;
-        String summary;
-    }
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class MemoirResultDTO {
         Long memoirId;
         LocalDate date;
@@ -61,6 +51,25 @@ public class MemoirResponseDTO {
         LocalDate date;
         String emoticonUrl;
         Integer remain;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MemoirQuestionResultDTO {
+        Long questionId;
+        String question;
+        String summary;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EmoticonResultDTO {
+        Long emoticonId;
+        String imageUrl;
     }
 
 }

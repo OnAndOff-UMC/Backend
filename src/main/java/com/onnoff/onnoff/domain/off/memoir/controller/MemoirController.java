@@ -4,6 +4,7 @@ import com.onnoff.onnoff.apiPayload.ApiResponse;
 import com.onnoff.onnoff.domain.off.memoir.converter.MemoirConverter;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirResponseDTO;
+import com.onnoff.onnoff.domain.off.memoir.entity.Emoticon;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
 import com.onnoff.onnoff.domain.off.memoir.service.MemoirService;
@@ -21,13 +22,6 @@ public class MemoirController {
 
     private final MemoirService memoirService;
 
-    @GetMapping("/memoir-questions")
-    @Operation(summary = "회고 질문 조회 API", description = "회고 질문 목록을 조회하는 API입니다.")
-    public ApiResponse<List<MemoirResponseDTO.MemoirQuestionResultDTO>> getMemoirQuestion() {
-        List<MemoirQuestion> memoirQuestionList = memoirService.getMemoirQuestion();
-        return ApiResponse.onSuccess(MemoirConverter.toMemoirQuestionResultDTOList(memoirQuestionList));
-    }
-
     @PostMapping("/memoirs")
     @Operation(summary = "회고 작성 API", description = "새로운 회고를 작성하는 API입니다.")
     public ApiResponse<MemoirResponseDTO.MemoirResultDTO> writeMemoir(@RequestBody @Valid MemoirRequestDTO.MemoirWriteDTO request) {
@@ -36,7 +30,7 @@ public class MemoirController {
     }
 
     @GetMapping("/memoirs/previews")
-    @Operation(summary = "회고 미리보기 조회 API", description = "특정 날짜의 회고 미리보기를 조회하는 API입니다.")
+    @Operation(summary = "회고 미리보기 조회 API", description = "특정 날짜의 회고 미리보기를 조회하는 API입니다. Query String으로 날짜를 입력해 주세요.")
     public ApiResponse<MemoirResponseDTO.MemoirPreviewResultDTO> getMemoirPreview(@RequestParam(name = "date") LocalDate date) {
         Memoir memoir = memoirService.getMemoirPreview(date);
         return ApiResponse.onSuccess(MemoirConverter.toMemoirPreviewResultDTO(memoir));
@@ -75,5 +69,19 @@ public class MemoirController {
     @Operation(summary = "회고 삭제 API", description = "기존의 회고를 삭제하는 API입니다.")
     public ApiResponse<Long> deleteMemoir(@PathVariable(name = "memoirId") Long memoirId) {
         return ApiResponse.onSuccess(memoirService.deleteMemoir(memoirId));
+    }
+
+    @GetMapping("/memoir-questions")
+    @Operation(summary = "회고 질문 조회 API", description = "회고 질문 목록을 조회하는 API입니다.")
+    public ApiResponse<List<MemoirResponseDTO.MemoirQuestionResultDTO>> getMemoirQuestion() {
+        List<MemoirQuestion> memoirQuestionList = memoirService.getMemoirQuestion();
+        return ApiResponse.onSuccess(MemoirConverter.toMemoirQuestionResultDTOList(memoirQuestionList));
+    }
+
+    @GetMapping("/emoticons")
+    @Operation(summary = "이모티콘 조회 API", description = "이모티콘 목록을 조회하는 API입니다.")
+    public ApiResponse<List<MemoirResponseDTO.EmoticonResultDTO>> getEmoticon() {
+        List<Emoticon> emoticonList = memoirService.getEmoticon();
+        return ApiResponse.onSuccess(MemoirConverter.toEmoticonResultDTOList(emoticonList));
     }
 }

@@ -1,6 +1,7 @@
 package com.onnoff.onnoff.domain.off.memoir.service;
 
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
+import com.onnoff.onnoff.domain.off.memoir.entity.Emoticon;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface MemoirService {
-    List<MemoirQuestion> getMemoirQuestion();
 
     Memoir writeMemoir(MemoirRequestDTO.MemoirWriteDTO request);
 
@@ -24,4 +24,8 @@ public interface MemoirService {
     Memoir bookmarkMemoir(Long memoirId);
 
     Long deleteMemoir(Long memoirId);
+
+    List<MemoirQuestion> getMemoirQuestion();
+
+    List<Emoticon> getEmoticon();
 }

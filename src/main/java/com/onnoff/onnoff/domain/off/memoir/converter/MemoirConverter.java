@@ -14,16 +14,6 @@ import java.util.stream.Collectors;
 
 public class MemoirConverter {
 
-    public static List<MemoirResponseDTO.MemoirQuestionResultDTO> toMemoirQuestionResultDTOList(List<MemoirQuestion> memoirQuestionList) {
-        return memoirQuestionList.stream()
-                .map(x -> MemoirResponseDTO.MemoirQuestionResultDTO.builder()
-                        .questionId(x.getId())
-                        .question(x.getQuestion())
-                        .summary(x.getSummary())
-                        .build())
-                .collect(Collectors.toList());
-    }
-
     public static MemoirResponseDTO.MemoirPreviewResultDTO toMemoirPreviewResultDTO(Memoir memoir) {
         if (memoir == null) {
             return MemoirResponseDTO.MemoirPreviewResultDTO.builder()
@@ -68,6 +58,25 @@ public class MemoirConverter {
                         .date(memoir.getDate())
                         .emoticonUrl(memoir.getEmoticon().getImageUrl())
                         .remain(index.getAndIncrement() % 2)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public static List<MemoirResponseDTO.MemoirQuestionResultDTO> toMemoirQuestionResultDTOList(List<MemoirQuestion> memoirQuestionList) {
+        return memoirQuestionList.stream()
+                .map(memoirQuestion -> MemoirResponseDTO.MemoirQuestionResultDTO.builder()
+                        .questionId(memoirQuestion.getId())
+                        .question(memoirQuestion.getQuestion())
+                        .summary(memoirQuestion.getSummary())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public static List<MemoirResponseDTO.EmoticonResultDTO> toEmoticonResultDTOList(List<Emoticon> emoticonList) {
+        return emoticonList.stream()
+                .map(emoticon -> MemoirResponseDTO.EmoticonResultDTO.builder()
+                        .emoticonId(emoticon.getId())
+                        .imageUrl(emoticon.getImageUrl())
                         .build())
                 .collect(Collectors.toList());
     }
