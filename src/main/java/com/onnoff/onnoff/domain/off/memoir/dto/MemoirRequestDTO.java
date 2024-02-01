@@ -12,9 +12,10 @@ public class MemoirRequestDTO {
     @Getter
     public static class MemoirWriteDTO {
         @NotNull
+        @PastOrPresent
         LocalDate date;
-        @Size(max = 255)
-        String icon;
+        @NotNull
+        Long emoticonId;
         @NotEmpty
         List<@Valid MemoirWriteAnswerDTO> memoirAnswerList;
     }
@@ -29,8 +30,8 @@ public class MemoirRequestDTO {
 
     @Getter
     public static class MemoirUpdateDTO {
-        @Size(max = 255)
-        String icon;
+        @NotNull
+        Long emoticonId;
         List<@Valid MemoirUpdateAnswerDTO> memoirAnswerList;
     }
 

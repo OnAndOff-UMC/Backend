@@ -35,6 +35,9 @@ public enum ErrorStatus implements BaseErrorCode {
     ANSWER_NOT_FOUND(HttpStatus.BAD_REQUEST, "ANSWER4001", "해당하는 회고 답변이 없습니다."),
     ANSWER_BAD_MATCH(HttpStatus.BAD_REQUEST, "ANSWER4002", "해당하는 회고에 속하는 회고 답변이 아닙니다."),
 
+    // 이모티콘 관련 에러
+    EMOTICON_NOT_FOUND(HttpStatus.BAD_REQUEST, "EMOTICON4001", "해당하는 이모티콘이 없습니다."),
+
     // 피드 관련 에러
     FEED_NOT_FOUND(HttpStatus.BAD_REQUEST, "FEED4001", "해당하는 워라벨 피드가 없습니다."),
     FEED_NOT_BLANK(HttpStatus.BAD_REQUEST, "FEED4002", "워라벨 피드 내용은 공백일 수 없습니다."),

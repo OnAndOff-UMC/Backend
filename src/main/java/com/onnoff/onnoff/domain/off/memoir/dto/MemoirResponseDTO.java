@@ -27,7 +27,7 @@ public class MemoirResponseDTO {
     public static class MemoirResultDTO {
         Long memoirId;
         LocalDate date;
-        String icon;
+        String emoticonUrl;
         Boolean isBookmarked;
         List<MemoirAnswerResultDTO> memoirAnswerList;
     }
@@ -59,7 +59,7 @@ public class MemoirResponseDTO {
     public static class BookmarkedMemoirResultDTO {
         Long memoirId;
         LocalDate date;
-        String icon;
+        String emoticonUrl;
         Integer remain;
     }
 

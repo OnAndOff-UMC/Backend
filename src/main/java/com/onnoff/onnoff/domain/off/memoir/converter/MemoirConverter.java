@@ -3,6 +3,7 @@ package com.onnoff.onnoff.domain.off.memoir.converter;
 import com.onnoff.onnoff.apiPayload.ApiResponse;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirResponseDTO;
+import com.onnoff.onnoff.domain.off.memoir.entity.Emoticon;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirAnswer;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
@@ -23,14 +24,6 @@ public class MemoirConverter {
                 .collect(Collectors.toList());
     }
 
-    public static Memoir toMemoir(MemoirRequestDTO.MemoirWriteDTO request) {
-        return Memoir.builder()
-                .date(request.getDate())
-                .icon(request.getIcon())
-                .isBookmarked(false)
-                .build();
-    }
-
     public static MemoirResponseDTO.MemoirPreviewResultDTO toMemoirPreviewResultDTO(Memoir memoir) {
         if (memoir == null) {
             return MemoirResponseDTO.MemoirPreviewResultDTO.builder()
@@ -49,7 +42,7 @@ public class MemoirConverter {
         return MemoirResponseDTO.MemoirResultDTO.builder()
                 .memoirId(memoir.getId())
                 .date(memoir.getDate())
-                .icon(memoir.getIcon())
+                .emoticonUrl(memoir.getEmoticon().getImageUrl())
                 .isBookmarked(memoir.getIsBookmarked())
                 .memoirAnswerList(toMemoirAnswerResultDTOList(memoir.getMemoirAnswerList()))
                 .build();
@@ -73,7 +66,7 @@ public class MemoirConverter {
                 .map(memoir -> MemoirResponseDTO.BookmarkedMemoirResultDTO.builder()
                         .memoirId(memoir.getId())
                         .date(memoir.getDate())
-                        .icon(memoir.getIcon())
+                        .emoticonUrl(memoir.getEmoticon().getImageUrl())
                         .remain(index.getAndIncrement() % 2)
                         .build())
                 .collect(Collectors.toList());

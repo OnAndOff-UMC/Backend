@@ -22,7 +22,9 @@ public class Memoir extends BaseEntity {
 
     private LocalDate date;
 
-    private String icon;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "emoticon_id")
+    private Emoticon emoticon;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean isBookmarked;
@@ -34,8 +36,8 @@ public class Memoir extends BaseEntity {
     @OneToMany(mappedBy = "memoir", cascade = CascadeType.ALL)
     private List<MemoirAnswer> memoirAnswerList = new ArrayList<>();
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setEmoticon(Emoticon emoticon) {
+        this.emoticon = emoticon;
     }
 
     public void setIsBookmarked(Boolean isBookmarked) {

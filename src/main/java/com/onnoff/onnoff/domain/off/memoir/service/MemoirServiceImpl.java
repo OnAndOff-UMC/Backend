@@ -7,8 +7,10 @@ import com.onnoff.onnoff.domain.off.memoir.converter.MemoirConverter;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirAnswer;
+import com.onnoff.onnoff.domain.off.memoir.entity.Emoticon;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirAnswerRepository;
+import com.onnoff.onnoff.domain.off.memoir.repository.EmoticonRepository;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirQuestionRepository;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirRepository;
 import com.onnoff.onnoff.domain.user.User;
@@ -28,6 +30,7 @@ public class MemoirServiceImpl implements MemoirService {
     private final MemoirRepository memoirRepository;
     private final MemoirAnswerRepository memoirAnswerRepository;
     private final MemoirQuestionRepository memoirQuestionRepository;
+    private final EmoticonRepository emoticonRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -43,7 +46,11 @@ public class MemoirServiceImpl implements MemoirService {
             throw new GeneralException(ErrorStatus.MEMOIR_EXIST);
         }
 
-        Memoir newMemoir = MemoirConverter.toMemoir(request);
+        Memoir newMemoir = Memoir.builder()
+                .date(request.getDate())
+                .emoticon(emoticonRepository.findById(request.getEmoticonId()).orElseThrow(() -> new GeneralException(ErrorStatus.EMOTICON_NOT_FOUND)))
+                .isBookmarked(false)
+                .build();
 
         List<MemoirAnswer> newMemoirAnswerList = request.getMemoirAnswerList().stream()
                 .map(memoirAnswer -> MemoirAnswer.builder()
@@ -84,7 +91,7 @@ public class MemoirServiceImpl implements MemoirService {
     public Memoir modifyMemoir(Long memoirId, MemoirRequestDTO.MemoirUpdateDTO request) {
         Memoir memoir = memoirRepository.findById(memoirId).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
 
-        memoir.setIcon(request.getIcon());
+        memoir.setEmoticon(emoticonRepository.findById(request.getEmoticonId()).orElseThrow(() -> new GeneralException(ErrorStatus.EMOTICON_NOT_FOUND)));
         List<MemoirRequestDTO.MemoirUpdateAnswerDTO> requestMemoirAnswerList = request.getMemoirAnswerList() == null ? new ArrayList<>() : request.getMemoirAnswerList();
 
         for (MemoirRequestDTO.MemoirUpdateAnswerDTO memoirAnswer : requestMemoirAnswerList) {
