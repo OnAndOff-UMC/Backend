@@ -25,7 +25,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
-    private final static String[] ignorePrefix = {"/swagger-ui", "/v3/api-docs", "/oauth2", "/on", "/health", "/token/validate"};
+    private final static String[] ignorePrefix = {"/swagger-ui", "/v3/api-docs", "/oauth2", "/on", "/health", "/token/validate" , "/message"};
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("url ={}", request.getRequestURI());
@@ -44,11 +44,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             accessToken = authHeader.substring(7);
         }
         if (jwtTokenProvider.verifyToken(accessToken)){
-            log.info("jwt Filter 인증성공");
+            log.info("인증성공");
             filterChain.doFilter(request, response);
         }
         else{
-            log.info("jwt Filter 인증실패");
+            log.info("인증실패");
             response.sendError(HttpStatus.UNAUTHORIZED.value());
         }
     }

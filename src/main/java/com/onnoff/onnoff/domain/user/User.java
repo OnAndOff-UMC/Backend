@@ -13,6 +13,7 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +67,9 @@ public class User extends BaseEntity {
     private boolean receivePushNotification;
 
     private String fcmToken;
+
+    @Column(nullable = true)
+    private LocalTime pushNotificationTime;
 
     private String appleRefreshToken;
 
