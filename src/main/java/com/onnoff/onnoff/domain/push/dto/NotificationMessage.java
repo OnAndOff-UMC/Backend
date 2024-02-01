@@ -12,7 +12,7 @@ public record NotificationMessage(
 ) {
     public static NotificationMessage toGoHomeNotification(User user) {
         return NotificationMessage.builder()
-                .title(user.getName() + "님, 이제 퇴근하실 시간이에요.")
+                .title(user.getNickname() + "님, 이제 퇴근하실 시간이에요.")
                 .message("")
                 .type(NotificationType.NOTIFY)
                 .build();
