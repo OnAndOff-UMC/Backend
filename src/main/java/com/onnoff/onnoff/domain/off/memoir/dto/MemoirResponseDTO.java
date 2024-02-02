@@ -46,6 +46,20 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class BookmarkedMemoirResultListDTO {
+        List<BookmarkedMemoirResultDTO> memoirList;
+        Integer pageNumber;
+        Integer pageSize;
+        Integer totalPages;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class BookmarkedMemoirResultDTO {
         Long memoirId;
         LocalDate date;

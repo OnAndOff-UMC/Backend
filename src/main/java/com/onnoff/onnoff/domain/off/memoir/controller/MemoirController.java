@@ -11,6 +11,7 @@ import com.onnoff.onnoff.domain.off.memoir.service.MemoirService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -44,10 +45,10 @@ public class MemoirController {
     }
 
     @GetMapping("/memoirs/bookmarks")
-    @Operation(summary = "북마크 회고 조회 API", description = "북마크 상태의 회고를 조회하는 API입니다.")
-    public ApiResponse<List<MemoirResponseDTO.BookmarkedMemoirResultDTO>> getBookmarkedMemoir() {
-        List<Memoir> memoirList = memoirService.getBookmarkedMemoir();
-        return ApiResponse.onSuccess(MemoirConverter.toBookmarkedMemoirResultDTOList(memoirList));
+    @Operation(summary = "북마크 회고 조회 API", description = "북마크 상태의 회고를 조회하는 API이며, 페이징을 포함합니다. Query String으로 페이지 번호를 입력해 주세요. 0번이 1페이지입니다.")
+    public ApiResponse<MemoirResponseDTO.BookmarkedMemoirResultListDTO> getBookmarkedMemoir(@RequestParam(name = "pageNumber") Integer pageNumber) {
+        Page<Memoir> memoirList = memoirService.getBookmarkedMemoir(pageNumber);
+        return ApiResponse.onSuccess(MemoirConverter.toBookmarkedMemoirPreviewListDTO(memoirList));
     }
 
     @PatchMapping("/memoirs/{memoirId}")

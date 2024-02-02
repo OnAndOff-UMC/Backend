@@ -1,12 +1,11 @@
 package com.onnoff.onnoff.domain.off.memoir.converter;
 
-import com.onnoff.onnoff.apiPayload.ApiResponse;
-import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirResponseDTO;
 import com.onnoff.onnoff.domain.off.memoir.entity.Emoticon;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirAnswer;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -49,17 +48,27 @@ public class MemoirConverter {
                 .collect(Collectors.toList());
     }
 
-    public static List<MemoirResponseDTO.BookmarkedMemoirResultDTO> toBookmarkedMemoirResultDTOList(List<Memoir> memoirList) {
+    public static MemoirResponseDTO.BookmarkedMemoirResultListDTO toBookmarkedMemoirPreviewListDTO(Page<Memoir> memoirList) {
         AtomicInteger index = new AtomicInteger();
 
-        return memoirList.stream()
+        List<MemoirResponseDTO.BookmarkedMemoirResultDTO> memoirResultDTOList = memoirList.stream()
                 .map(memoir -> MemoirResponseDTO.BookmarkedMemoirResultDTO.builder()
                         .memoirId(memoir.getId())
                         .date(memoir.getDate())
                         .emoticonUrl(memoir.getEmoticon().getImageUrl())
                         .remain(index.getAndIncrement() % 2)
                         .build())
-                .collect(Collectors.toList());
+                .toList();
+
+        return MemoirResponseDTO.BookmarkedMemoirResultListDTO.builder()
+                .memoirList(memoirResultDTOList)
+                .pageNumber(memoirList.getNumber())
+                .pageSize(memoirList.getSize())
+                .totalPages(memoirList.getTotalPages())
+                .totalElements(memoirList.getTotalElements())
+                .isFirst(memoirList.isFirst())
+                .isLast(memoirList.isLast())
+                .build();
     }
 
     public static List<MemoirResponseDTO.MemoirQuestionResultDTO> toMemoirQuestionResultDTOList(List<MemoirQuestion> memoirQuestionList) {

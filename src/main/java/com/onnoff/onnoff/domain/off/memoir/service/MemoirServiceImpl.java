@@ -14,6 +14,8 @@ import com.onnoff.onnoff.domain.off.memoir.repository.MemoirQuestionRepository;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirRepository;
 import com.onnoff.onnoff.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,9 +76,9 @@ public class MemoirServiceImpl implements MemoirService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Memoir> getBookmarkedMemoir() {
+    public Page<Memoir> getBookmarkedMemoir(Integer pageNumber) {
         User user = UserContext.getUser();
-        return memoirRepository.findByUserAndIsBookmarkedOrderByDateDesc(user, true);
+        return memoirRepository.findByUserAndIsBookmarkedOrderByDateDesc(user, true, PageRequest.of(pageNumber, 10));
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
 import com.onnoff.onnoff.domain.off.memoir.entity.Emoticon;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ public interface MemoirService {
 
     Memoir getMemoir(Long memoirId);
 
-    List<Memoir> getBookmarkedMemoir();
+    Page<Memoir> getBookmarkedMemoir(Integer pageNumber);
 
     Memoir modifyMemoir(Long memoirId, MemoirRequestDTO.MemoirUpdateDTO request);
 
