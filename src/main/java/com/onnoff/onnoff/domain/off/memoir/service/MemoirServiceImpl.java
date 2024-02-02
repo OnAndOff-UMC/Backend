@@ -85,9 +85,8 @@ public class MemoirServiceImpl implements MemoirService {
         Memoir memoir = memoirRepository.findById(memoirId).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
 
         memoir.setEmoticon(emoticonRepository.findById(request.getEmoticonId()).orElseThrow(() -> new GeneralException(ErrorStatus.EMOTICON_NOT_FOUND)));
-        List<MemoirRequestDTO.MemoirUpdateAnswerDTO> requestMemoirAnswerList = request.getMemoirAnswerList() == null ? new ArrayList<>() : request.getMemoirAnswerList();
 
-        for (MemoirRequestDTO.MemoirUpdateAnswerDTO memoirAnswer : requestMemoirAnswerList) {
+        for (MemoirRequestDTO.MemoirUpdateAnswerDTO memoirAnswer : request.getMemoirAnswerList()) {
             MemoirAnswer findMemoirAnswer = memoirAnswerRepository.findById(memoirAnswer.getAnswerId()).orElseThrow(() -> new GeneralException(ErrorStatus.ANSWER_NOT_FOUND));
             if (findMemoirAnswer.getMemoir() != memoir) {
                 throw new GeneralException(ErrorStatus.ANSWER_BAD_MATCH);

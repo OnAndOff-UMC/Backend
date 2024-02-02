@@ -32,6 +32,7 @@ public class MemoirRequestDTO {
     public static class MemoirUpdateDTO {
         @NotNull
         Long emoticonId;
+        @NotEmpty
         List<@Valid MemoirUpdateAnswerDTO> memoirAnswerList;
     }
 
