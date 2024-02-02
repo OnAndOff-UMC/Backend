@@ -1,6 +1,5 @@
 package com.onnoff.onnoff.domain.on.worklog.repository;
 
-import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
 import com.onnoff.onnoff.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

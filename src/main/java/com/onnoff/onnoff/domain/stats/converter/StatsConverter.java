@@ -1,7 +1,6 @@
 package com.onnoff.onnoff.domain.stats.converter;
 
 import com.onnoff.onnoff.domain.stats.dto.StatsResponseDTO;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.time.LocalDate;
 import java.util.List;

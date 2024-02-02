@@ -25,7 +25,7 @@ public class StatsServiceImpl implements StatsService{
     private final UserRepository userRepository;
     private final WorklogRepository worklogRepository;
     private final FeedRepository feedRepository;
-    private final MemoirRepository memoirRepository;
+    //private final MemoirRepository memoirRepository;
 
     @Override
     public StatsResponseDTO.WeekDTO getWeekStats(Long userId){
