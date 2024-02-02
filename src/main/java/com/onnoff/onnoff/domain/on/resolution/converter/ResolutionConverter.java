@@ -5,7 +5,6 @@ import com.onnoff.onnoff.domain.on.resolution.dto.ResolutionResponse;
 import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

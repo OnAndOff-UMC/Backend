@@ -1,7 +1,6 @@
 package com.onnoff.onnoff.domain.on.worklog.service;
 
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
-import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.apiPayload.exception.handler.WorklogHandler;
 import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.on.worklog.converter.WorklogConverter;
@@ -20,7 +19,6 @@ import java.time.LocalDate;
 @Transactional
 @RequiredArgsConstructor
 public class WorklogServiceImpl implements WorklogService{
-    private final UserRepository userRepository;
     private final WorklogRepository worklogRepository;
 
     @Override

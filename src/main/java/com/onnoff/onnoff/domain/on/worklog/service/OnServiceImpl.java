@@ -1,7 +1,5 @@
 package com.onnoff.onnoff.domain.on.worklog.service;
 
-import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
-import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 import com.onnoff.onnoff.domain.on.resolution.repository.ResolutionRepository;
@@ -23,7 +21,6 @@ import java.util.Objects;
 @Transactional
 @RequiredArgsConstructor
 public class OnServiceImpl implements OnService{
-    private final UserRepository userRepository;
     private final ResolutionRepository resolutionRepository;
     private final WorklogRepository worklogRepository;
 
