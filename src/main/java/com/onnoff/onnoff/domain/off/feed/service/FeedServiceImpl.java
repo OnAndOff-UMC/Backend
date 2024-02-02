@@ -2,6 +2,7 @@ package com.onnoff.onnoff.domain.off.feed.service;
 
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
+import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.off.feed.converter.FeedConverter;
 import com.onnoff.onnoff.domain.off.feed.dto.FeedRequestDTO;
 import com.onnoff.onnoff.domain.off.feed.entity.Feed;
@@ -20,19 +21,18 @@ import java.util.List;
 public class FeedServiceImpl implements FeedService {
 
     private final FeedRepository feedRepository;
-    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public Feed addFeed(FeedRequestDTO.AddFeedDTO request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        User user = UserContext.getUser();
         return feedRepository.save(FeedConverter.toFeed(request, user));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Feed> getFeed(Long userId, LocalDate date) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+    public List<Feed> getFeed(LocalDate date) {
+        User user = UserContext.getUser();
         return feedRepository.findAllByUserAndDateOrderByCreatedAtAsc(user, date);
     }
 

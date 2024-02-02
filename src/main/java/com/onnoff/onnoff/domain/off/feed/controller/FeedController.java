@@ -28,9 +28,9 @@ public class FeedController {
     }
 
     @GetMapping("/feeds")
-    @Operation(summary = "워라벨 피드 조회 API",description = "특정한 날짜의 워라벨 피드를 조회하는 API입니다. Query String으로 사용자 아이디와 날짜를 입력해 주세요.")
-    public ApiResponse<List<FeedResponseDTO.FeedResultDTO>> getFeed(@RequestParam(name = "userId") Long userId, @RequestParam(name = "date") LocalDate date){
-        List<Feed> feedList = feedService.getFeed(userId, date);
+    @Operation(summary = "워라벨 피드 조회 API",description = "특정한 날짜의 워라벨 피드를 조회하는 API입니다. Query String으로 날짜를 입력해 주세요.")
+    public ApiResponse<List<FeedResponseDTO.FeedResultDTO>> getFeed(@RequestParam(name = "date") LocalDate date){
+        List<Feed> feedList = feedService.getFeed(date);
         return ApiResponse.onSuccess(feedList.stream().map(FeedConverter::toFeedResultDTO).toList());
     }
 

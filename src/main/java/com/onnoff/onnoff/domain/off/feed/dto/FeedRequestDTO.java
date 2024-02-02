@@ -13,8 +13,6 @@ public class FeedRequestDTO {
     @Getter
     public static class AddFeedDTO {
         @NotNull
-        Long userId;
-        @NotNull
         @PastOrPresent
         LocalDate date;
         @NotBlank
