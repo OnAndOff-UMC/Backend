@@ -1,15 +1,15 @@
 package com.onnoff.onnoff.domain.stats.service;
 
-import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
-import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.off.feed.repository.FeedRepository;
+import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
+import com.onnoff.onnoff.domain.off.memoir.entity.MemoirAnswer;
+import com.onnoff.onnoff.domain.off.memoir.repository.MemoirAnswerRepository;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirRepository;
 import com.onnoff.onnoff.domain.on.worklog.repository.WorklogRepository;
 import com.onnoff.onnoff.domain.stats.converter.StatsConverter;
 import com.onnoff.onnoff.domain.stats.dto.StatsResponseDTO;
 import com.onnoff.onnoff.domain.user.User;
-import com.onnoff.onnoff.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +22,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StatsServiceImpl implements StatsService{
-    private final UserRepository userRepository;
     private final WorklogRepository worklogRepository;
     private final FeedRepository feedRepository;
-    //private final MemoirRepository memoirRepository;
+    private final MemoirRepository memoirRepository;
+    private final MemoirAnswerRepository memoirAnswerRepository;
 
     @Override
-    public StatsResponseDTO.WeekDTO getWeekStats(Long userId){
+    public StatsResponseDTO.WeekDTO getWeekStats(){
         LocalDate today = LocalDate.now();
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-        //User user = UserContext.getUser();
+        User user = UserContext.getUser();
 
         Double on = worklogRepository.countByUserAndDateAndIsChecked(user, today, true) / worklogRepository.countByUserAndDate(user, today).doubleValue();
         Double off = feedRepository.countByUserAndDateAndIsChecked(user, today, true) / feedRepository.countByUserAndDate(user, today).doubleValue();
@@ -55,5 +53,62 @@ public class StatsServiceImpl implements StatsService{
         }
 
         return StatsConverter.getWeekStatsDTO(today, on, off, weekOfMonth, weekStats);
+    }
+
+    @Override
+    public StatsResponseDTO.MonthDTO getMonthStats(LocalDate date){
+        if(date == null){
+            date = LocalDate.now();
+        }
+
+        Double avg = 0.0;
+
+        User user = UserContext.getUser();
+
+        List<StatsResponseDTO.MonthStatsDTO> monthStatsList = new ArrayList<>();
+        LocalDate localDate = date.minusDays(date.getDayOfMonth() - 1);
+        for(int i=0; i<date.lengthOfMonth(); i++){
+            int rate =0;
+
+            Memoir memoir = memoirRepository.findByUserAndDate(user, localDate.plusDays(i)).orElse(null);
+            if(memoir == null){
+                StatsResponseDTO.MonthStatsDTO stats = StatsResponseDTO.MonthStatsDTO.builder()
+                        .date(localDate.plusDays(i))
+                        .rate(0.0)
+                        .build();
+                monthStatsList.add(stats);
+                continue;
+            }
+
+            if(memoir.getEmoticon() != null){
+                rate++;
+            }
+
+            List<MemoirAnswer> memoirAnswerList = memoirAnswerRepository.findAllByMemoirId(memoir.getId()).stream().toList();
+            for(MemoirAnswer memoirAnswer: memoirAnswerList){
+                if(memoirAnswer.getAnswer() != null){
+                    rate++;
+                }
+            }
+
+            StatsResponseDTO.MonthStatsDTO stats = StatsResponseDTO.MonthStatsDTO.builder()
+                    .date(localDate.plusDays(i))
+                    .rate(rate / 4.0)
+                    .build();
+            monthStatsList.add(stats);
+
+            avg += rate / 4.0 * 100;
+        }
+
+        if(date.equals(LocalDate.now())){
+            //이번달은 오늘 기준으로 계산
+            avg = avg / date.getDayOfMonth();
+        }
+        else{
+            //이외에는 한 달 기준으로 계산
+            avg = avg / date.lengthOfMonth();
+        }
+
+        return StatsConverter.getMonthStatsDTO(date, Integer.parseInt(String.valueOf(Math.round(avg))), monthStatsList);
     }
 }

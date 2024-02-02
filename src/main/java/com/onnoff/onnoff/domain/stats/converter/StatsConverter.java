@@ -26,4 +26,12 @@ public class StatsConverter {
                 .weekStatsDTO(weekStatsDTO)
                 .build();
     }
+
+    public static StatsResponseDTO.MonthDTO getMonthStatsDTO(LocalDate date, Integer avg, List<StatsResponseDTO.MonthStatsDTO> monthStatsList){
+        return StatsResponseDTO.MonthDTO.builder()
+                .date(date)
+                .avg(avg)
+                .monthStatsList(monthStatsList)
+                .build();
+    }
 }

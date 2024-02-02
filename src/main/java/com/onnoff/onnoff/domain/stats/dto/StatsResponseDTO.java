@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class StatsResponseDTO {
 
@@ -35,11 +36,22 @@ public class StatsResponseDTO {
         WeekStatsDTO weekStatsDTO;
     }
 
-//    @Builder
-//    @Getter
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    public static class MonthDTO{
-//
-//    }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MonthStatsDTO{
+        LocalDate date;
+        Double rate;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MonthDTO{
+        LocalDate date;
+        Integer avg;
+        List<MonthStatsDTO> monthStatsList;
+    }
 }
