@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface ResolutionService {
 
-    List<Resolution> getAll(Long userId, LocalDate date);
+    List<Resolution> getAll(LocalDate date);
 
-    Resolution addResolution(Long userId, ResolutionRequest.AddResolutionDTO request);
+    Resolution addResolution(ResolutionRequest.AddResolutionDTO request);
 
-    void modifyResolution(Long userId, ResolutionRequest.ModifyResolutionDTO request);
+    List<Resolution> modifyResolution(ResolutionRequest.ModifyResolutionDTO request);
 
-    void deleteResolution(Long userId, LocalDate date, Long resolutionId);
+    void deleteResolution(LocalDate date, Long resolutionId);
 }

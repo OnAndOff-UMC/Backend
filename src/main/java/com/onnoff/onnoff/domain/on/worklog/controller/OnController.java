@@ -20,8 +20,7 @@ public class OnController {
 
     @GetMapping("/")
     @Operation(summary = "ON 화면 조회")
-    public ApiResponse<OnResponse.OnViewDTO> getOn(@RequestParam(name = "userId") Long userId,
-                                                   @RequestParam(name = "date", required = false) LocalDate date){
-        return ApiResponse.onSuccess(onService.getOn(userId, date));
+    public ApiResponse<OnResponse.OnViewDTO> getOn(@RequestParam(name = "date", required = false) LocalDate date){
+        return ApiResponse.onSuccess(onService.getOn(date));
     }
 }

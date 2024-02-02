@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ResolutionRepository extends JpaRepository<Resolution, Long> {
-    List<Resolution> findAllByUserAndDate(User user, LocalDate date);
+    List<Resolution> findAllByUserAndDateOrderByOrder(User user, LocalDate date);
 
     Long countByUserAndDate(User user, LocalDate date);
 }

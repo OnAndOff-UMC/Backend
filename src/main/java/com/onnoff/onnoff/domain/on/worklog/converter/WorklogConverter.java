@@ -19,6 +19,8 @@ public class WorklogConverter {
     public static WorklogResponse.AddResultDTO toAddWorklogResultDTO(Worklog worklog){
         return WorklogResponse.AddResultDTO.builder()
                 .worklogId(worklog.getId())
+                .content(worklog.getContent())
+                .isChecked(worklog.getIsChecked())
                 .createdAt(worklog.getCreatedAt())
                 .build();
     }

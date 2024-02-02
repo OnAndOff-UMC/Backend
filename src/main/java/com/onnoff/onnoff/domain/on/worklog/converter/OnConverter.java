@@ -1,6 +1,5 @@
 package com.onnoff.onnoff.domain.on.worklog.converter;
 
-import com.onnoff.onnoff.domain.on.resolution.converter.ResolutionConverter;
 import com.onnoff.onnoff.domain.on.resolution.dto.ResolutionResponse;
 import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 import com.onnoff.onnoff.domain.on.worklog.dto.OnResponse;
@@ -9,7 +8,6 @@ import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class OnConverter {

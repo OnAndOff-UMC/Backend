@@ -2,6 +2,7 @@ package com.onnoff.onnoff.domain.on.worklog.service;
 
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
+import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 import com.onnoff.onnoff.domain.on.resolution.repository.ResolutionRepository;
 import com.onnoff.onnoff.domain.on.worklog.converter.OnConverter;
@@ -27,17 +28,16 @@ public class OnServiceImpl implements OnService{
     private final WorklogRepository worklogRepository;
 
     @Override
-    public OnResponse.OnViewDTO getOn(Long userId, LocalDate date){
+    public OnResponse.OnViewDTO getOn(LocalDate date){
         LocalDate localDate = Objects.requireNonNullElseGet(date, LocalDate::now);
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        User user = UserContext.getUser();
 
-        List<Resolution> resolutionList = resolutionRepository.findAllByUserAndDate(user, localDate);
+        List<Resolution> resolutionList = resolutionRepository.findAllByUserAndDateOrderByOrder(user, localDate);
 
-        List<Worklog> worklogList = worklogRepository.findAllByUserAndDate(user, localDate);
+        List<Worklog> worklogList = worklogRepository.findAllByUserAndDateOrderByCreatedAt(user, localDate);
 
 
-        return OnConverter.getOnDTO(userId, localDate, resolutionList, worklogList);
+        return OnConverter.getOnDTO(user.getId(), localDate, resolutionList, worklogList);
     }
 }

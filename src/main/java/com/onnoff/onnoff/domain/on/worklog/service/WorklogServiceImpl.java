@@ -3,6 +3,7 @@ package com.onnoff.onnoff.domain.on.worklog.service;
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.apiPayload.exception.handler.WorklogHandler;
+import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.on.worklog.converter.WorklogConverter;
 import com.onnoff.onnoff.domain.on.worklog.dto.WorklogRequest;
 import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
@@ -24,9 +25,8 @@ public class WorklogServiceImpl implements WorklogService{
 
     @Override
     @Transactional
-    public Worklog addWorklog(Long userId, WorklogRequest.AddWorklogDTO request){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+    public Worklog addWorklog(WorklogRequest.AddWorklogDTO request){
+        User user = UserContext.getUser();
 
         Worklog worklog = WorklogConverter.toAddWorklog(request);
         worklog.setUser(user);

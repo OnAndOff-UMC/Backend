@@ -9,5 +9,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface WorklogRepository extends JpaRepository<Worklog, Long> {
-    List<Worklog> findAllByUserAndDate(User user, LocalDate date);
+    List<Worklog> findAllByUserAndDateOrderByCreatedAt(User user, LocalDate date);
 }

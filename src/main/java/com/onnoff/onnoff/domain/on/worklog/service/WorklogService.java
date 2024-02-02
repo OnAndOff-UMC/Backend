@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface WorklogService {
 
-    Worklog addWorklog(Long userId, WorklogRequest.AddWorklogDTO request);
+    Worklog addWorklog(WorklogRequest.AddWorklogDTO request);
 
     Worklog  modifyContent(Long worklogId, WorklogRequest.ModifyWorklogDTO request);
 
