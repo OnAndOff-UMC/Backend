@@ -28,8 +28,8 @@ public class FeedController {
     }
 
     @GetMapping("/feeds")
-    @Operation(summary = "워라벨 피드 조회 API",description = "특정한 날짜의 워라벨 피드를 조회하는 API입니다. Query String으로 날짜를 입력해 주세요.")
-    public ApiResponse<List<FeedResponseDTO.FeedResultDTO>> getFeed(@RequestParam(name = "date") LocalDate date){
+    @Operation(summary = "워라벨 피드 조회 API", description = "특정한 날짜의 워라벨 피드를 조회하는 API입니다. Query String으로 날짜를 입력해 주세요.")
+    public ApiResponse<List<FeedResponseDTO.FeedResultDTO>> getFeed(@RequestParam(name = "date") LocalDate date) {
         List<Feed> feedList = feedService.getFeed(date);
         return ApiResponse.onSuccess(feedList.stream().map(FeedConverter::toFeedResultDTO).toList());
     }
@@ -42,9 +42,8 @@ public class FeedController {
     }
 
     @DeleteMapping("/feeds/{feedId}")
-    @Operation(summary = "워라벨 피드 삭제 API",description = "기존의 워라벨 피드를 삭제하는 API입니다.")
-    public ApiResponse<?> deleteFeed(@PathVariable(name = "feedId") Long feedId){
-        feedService.deleteFeed(feedId);
-        return ApiResponse.onSuccess(null);
+    @Operation(summary = "워라벨 피드 삭제 API", description = "기존의 워라벨 피드를 삭제하는 API입니다.")
+    public ApiResponse<Long> deleteFeed(@PathVariable(name = "feedId") Long feedId) {
+        return ApiResponse.onSuccess(feedService.deleteFeed(feedId));
     }
 }

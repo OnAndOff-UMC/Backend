@@ -15,5 +15,5 @@ public interface FeedService {
 
     Feed modifyFeed(FeedRequestDTO.ModifyFeedDTO request);
 
-    void deleteFeed(Long feedId);
+    Long deleteFeed(Long feedId);
 }

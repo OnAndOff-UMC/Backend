@@ -49,8 +49,10 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     @Transactional
-    public void deleteFeed(Long feedId) {
+    public Long deleteFeed(Long feedId) {
         Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_NOT_FOUND));
         feedRepository.delete(feed);
+
+        return feed.getId();
     }
 }
