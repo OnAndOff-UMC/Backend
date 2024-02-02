@@ -16,7 +16,7 @@ public class MemoirRequestDTO {
         LocalDate date;
         @NotNull
         Long emoticonId;
-        @NotEmpty
+        @NotNull
         List<@Valid MemoirWriteAnswerDTO> memoirAnswerList;
     }
 
@@ -32,7 +32,7 @@ public class MemoirRequestDTO {
     public static class MemoirUpdateDTO {
         @NotNull
         Long emoticonId;
-        @NotEmpty
+        @NotNull
         List<@Valid MemoirUpdateAnswerDTO> memoirAnswerList;
     }
 
