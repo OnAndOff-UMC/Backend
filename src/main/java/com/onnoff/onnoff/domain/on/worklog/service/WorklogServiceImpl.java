@@ -8,7 +8,6 @@ import com.onnoff.onnoff.domain.on.worklog.dto.WorklogRequest;
 import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
 import com.onnoff.onnoff.domain.on.worklog.repository.WorklogRepository;
 import com.onnoff.onnoff.domain.user.User;
-import com.onnoff.onnoff.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
