@@ -14,19 +14,19 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MemoirResultDTO {
+    public static class MemoirDTO {
         Long memoirId;
         LocalDate date;
         String emoticonUrl;
         Boolean isBookmarked;
-        List<MemoirAnswerResultDTO> memoirAnswerList;
+        List<MemoirAnswerDTO> memoirAnswerList;
     }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MemoirAnswerResultDTO {
+    public static class MemoirAnswerDTO {
         Long answerId;
         String question;
         String summary;
@@ -37,7 +37,7 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MemoirPreviewResultDTO {
+    public static class MemoirPreviewDTO {
         Boolean written;
         Long memoirId;
     }
@@ -46,8 +46,8 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class BookmarkedMemoirResultListDTO {
-        List<BookmarkedMemoirResultDTO> memoirList;
+    public static class BookmarkedMemoirListDTO {
+        List<BookmarkedMemoirDTO> memoirList;
         Integer pageNumber;
         Integer pageSize;
         Integer totalPages;
@@ -60,7 +60,7 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class BookmarkedMemoirResultDTO {
+    public static class BookmarkedMemoirDTO {
         Long memoirId;
         LocalDate date;
         String emoticonUrl;
@@ -71,7 +71,7 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MemoirQuestionResultDTO {
+    public static class MemoirQuestionDTO {
         Long questionId;
         String question;
         String summary;
@@ -81,7 +81,7 @@ public class MemoirResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class EmoticonResultDTO {
+    public static class EmoticonDTO {
         Long emoticonId;
         String imageUrl;
     }

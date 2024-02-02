@@ -13,33 +13,33 @@ import java.util.stream.Collectors;
 
 public class MemoirConverter {
 
-    public static MemoirResponseDTO.MemoirPreviewResultDTO toMemoirPreviewResultDTO(Memoir memoir) {
+    public static MemoirResponseDTO.MemoirPreviewDTO toMemoirPreviewDTO(Memoir memoir) {
         if (memoir == null) {
-            return MemoirResponseDTO.MemoirPreviewResultDTO.builder()
+            return MemoirResponseDTO.MemoirPreviewDTO.builder()
                     .memoirId(null)
                     .written(false)
                     .build();
         } else {
-            return MemoirResponseDTO.MemoirPreviewResultDTO.builder()
+            return MemoirResponseDTO.MemoirPreviewDTO.builder()
                     .memoirId(memoir.getId())
                     .written(true)
                     .build();
         }
     }
 
-    public static MemoirResponseDTO.MemoirResultDTO toMemoirResultDTO(Memoir memoir) {
-        return MemoirResponseDTO.MemoirResultDTO.builder()
+    public static MemoirResponseDTO.MemoirDTO toMemoirDTO(Memoir memoir) {
+        return MemoirResponseDTO.MemoirDTO.builder()
                 .memoirId(memoir.getId())
                 .date(memoir.getDate())
                 .emoticonUrl(memoir.getEmoticon().getImageUrl())
                 .isBookmarked(memoir.getIsBookmarked())
-                .memoirAnswerList(toMemoirAnswerResultDTOList(memoir.getMemoirAnswerList()))
+                .memoirAnswerList(toMemoirAnswerDTOList(memoir.getMemoirAnswerList()))
                 .build();
     }
 
-    public static List<MemoirResponseDTO.MemoirAnswerResultDTO> toMemoirAnswerResultDTOList(List<MemoirAnswer> memoirAnswerList) {
+    public static List<MemoirResponseDTO.MemoirAnswerDTO> toMemoirAnswerDTOList(List<MemoirAnswer> memoirAnswerList) {
         return memoirAnswerList.stream()
-                .map(memoirAnswer -> MemoirResponseDTO.MemoirAnswerResultDTO.builder()
+                .map(memoirAnswer -> MemoirResponseDTO.MemoirAnswerDTO.builder()
                         .answerId(memoirAnswer.getId())
                         .question(memoirAnswer.getMemoirQuestion().getQuestion())
                         .summary(memoirAnswer.getMemoirQuestion().getSummary())
@@ -48,11 +48,11 @@ public class MemoirConverter {
                 .collect(Collectors.toList());
     }
 
-    public static MemoirResponseDTO.BookmarkedMemoirResultListDTO toBookmarkedMemoirPreviewListDTO(Page<Memoir> memoirList) {
+    public static MemoirResponseDTO.BookmarkedMemoirListDTO toBookmarkedMemoirPreviewListDTO(Page<Memoir> memoirList) {
         AtomicInteger index = new AtomicInteger();
 
-        List<MemoirResponseDTO.BookmarkedMemoirResultDTO> memoirResultDTOList = memoirList.stream()
-                .map(memoir -> MemoirResponseDTO.BookmarkedMemoirResultDTO.builder()
+        List<MemoirResponseDTO.BookmarkedMemoirDTO> memoirDTOList = memoirList.stream()
+                .map(memoir -> MemoirResponseDTO.BookmarkedMemoirDTO.builder()
                         .memoirId(memoir.getId())
                         .date(memoir.getDate())
                         .emoticonUrl(memoir.getEmoticon().getImageUrl())
@@ -60,8 +60,8 @@ public class MemoirConverter {
                         .build())
                 .toList();
 
-        return MemoirResponseDTO.BookmarkedMemoirResultListDTO.builder()
-                .memoirList(memoirResultDTOList)
+        return MemoirResponseDTO.BookmarkedMemoirListDTO.builder()
+                .memoirList(memoirDTOList)
                 .pageNumber(memoirList.getNumber())
                 .pageSize(memoirList.getSize())
                 .totalPages(memoirList.getTotalPages())
@@ -71,9 +71,9 @@ public class MemoirConverter {
                 .build();
     }
 
-    public static List<MemoirResponseDTO.MemoirQuestionResultDTO> toMemoirQuestionResultDTOList(List<MemoirQuestion> memoirQuestionList) {
+    public static List<MemoirResponseDTO.MemoirQuestionDTO> toMemoirQuestionDTOList(List<MemoirQuestion> memoirQuestionList) {
         return memoirQuestionList.stream()
-                .map(memoirQuestion -> MemoirResponseDTO.MemoirQuestionResultDTO.builder()
+                .map(memoirQuestion -> MemoirResponseDTO.MemoirQuestionDTO.builder()
                         .questionId(memoirQuestion.getId())
                         .question(memoirQuestion.getQuestion())
                         .summary(memoirQuestion.getSummary())
@@ -81,9 +81,9 @@ public class MemoirConverter {
                 .collect(Collectors.toList());
     }
 
-    public static List<MemoirResponseDTO.EmoticonResultDTO> toEmoticonResultDTOList(List<Emoticon> emoticonList) {
+    public static List<MemoirResponseDTO.EmoticonDTO> toEmoticonDTOList(List<Emoticon> emoticonList) {
         return emoticonList.stream()
-                .map(emoticon -> MemoirResponseDTO.EmoticonResultDTO.builder()
+                .map(emoticon -> MemoirResponseDTO.EmoticonDTO.builder()
                         .emoticonId(emoticon.getId())
                         .imageUrl(emoticon.getImageUrl())
                         .build())
