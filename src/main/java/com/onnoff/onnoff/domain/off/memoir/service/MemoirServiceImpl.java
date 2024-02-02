@@ -2,17 +2,20 @@ package com.onnoff.onnoff.domain.off.memoir.service;
 
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
-import com.onnoff.onnoff.domain.off.memoir.converter.MemoirConverter;
+import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.off.memoir.dto.MemoirRequestDTO;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirAnswer;
+import com.onnoff.onnoff.domain.off.memoir.entity.Emoticon;
 import com.onnoff.onnoff.domain.off.memoir.entity.MemoirQuestion;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirAnswerRepository;
+import com.onnoff.onnoff.domain.off.memoir.repository.EmoticonRepository;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirQuestionRepository;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirRepository;
 import com.onnoff.onnoff.domain.user.User;
-import com.onnoff.onnoff.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,24 +31,21 @@ public class MemoirServiceImpl implements MemoirService {
     private final MemoirRepository memoirRepository;
     private final MemoirAnswerRepository memoirAnswerRepository;
     private final MemoirQuestionRepository memoirQuestionRepository;
-
-    private final UserRepository userRepository;
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<MemoirQuestion> getMemoirQuestion(Long userId) {
-        return memoirQuestionRepository.findAll();
-    }
+    private final EmoticonRepository emoticonRepository;
 
     @Override
     @Transactional
-    public Memoir writeMemoir(MemoirRequestDTO.WriteDTO request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+    public Memoir writeMemoir(MemoirRequestDTO.MemoirWriteDTO request) {
+        User user = UserContext.getUser();
         if (memoirRepository.findByUserAndDate(user, request.getDate()).isPresent()) {
             throw new GeneralException(ErrorStatus.MEMOIR_EXIST);
         }
 
-        Memoir newMemoir = MemoirConverter.toMemoir(request);
+        Memoir newMemoir = Memoir.builder()
+                .date(request.getDate())
+                .emoticon(emoticonRepository.findById(request.getEmoticonId()).orElseThrow(() -> new GeneralException(ErrorStatus.EMOTICON_NOT_FOUND)))
+                .isBookmarked(false)
+                .build();
 
         List<MemoirAnswer> newMemoirAnswerList = request.getMemoirAnswerList().stream()
                 .map(memoirAnswer -> MemoirAnswer.builder()
@@ -63,27 +63,32 @@ public class MemoirServiceImpl implements MemoirService {
 
     @Override
     @Transactional(readOnly = true)
-    public Memoir getMemoir(Long userId, LocalDate date) {
-        User user = userRepository.findById(userId).orElseThrow(()  -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+    public Memoir getMemoirPreview(LocalDate date) {
+        User user = UserContext.getUser();
         return memoirRepository.findByUserAndDate(user, date).orElse(null);
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Memoir getMemoir(Long memoirId) {
+        return memoirRepository.findById(memoirId).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Memoir> getBookmarkedMemoir(Integer pageNumber) {
+        User user = UserContext.getUser();
+        return memoirRepository.findByUserAndIsBookmarkedOrderByDateDesc(user, true, PageRequest.of(pageNumber, 10));
+    }
+
+    @Override
     @Transactional
-    public Memoir updateMemoir(MemoirRequestDTO.UpdateDTO request) {
-        Memoir memoir = memoirRepository.findById(request.getMemoirId()).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
+    public Memoir modifyMemoir(Long memoirId, MemoirRequestDTO.MemoirUpdateDTO request) {
+        Memoir memoir = memoirRepository.findById(memoirId).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
 
-        if (request.getIcon() != null) {
-            memoir.setIcon(request.getIcon());
-        }
+        memoir.setEmoticon(emoticonRepository.findById(request.getEmoticonId()).orElseThrow(() -> new GeneralException(ErrorStatus.EMOTICON_NOT_FOUND)));
 
-        if (request.getIsBookmarked() != null) {
-            memoir.setIsBookmarked(request.getIsBookmarked());
-        }
-
-        List<MemoirRequestDTO.UpdateAnswerDTO> requestMemoirAnswerList = request.getMemoirAnswerList() == null ? new ArrayList<>() : request.getMemoirAnswerList();
-
-        for (MemoirRequestDTO.UpdateAnswerDTO memoirAnswer: requestMemoirAnswerList) {
+        for (MemoirRequestDTO.MemoirUpdateAnswerDTO memoirAnswer : request.getMemoirAnswerList()) {
             MemoirAnswer findMemoirAnswer = memoirAnswerRepository.findById(memoirAnswer.getAnswerId()).orElseThrow(() -> new GeneralException(ErrorStatus.ANSWER_NOT_FOUND));
             if (findMemoirAnswer.getMemoir() != memoir) {
                 throw new GeneralException(ErrorStatus.ANSWER_BAD_MATCH);
@@ -91,14 +96,36 @@ public class MemoirServiceImpl implements MemoirService {
             findMemoirAnswer.setAnswer(memoirAnswer.getAnswer());
         }
 
-        return memoirRepository.save(memoir);
+        return memoir;
     }
 
     @Override
     @Transactional
-    public Memoir deleteMemoir(Long memoirId) {
+    public Memoir bookmarkMemoir(Long memoirId) {
+        Memoir memoir = memoirRepository.findById(memoirId).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
+        memoir.setIsBookmarked(memoir.getIsBookmarked().equals(false));
+
+        return memoir;
+    }
+
+    @Override
+    @Transactional
+    public Long deleteMemoir(Long memoirId) {
         Memoir memoir = memoirRepository.findById(memoirId).orElseThrow(() -> new GeneralException(ErrorStatus.MEMOIR_NOT_FOUND));
         memoirRepository.delete(memoir);
-        return memoir;
+
+        return memoir.getId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MemoirQuestion> getMemoirQuestion() {
+        return memoirQuestionRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Emoticon> getEmoticon() {
+        return emoticonRepository.findAll();
     }
 }

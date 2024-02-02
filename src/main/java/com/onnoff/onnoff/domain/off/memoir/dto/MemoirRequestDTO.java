@@ -10,19 +10,18 @@ import java.util.List;
 public class MemoirRequestDTO {
 
     @Getter
-    public static class WriteDTO {
+    public static class MemoirWriteDTO {
         @NotNull
-        Long userId;
-        @NotNull
+        @PastOrPresent
         LocalDate date;
-        @Size(max = 255)
-        String icon;
-        @NotEmpty
-        List<@Valid WriteAnswerDTO> memoirAnswerList;
+        @NotNull
+        Long emoticonId;
+        @NotNull
+        List<@Valid MemoirWriteAnswerDTO> memoirAnswerList;
     }
 
     @Getter
-    public static class WriteAnswerDTO {
+    public static class MemoirWriteAnswerDTO {
         @NotNull
         Long questionId;
         @Size(max = 500)
@@ -30,17 +29,15 @@ public class MemoirRequestDTO {
     }
 
     @Getter
-    public static class UpdateDTO {
+    public static class MemoirUpdateDTO {
         @NotNull
-        Long memoirId;
-        @Size(max = 255)
-        String icon;
-        Boolean isBookmarked;
-        List<@Valid UpdateAnswerDTO> memoirAnswerList;
+        Long emoticonId;
+        @NotNull
+        List<@Valid MemoirUpdateAnswerDTO> memoirAnswerList;
     }
 
     @Getter
-    public static class UpdateAnswerDTO {
+    public static class MemoirUpdateAnswerDTO {
         @NotNull
         Long answerId;
         @Size(max = 500)
