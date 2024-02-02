@@ -19,4 +19,7 @@ kakao:
   iss: https://kauth.kakao.com
   client-id: ${KAKAO_CLIENT_ID}
   admin-key: ${KAKAO_ADMIN_KEY}
+fcm:
+  firebase-sdk-path : ${FIREBASE_SDK_PATH}
+  project-id : ${FIREBASE_PROJECT_ID}
 
