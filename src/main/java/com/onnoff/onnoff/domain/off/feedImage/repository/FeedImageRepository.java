@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface FeedImageRepository extends JpaRepository<FeedImage, Long> {
 
-    List<FeedImage> findByUserOrderByLocationAsc(User user);
+    List<FeedImage> findByUserOrderByCreatedAtAsc(User user);
 }

@@ -54,7 +54,7 @@ public class FeedImageServiceImpl implements FeedImageService {
     @Transactional(readOnly = true)
     public List<FeedImageResponseDTO.FeedImageResultDTO> getFeedImage() {
         User user = UserContext.getUser();
-        List<FeedImage> feedImageList = feedImageRepository.findByUserOrderByLocationAsc(user);
+        List<FeedImage> feedImageList = feedImageRepository.findByUserOrderByCreatedAtAsc(user);
 
         return feedImageList.stream()
                 .map(feedImage -> FeedImageConverter.toResultDTO(feedImage, amazonS3Client.getUrl(bucket, feedImage.getImageKey()).toString()))
