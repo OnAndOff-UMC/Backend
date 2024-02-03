@@ -23,7 +23,4 @@ public class FeedImage extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void setImageKey(String imageKey) {
-        this.imageKey = imageKey;
-    }
 }

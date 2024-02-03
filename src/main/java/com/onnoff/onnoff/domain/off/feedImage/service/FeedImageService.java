@@ -12,7 +12,5 @@ public interface FeedImageService {
 
     List<FeedImageResponseDTO.FeedImageResultDTO> getFeedImage();
 
-    FeedImageResponseDTO.FeedImageResultDTO modifyFeedImage(Long feedImageId, MultipartFile multipartFile);
-
     Long deleteFeedImage(Long feedImageId);
 }

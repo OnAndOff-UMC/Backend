@@ -29,13 +29,6 @@ public class FeedImageController {
         return ApiResponse.onSuccess(feedImageService.getFeedImage());
     }
 
-    @PatchMapping(value = "/feed-images/{feedImageId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "워라벨 피드 사진 수정 API",description = "워라벨 피드의 사진을 수정하는 API입니다.")
-    public ApiResponse<FeedImageResponseDTO.FeedImageResultDTO> modifyFeedImage(@PathVariable(name = "feedImageId") Long feedImageId,
-                                                                       @RequestPart(name = "image") MultipartFile multipartFile) {
-        return ApiResponse.onSuccess(feedImageService.modifyFeedImage(feedImageId, multipartFile));
-    }
-
     @DeleteMapping("/feed-images/{feedImageId}")
     @Operation(summary = "워라벨 피드 사진 삭제 API",description = "워라벨 피드의 사진을 삭제하는 API입니다.")
     public ApiResponse<Long> deleteFeedImage(@PathVariable(name = "feedImageId") Long feedImageId) {
