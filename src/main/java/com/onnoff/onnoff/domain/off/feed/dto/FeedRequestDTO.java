@@ -22,11 +22,8 @@ public class FeedRequestDTO {
 
     @Getter
     public static class ModifyFeedDTO {
-        @NotNull
-        Long feedId;
-        LocalDate date;
+        @NotBlank
         @Size(max = 30)
         String content;
-        Boolean isChecked;
     }
 }

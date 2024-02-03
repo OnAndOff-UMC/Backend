@@ -34,10 +34,24 @@ public class FeedController {
         return ApiResponse.onSuccess(feedList.stream().map(FeedConverter::toFeedResultDTO).toList());
     }
 
-    @PatchMapping("/feeds")
-    @Operation(summary = "워라벨 피드 수정 API", description = "기존의 워라벨 피드를 수정하는 API입니다.")
-    public ApiResponse<FeedResponseDTO.FeedResultDTO> modifyFeed(@RequestBody @Valid FeedRequestDTO.ModifyFeedDTO request) {
-        Feed feed = feedService.modifyFeed(request);
+    @PatchMapping("/feeds/{feedId}")
+    @Operation(summary = "워라벨 피드 수정 API", description = "워라벨 피드의 내용을 수정하는 API입니다.")
+    public ApiResponse<FeedResponseDTO.FeedResultDTO> modifyFeed(@PathVariable(name = "feedId") Long feedId, @RequestBody @Valid FeedRequestDTO.ModifyFeedDTO request) {
+        Feed feed = feedService.modifyFeed(feedId, request);
+        return ApiResponse.onSuccess(FeedConverter.toFeedResultDTO(feed));
+    }
+
+    @PatchMapping("/feeds/{feedId}/delay")
+    @Operation(summary = "워라벨 피드 내일로 미루기 API", description = "워라벨 피드의 날짜를 현재 기준 내일로 변경하는 API입니다.")
+    public ApiResponse<FeedResponseDTO.FeedResultDTO> delayFeed(@PathVariable(name = "feedId") Long feedId) {
+        Feed feed = feedService.delayFeed(feedId);
+        return ApiResponse.onSuccess(FeedConverter.toFeedResultDTO(feed));
+    }
+
+    @PatchMapping("/feeds/{feedId}/check")
+    @Operation(summary = "워라벨 피드 체크 및 해제 API", description = "워라벨 피드를 체크하거나 체크 해제하는 API입니다.")
+    public ApiResponse<FeedResponseDTO.FeedResultDTO> checkFeed(@PathVariable(name = "feedId") Long feedId) {
+        Feed feed = feedService.checkFeed(feedId);
         return ApiResponse.onSuccess(FeedConverter.toFeedResultDTO(feed));
     }
 

@@ -13,7 +13,11 @@ public interface FeedService {
 
     List<Feed> getFeed(LocalDate date);
 
-    Feed modifyFeed(FeedRequestDTO.ModifyFeedDTO request);
+    Feed modifyFeed(Long feedId, FeedRequestDTO.ModifyFeedDTO request);
+
+    Feed delayFeed(Long feedId);
+
+    Feed checkFeed(Long feedId);
 
     Long deleteFeed(Long feedId);
 }

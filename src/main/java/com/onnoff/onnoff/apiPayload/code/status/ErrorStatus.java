@@ -40,7 +40,6 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 피드 관련 에러
     FEED_NOT_FOUND(HttpStatus.BAD_REQUEST, "FEED4001", "해당하는 워라벨 피드가 없습니다."),
-    FEED_NOT_BLANK(HttpStatus.BAD_REQUEST, "FEED4002", "워라벨 피드 내용은 공백일 수 없습니다."),
 
     // 피드 사진 관련 에러
     FEED_IMAGE_EXIST(HttpStatus.BAD_REQUEST, "FEEDIMAGE4001", "이미 해당 위치에 업로드된 워라벨 피드 사진이 있습니다."),
