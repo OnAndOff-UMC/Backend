@@ -30,15 +30,15 @@ public class Feed extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void updateFeed(LocalDate date, String content, Boolean isChecked) {
-        if (date != null) {
-            this.date = date;
-        }
-        if (content != null) {
-            this.content = content;
-        }
-        if (isChecked != null) {
-            this.isChecked = isChecked;
-        }
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setIsChecked(Boolean isChecked) {
+        this.isChecked = isChecked;
     }
 }

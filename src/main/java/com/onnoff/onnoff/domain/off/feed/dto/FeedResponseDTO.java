@@ -13,7 +13,7 @@ public class FeedResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class FeedResultDTO {
+    public static class FeedDTO {
         Long feedId;
         LocalDate date;
         String content;

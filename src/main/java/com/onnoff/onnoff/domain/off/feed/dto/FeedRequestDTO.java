@@ -13,8 +13,6 @@ public class FeedRequestDTO {
     @Getter
     public static class AddFeedDTO {
         @NotNull
-        Long userId;
-        @NotNull
         @PastOrPresent
         LocalDate date;
         @NotBlank
@@ -24,11 +22,8 @@ public class FeedRequestDTO {
 
     @Getter
     public static class ModifyFeedDTO {
-        @NotNull
-        Long feedId;
-        LocalDate date;
+        @NotBlank
         @Size(max = 30)
         String content;
-        Boolean isChecked;
     }
 }
