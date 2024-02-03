@@ -11,7 +11,7 @@ public class UserConverter {
         return User.builder()
                 .oauthId(response.getSub())
                 .email(response.getEmail())
-                .name(response.getName())
+                .name(response.getNickname())
                 .socialType(SocialType.KAKAO)
                 .build();
     }

@@ -44,6 +44,8 @@ public class LoginController {
 
     @Value("${kakao.redirect-uri}")
     private String redirectUri;
+    @Value("${kakao.client-id}")
+    private String kakaoClientId;
 
 
 
@@ -54,7 +56,7 @@ public class LoginController {
     public String login(){
         String toRedirectUri = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
                 .queryParam("response_type", "code")
-                .queryParam("client_id", "32c0787d1b1e9fcabcc24af247903ba8")
+                .queryParam("client_id", kakaoClientId)
                 .queryParam("redirect_uri", redirectUri)
                 .toUriString();
         return "redirect:" + toRedirectUri;
