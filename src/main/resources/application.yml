@@ -1,4 +1,10 @@
 spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            logger-level: FULL
   profiles:
     active: dev
   jwt:
