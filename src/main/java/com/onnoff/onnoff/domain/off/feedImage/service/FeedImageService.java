@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface FeedImageService {
 
-    FeedImageResponseDTO.FeedImageResultDTO uploadFeedImage(Integer location, MultipartFile multipartFile);
+    FeedImageResponseDTO.FeedImageResultDTO uploadFeedImage(MultipartFile multipartFile);
 
     List<FeedImageResponseDTO.FeedImageResultDTO> getFeedImage();
 

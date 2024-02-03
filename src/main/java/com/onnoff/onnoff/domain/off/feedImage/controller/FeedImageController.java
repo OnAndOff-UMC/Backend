@@ -18,10 +18,9 @@ public class FeedImageController {
     private final FeedImageService feedImageService;
 
     @PostMapping(value = "/feed-images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "워라벨 피드 사진 업로드 API",description = "워라벨 피드에 사진을 업로드하는 API입니다. Query String으로 사진 위치를 입력해 주세요.")
-    public ApiResponse<FeedImageResponseDTO.FeedImageResultDTO> uploadFeedImage(@RequestParam(name = "location") Integer location,
-                                                                       @RequestPart(name = "image") MultipartFile multipartFile) {
-        return ApiResponse.onSuccess(feedImageService.uploadFeedImage(location, multipartFile));
+    @Operation(summary = "워라벨 피드 사진 업로드 API",description = "워라벨 피드에 사진을 업로드하는 API입니다.")
+    public ApiResponse<FeedImageResponseDTO.FeedImageResultDTO> uploadFeedImage(@RequestPart(name = "image") MultipartFile multipartFile) {
+        return ApiResponse.onSuccess(feedImageService.uploadFeedImage(multipartFile));
     }
 
     @GetMapping("/feed-images")

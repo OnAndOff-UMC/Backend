@@ -37,19 +37,11 @@ public class FeedImageServiceImpl implements FeedImageService {
 
     @Override
     @Transactional
-    public FeedImageResponseDTO.FeedImageResultDTO uploadFeedImage(Integer location, MultipartFile multipartFile) {
+    public FeedImageResponseDTO.FeedImageResultDTO uploadFeedImage(MultipartFile multipartFile) {
         User user = UserContext.getUser();
-        if (feedImageRepository.findByUserAndLocation(user, location).isPresent()) {
-            throw new GeneralException(ErrorStatus.FEED_IMAGE_EXIST);
-        }
-
-        if (location < 1 | location > 9) {
-            throw new GeneralException(ErrorStatus.FEED_IMAGE_LOCATION_INVALID);
-        }
 
         FeedImage feedImage = FeedImage.builder()
                 .user(user)
-                .location(location)
                 .imageKey(uploadImage(multipartFile))
                 .build();
 

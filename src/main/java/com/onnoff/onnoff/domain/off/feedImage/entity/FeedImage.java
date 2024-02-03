@@ -16,9 +16,6 @@ public class FeedImage extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Integer location;
-
     @Column(nullable = false, length = 1024)
     private String imageKey;
 
