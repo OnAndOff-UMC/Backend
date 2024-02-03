@@ -10,4 +10,6 @@ import java.util.List;
 public interface FeedRepository extends JpaRepository<Feed, Long> {
 
     List<Feed> findAllByUserAndDateOrderByCreatedAtAsc(User user, LocalDate date);
+    Integer countByUserAndDate(User user, LocalDate date);
+    Integer countByUserAndDateAndIsChecked(User user, LocalDate date, Boolean t);
 }
