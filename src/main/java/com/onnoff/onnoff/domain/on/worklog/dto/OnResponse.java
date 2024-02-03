@@ -1,6 +1,5 @@
 package com.onnoff.onnoff.domain.on.worklog.dto;
 
-import com.onnoff.onnoff.domain.on.resolution.dto.ResolutionRequest;
 import com.onnoff.onnoff.domain.on.resolution.dto.ResolutionResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

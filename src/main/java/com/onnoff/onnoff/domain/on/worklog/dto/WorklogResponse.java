@@ -15,6 +15,8 @@ public class WorklogResponse {
     @AllArgsConstructor
     public static class AddResultDTO{
         Long worklogId;
+        String content;
+        Boolean isChecked;
         LocalDateTime createdAt;
     }
 

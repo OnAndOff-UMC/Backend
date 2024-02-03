@@ -20,9 +20,8 @@ public class WorklogController {
 
     @PostMapping("/")
     @Operation(summary = "업무일지 추가 API")
-    public ApiResponse<WorklogResponse.AddResultDTO> addWorklog(@RequestParam(name = "userId") Long userId,
-                                                                @RequestBody @Valid WorklogRequest.AddWorklogDTO request){
-        Worklog worklog = worklogService.addWorklog(userId, request);
+    public ApiResponse<WorklogResponse.AddResultDTO> addWorklog(@RequestBody @Valid WorklogRequest.AddWorklogDTO request){
+        Worklog worklog = worklogService.addWorklog(request);
         return ApiResponse.onSuccess(WorklogConverter.toAddWorklogResultDTO(worklog));
     }
 
@@ -54,7 +53,7 @@ public class WorklogController {
 
     @DeleteMapping("/{worklogId}")
     @Operation(summary = "업무일지 삭제 API")
-    public ApiResponse<WorklogResponse.AddResultDTO> deleteWorklog(@PathVariable(name = "worklogId") Long worklogId){
+    public ApiResponse<Long> deleteWorklog(@PathVariable(name = "worklogId") Long worklogId){
         worklogService.deleteWorklog(worklogId);
         return ApiResponse.onSuccess(null);
     }
