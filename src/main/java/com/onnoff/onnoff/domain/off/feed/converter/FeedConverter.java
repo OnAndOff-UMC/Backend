@@ -16,8 +16,8 @@ public class FeedConverter {
                 .build();
     }
 
-    public static FeedResponseDTO.FeedResultDTO toFeedResultDTO(Feed feed) {
-        return FeedResponseDTO.FeedResultDTO.builder()
+    public static FeedResponseDTO.FeedDTO toFeedDTO(Feed feed) {
+        return FeedResponseDTO.FeedDTO.builder()
                 .feedId(feed.getId())
                 .date(feed.getDate())
                 .content(feed.getContent())
