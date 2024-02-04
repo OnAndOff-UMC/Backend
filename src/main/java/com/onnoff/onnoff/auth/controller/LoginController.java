@@ -98,12 +98,12 @@ public class LoginController {
             user = userService.getUserByOauthId(oauthId);
         }
         else{
-            user = UserConverter.toUser(userInfo);
+            user = UserConverter.toUser(userInfo, requestDTO.getAdditionalInfo());
             user = userService.create(user);
         }
         // 응답본문에 토큰 추가
         JwtToken token = jwtUtil.generateToken(String.valueOf(user.getId()));
-        return ApiResponse.onSuccess(UserConverter.toLoginDTO(user, token.getAccessToken(), token.getRefreshToken()));
+        return ApiResponse.onSuccess(UserConverter.toLoginDTO(token.getAccessToken(), token.getRefreshToken()));
     }
 
     @ResponseBody
@@ -120,17 +120,17 @@ public class LoginController {
             user = userService.getUserByOauthId(oauthId);
         }
         else{
-            user = UserConverter.toUser(requestDTO);
+            user = UserConverter.toUser(requestDTO, requestDTO.getAdditionalInfo());
             user.setAppleRefreshToken(tokenResponse.getRefreshToken());
             user = userService.create(user);
         }
         // 응답헤더에 토큰 추가
         JwtToken token = jwtUtil.generateToken(String.valueOf(user.getId()));
-        return ApiResponse.onSuccess(UserConverter.toLoginDTO(user, token.getAccessToken(), token.getRefreshToken()));
+        return ApiResponse.onSuccess(UserConverter.toLoginDTO(token.getAccessToken(), token.getRefreshToken()));
     }
 
     @Operation(summary = "서버 토큰 검증 API",description = "토큰의 유효성을 검증하고 액세스 토큰이 만료되었으면" +
-            "재발급, 리프레시 토큰까지 만료되었으면 오류 응답 추가. 정보 입력 여부도 같이 응답 합니다.")
+            "재발급, 리프레시 토큰까지 만료되었으면 4001 오류 응답")
     @ResponseBody
     @PostMapping("/token/validate")
     public ApiResponse<UserResponseDTO.LoginDTO> validateServerToken(@RequestBody JwtToken tokenDTO){
@@ -140,7 +140,7 @@ public class LoginController {
             // accessToken 유효
             String userId = jwtUtil.getUserId(accessToken);
             User user = userService.getUser(Long.valueOf(userId));
-            UserResponseDTO.LoginDTO loginDTO = UserConverter.toLoginDTO(user, accessToken, refreshToken);
+            UserResponseDTO.LoginDTO loginDTO = UserConverter.toLoginDTO(accessToken, refreshToken);
             return ApiResponse.onSuccess(loginDTO);
         }
         if (jwtTokenProvider.verifyToken(refreshToken)) {
@@ -150,7 +150,7 @@ public class LoginController {
 
             String newRefreshToken = jwtUtil.generateRefreshToken(jwtUtil.getUserId(refreshToken));
             String newAccessToken = jwtUtil.generateAccessToken(jwtUtil.getUserId(refreshToken));
-            return ApiResponse.onSuccess(UserConverter.toLoginDTO(user, newAccessToken, newRefreshToken));
+            return ApiResponse.onSuccess(UserConverter.toLoginDTO(newAccessToken, newRefreshToken));
         }
         // 둘 다 유효하지 않은 경우
         throw new GeneralException(ErrorStatus.INVALID_TOKEN_ERROR);

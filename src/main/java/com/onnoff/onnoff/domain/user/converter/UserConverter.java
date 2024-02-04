@@ -4,27 +4,37 @@ import com.onnoff.onnoff.auth.dto.LoginRequestDTO;
 import com.onnoff.onnoff.auth.feignClient.dto.kakao.KakaoOauth2DTO;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
+import com.onnoff.onnoff.domain.user.enums.ExperienceYear;
+import com.onnoff.onnoff.domain.user.enums.FieldOfWork;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
 
 public class UserConverter {
-    public static User toUser(KakaoOauth2DTO.UserInfoResponseDTO response){
+    public static User toUser(KakaoOauth2DTO.UserInfoResponseDTO response, LoginRequestDTO.AdditionalInfo additionalInfo){
+        ExperienceYear experienceYear = ExperienceYear.fromValue(additionalInfo.getExperienceYear());
         return User.builder()
                 .oauthId(response.getSub())
                 .email(response.getEmail())
                 .name(response.getNickname())
                 .socialType(SocialType.KAKAO)
+                .fieldOfWork(Enum.valueOf(FieldOfWork.class ,additionalInfo.getFieldOfWork() ) )
+                .job(additionalInfo.getJob())
+                .experienceYear(experienceYear)
                 .build();
     }
-    public static User toUser(LoginRequestDTO.AppleTokenValidateDTO request){
+    public static User toUser(LoginRequestDTO.AppleTokenValidateDTO request, LoginRequestDTO.AdditionalInfo additionalInfo){
+        ExperienceYear experienceYear = ExperienceYear.fromValue(additionalInfo.getExperienceYear());
         String fullName = request.getFullName().getFamilyName() + request.getFullName().getGivenName();
         return User.builder()
                 .oauthId(request.getOauthId())
                 .email(request.getEmail())
                 .name(fullName)
                 .socialType(SocialType.APPLE)
+                .fieldOfWork(Enum.valueOf(FieldOfWork.class ,additionalInfo.getFieldOfWork() ) )
+                .job(additionalInfo.getJob())
+                .experienceYear(experienceYear)
                 .build();
     }
-    public static UserResponseDTO.LoginDTO toLoginDTO(User user, String accessToken, String refreshToken){
+    public static UserResponseDTO.LoginDTO toLoginDTO(String accessToken, String refreshToken){
         return UserResponseDTO.LoginDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
