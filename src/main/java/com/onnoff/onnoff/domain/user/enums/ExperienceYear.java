@@ -1,6 +1,8 @@
 package com.onnoff.onnoff.domain.user.enums;
 
 
+import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
+import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -23,6 +25,6 @@ public enum ExperienceYear {
                 return experienceYear;
             }
         }
-        throw new IllegalArgumentException("Invalid status value: " + value);
+        throw new GeneralException(ErrorStatus.INVALID_ENUM_VALUE);
     }
 }
