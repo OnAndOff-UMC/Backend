@@ -20,7 +20,7 @@ public class KakaoOauth2DTO {
     @ToString
     public static class UserInfoResponseDTO{
         private String sub;
-        private String name;
+        private String nickname;
         private String email;
     }
 }
