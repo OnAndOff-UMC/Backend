@@ -16,4 +16,13 @@ public enum ExperienceYear {
     THE_FIFTH_YEAR_OR_MORE("5년 이상"),
     THE_SENIOR("시니어");
     private final String value;
+
+    public static ExperienceYear fromValue(String value) {
+        for (ExperienceYear experienceYear : ExperienceYear.values()) {
+            if (experienceYear.getValue().equals(value)) {
+                return experienceYear;
+            }
+        }
+        throw new IllegalArgumentException("Invalid status value: " + value);
+    }
 }
