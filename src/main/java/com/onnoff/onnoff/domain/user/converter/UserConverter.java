@@ -1,5 +1,7 @@
 package com.onnoff.onnoff.domain.user.converter;
 
+import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
+import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.auth.dto.LoginRequestDTO;
 import com.onnoff.onnoff.auth.feignClient.dto.kakao.KakaoOauth2DTO;
 import com.onnoff.onnoff.domain.user.User;
@@ -8,8 +10,18 @@ import com.onnoff.onnoff.domain.user.enums.ExperienceYear;
 import com.onnoff.onnoff.domain.user.enums.FieldOfWork;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
 
+import java.util.EnumSet;
+
 public class UserConverter {
     public static User toUser(KakaoOauth2DTO.UserInfoResponseDTO response, LoginRequestDTO.AdditionalInfo additionalInfo){
+        String fieldOfWork = additionalInfo.getFieldOfWork();
+        try{
+            FieldOfWork.valueOf(fieldOfWork);
+        }
+        catch (IllegalArgumentException e){
+            throw new GeneralException(ErrorStatus.INVALID_ENUM_VALUE);
+        }
+
         ExperienceYear experienceYear = ExperienceYear.fromValue(additionalInfo.getExperienceYear());
         return User.builder()
                 .oauthId(response.getSub())

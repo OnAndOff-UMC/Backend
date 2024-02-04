@@ -80,7 +80,7 @@ public class LoginController {
     @Operation(summary = "소셜 토큰 검증 API",description = "토큰을 검증 하고 이에 대한 결과를 응답합니다. 추가 정보 입력 여부도 같이 응답 합니다.")
     @ResponseBody
     @PostMapping("/oauth2/kakao/token/validate")
-    public ApiResponse<UserResponseDTO.LoginDTO> validateKakoToken(HttpServletResponse response, @RequestBody LoginRequestDTO.KakaoTokenValidateDTO requestDTO)  {
+    public ApiResponse<UserResponseDTO.LoginDTO> validateKakoToken(@RequestBody LoginRequestDTO.KakaoTokenValidateDTO requestDTO)  {
         // identity 토큰 검증
         kakaoLoginService.validate(requestDTO.getIdentityToken());
         // ok -> 유저 정보 가져오기
@@ -108,7 +108,7 @@ public class LoginController {
 
     @ResponseBody
     @PostMapping("/oauth2/apple/token/validate")
-    public ApiResponse<UserResponseDTO.LoginDTO> validateAppleToken(HttpServletResponse response, @RequestBody LoginRequestDTO.AppleTokenValidateDTO requestDTO)  {
+    public ApiResponse<UserResponseDTO.LoginDTO> validateAppleToken(@RequestBody LoginRequestDTO.AppleTokenValidateDTO requestDTO)  {
         // 검증하기
         appleLoginService.validate(requestDTO.getIdentityToken());
         // 검증 성공 시 리프레시 토큰 발급받아 저장(기한 무제한, 회원탈퇴 시 필요)
