@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
+import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.off.feedImage.converter.FeedImageConverter;
 import com.onnoff.onnoff.domain.off.feedImage.dto.FeedImageResponseDTO;
 import com.onnoff.onnoff.domain.off.feedImage.entity.FeedImage;
@@ -32,53 +33,32 @@ public class FeedImageServiceImpl implements FeedImageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     private final AmazonS3Client amazonS3Client;
-
     private final FeedImageRepository feedImageRepository;
-    private final UserRepository userRepository;
 
     @Override
     @Transactional
-    public FeedImageResponseDTO.FeedImageResultDTO uploadFeedImage(Long userId, Integer location, MultipartFile multipartFile) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-        if (feedImageRepository.findByUserAndLocation(user, location).isPresent()) {
-            throw new GeneralException(ErrorStatus.FEED_IMAGE_EXIST);
-        }
-
-        if (location < 1 | location > 9) {
-            throw new GeneralException(ErrorStatus.FEED_IMAGE_LOCATION_INVALID);
-        }
+    public FeedImageResponseDTO.FeedImageDTO uploadFeedImage(MultipartFile multipartFile) {
+        User user = UserContext.getUser();
 
         FeedImage feedImage = FeedImage.builder()
                 .user(user)
-                .location(location)
                 .imageKey(uploadImage(multipartFile))
                 .build();
 
         feedImageRepository.save(feedImage);
 
-        return FeedImageConverter.toResultDTO(feedImage, amazonS3Client.getUrl(bucket, feedImage.getImageKey()).toString());
+        return FeedImageConverter.toFeedImageDTO(feedImage, amazonS3Client.getUrl(bucket, feedImage.getImageKey()).toString());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<FeedImageResponseDTO.FeedImageResultDTO> getFeedImage(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-        List<FeedImage> feedImageList = feedImageRepository.findByUserOrderByLocationAsc(user);
+    public List<FeedImageResponseDTO.FeedImageDTO> getFeedImage() {
+        User user = UserContext.getUser();
+        List<FeedImage> feedImageList = feedImageRepository.findByUserOrderByCreatedAtAsc(user);
 
         return feedImageList.stream()
-                .map(feedImage -> FeedImageConverter.toResultDTO(feedImage, amazonS3Client.getUrl(bucket, feedImage.getImageKey()).toString()))
+                .map(feedImage -> FeedImageConverter.toFeedImageDTO(feedImage, amazonS3Client.getUrl(bucket, feedImage.getImageKey()).toString()))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public FeedImageResponseDTO.FeedImageResultDTO modifyFeedImage(Long feedImageId, MultipartFile multipartFile) {
-        FeedImage feedImage = feedImageRepository.findById(feedImageId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_IMAGE_NOT_FOUND));
-
-        deleteImage(feedImage.getImageKey());
-        feedImage.setImageKey(uploadImage(multipartFile));
-
-        return FeedImageConverter.toResultDTO(feedImage, amazonS3Client.getUrl(bucket, feedImage.getImageKey()).toString());
     }
 
     @Override
