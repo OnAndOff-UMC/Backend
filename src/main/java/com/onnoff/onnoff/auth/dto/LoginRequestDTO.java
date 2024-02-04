@@ -8,14 +8,28 @@ public class LoginRequestDTO {
     @Getter
     public static class AppleTokenValidateDTO{
         private String oauthId;
-        private String fullName;
+        private Fullname fullName;
         private String email;
         private String identityToken;
         private String authorizationCode;
+        private AdditionalInfo additionalInfo;
     }
     @Getter
     public static class KakaoTokenValidateDTO{
         private String identityToken;
         private String accessToken;
+        private AdditionalInfo additionalInfo;
+    }
+
+    @Getter
+    public static class AdditionalInfo{
+        private String fieldOfWork;
+        private String job;
+        private String experienceYear;
+    }
+    @Getter
+    public static class Fullname{
+        private String givenName;
+        private String familyName;
     }
 }

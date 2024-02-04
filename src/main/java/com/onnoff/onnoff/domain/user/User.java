@@ -6,6 +6,8 @@ import com.onnoff.onnoff.domain.off.feedImage.entity.FeedImage;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
+import com.onnoff.onnoff.domain.user.enums.ExperienceYear;
+import com.onnoff.onnoff.domain.user.enums.FieldOfWork;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
 import com.onnoff.onnoff.domain.user.enums.Status;
 import jakarta.persistence.*;
@@ -46,15 +48,16 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
-    @Column(length = 30)
-    private String fieldOfWork;
+    @Enumerated(EnumType.STRING)
+    private FieldOfWork fieldOfWork;
 
     // private String profile_image;
     @Column(length = 30)
     private String job;
 
     @Column(length = 30)
-    private String experienceYear;
+    @Enumerated(EnumType.STRING)
+    private ExperienceYear experienceYear;
 
     @Column(columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     @Enumerated(EnumType.STRING)

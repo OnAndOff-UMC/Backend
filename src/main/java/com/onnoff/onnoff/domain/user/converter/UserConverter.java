@@ -16,10 +16,11 @@ public class UserConverter {
                 .build();
     }
     public static User toUser(LoginRequestDTO.AppleTokenValidateDTO request){
+        String fullName = request.getFullName().getFamilyName() + request.getFullName().getGivenName();
         return User.builder()
                 .oauthId(request.getOauthId())
                 .email(request.getEmail())
-                .name(request.getFullName())
+                .name(fullName)
                 .socialType(SocialType.APPLE)
                 .build();
     }
@@ -27,7 +28,6 @@ public class UserConverter {
         return UserResponseDTO.LoginDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .infoSet(user.isInfoSet())
                 .build();
 
     }

@@ -25,7 +25,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
-    private final static String[] ignorePrefix = {"/swagger-ui", "/v3/api-docs", "/oauth2", "/health", "/token/validate" , "/message"};
+    private final static String[] ignorePrefix = {"/swagger-ui", "/v3/api-docs", "/oauth2", "/health", "/token/validate" , "/message", "/enums"};
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("url ={}", request.getRequestURI());

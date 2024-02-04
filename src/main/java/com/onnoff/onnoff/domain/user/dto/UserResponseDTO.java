@@ -1,6 +1,8 @@
 package com.onnoff.onnoff.domain.user.dto;
 
 import com.onnoff.onnoff.apiPayload.ApiResponse;
+import com.onnoff.onnoff.domain.user.enums.ExperienceYear;
+import com.onnoff.onnoff.domain.user.enums.FieldOfWork;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
 import com.onnoff.onnoff.domain.user.enums.Status;
 import lombok.AllArgsConstructor;
@@ -16,7 +18,6 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LoginDTO{
-        private boolean infoSet;
         private String accessToken;
         private String refreshToken;
     }
@@ -31,9 +32,9 @@ public class UserResponseDTO {
         private String name;
         private String nickname;
         private String email;
-        private String fieldOfWork;
+        private FieldOfWork fieldOfWork;
         private String job;
-        private String experienceYear;
+        private ExperienceYear experienceYear;
         private Status status;
         private LocalDateTime inactiveDate;
         private boolean receivePushNotification;
@@ -42,19 +43,4 @@ public class UserResponseDTO {
         private LocalDateTime updatedAt;
     }
 
-    /**
-     * 스웨거 response에 제네릭 타입을 써주기 위한 클래스
-     */
-    public static class ApiResponseLoginDTO extends ApiResponse<LoginDTO> {
-
-        public ApiResponseLoginDTO(Boolean isSuccess, String code, String message, LoginDTO result) {
-            super(isSuccess, code, message, result);
-        }
-    }
-    public static class ApiResponseUserDetailDTO extends  ApiResponse<UserDetailDTO>{
-
-        public ApiResponseUserDetailDTO(Boolean isSuccess, String code, String message, UserDetailDTO result) {
-            super(isSuccess, code, message, result);
-        }
-    }
 }
