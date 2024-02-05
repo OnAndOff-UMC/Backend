@@ -6,6 +6,7 @@ import com.onnoff.onnoff.domain.off.feedImage.entity.FeedImage;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
+import com.onnoff.onnoff.domain.push.entity.AlarmSetting;
 import com.onnoff.onnoff.domain.user.enums.ExperienceYear;
 import com.onnoff.onnoff.domain.user.enums.FieldOfWork;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
@@ -71,9 +72,6 @@ public class User extends BaseEntity {
 
     private String fcmToken;
 
-    @Column(nullable = true)
-    private LocalTime pushNotificationTime;
-
     private String appleRefreshToken;
 
     @Enumerated(EnumType.STRING)
@@ -94,6 +92,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Worklog> worklogList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private AlarmSetting alarmSetting;
     public void setAppleRefreshToken(String appleRefreshToken) {
         this.appleRefreshToken = appleRefreshToken;
     }
