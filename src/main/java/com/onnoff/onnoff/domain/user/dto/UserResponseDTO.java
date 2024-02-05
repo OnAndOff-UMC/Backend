@@ -43,4 +43,14 @@ public class UserResponseDTO {
         private LocalDateTime updatedAt;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserInfoResponseDTO {
+        private String nickname;
+        private FieldOfWork fieldOfWork;
+        private ExperienceYear experienceYear;
+    }
+
 }

@@ -71,4 +71,13 @@ public class UserConverter {
                 .updatedAt(user.getUpdatedAt())
                 .build();
     }
+
+    public static UserResponseDTO.UserInfoResponseDTO toUserInfoResponseDTO(User user){
+        return UserResponseDTO.UserInfoResponseDTO.builder()
+                .nickname(user.getNickname())
+                .experienceYear(user.getExperienceYear())
+                .fieldOfWork(user.getFieldOfWork())
+                .build();
+    }
+
 }
