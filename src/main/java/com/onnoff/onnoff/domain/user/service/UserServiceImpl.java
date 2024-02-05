@@ -4,6 +4,7 @@ import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.user.User;
+import com.onnoff.onnoff.domain.user.dto.UserRequestDTO;
 import com.onnoff.onnoff.domain.user.enums.Status;
 import com.onnoff.onnoff.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,15 @@ public class UserServiceImpl implements UserService{
     public User withdrawUser(){
         User user = UserContext.getUser();
         user.setUserStatusInactive();
+        userRepository.save(user);
+        return user;
+    }
+
+    @Transactional
+    @Override
+    public User modifyUser(UserRequestDTO.ModifyUserDTO modifyUserDTO){
+        User user = UserContext.getUser();
+        user.updateUser(modifyUserDTO);
         userRepository.save(user);
         return user;
     }

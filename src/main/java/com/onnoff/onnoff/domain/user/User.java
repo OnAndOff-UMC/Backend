@@ -6,6 +6,7 @@ import com.onnoff.onnoff.domain.off.feedImage.entity.FeedImage;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
+import com.onnoff.onnoff.domain.user.dto.UserRequestDTO;
 import com.onnoff.onnoff.domain.user.enums.ExperienceYear;
 import com.onnoff.onnoff.domain.user.enums.FieldOfWork;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
@@ -101,5 +102,12 @@ public class User extends BaseEntity {
     public void setUserStatusInactive(){
         this.status = Status.INACTIVE;
         this.inactiveDate = LocalDateTime.now();
+    }
+
+    public void updateUser(UserRequestDTO.ModifyUserDTO modifyUserDTO) {
+        this.nickname = modifyUserDTO.getNickname();
+        this.fieldOfWork = modifyUserDTO.getFieldOfWork();
+        this.job = modifyUserDTO.getJob();
+        this.experienceYear = modifyUserDTO.getExperienceYear();
     }
 }

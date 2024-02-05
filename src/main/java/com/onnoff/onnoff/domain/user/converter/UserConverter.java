@@ -72,8 +72,8 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDTO.UserInfoResponseDTO toUserInfoResponseDTO(User user){
-        return UserResponseDTO.UserInfoResponseDTO.builder()
+    public static UserResponseDTO.UserInformationResponseDTO toUserInformationResponseDTO(User user){
+        return UserResponseDTO.UserInformationResponseDTO.builder()
                 .nickname(user.getNickname())
                 .experienceYear(user.getExperienceYear())
                 .fieldOfWork(user.getFieldOfWork())
