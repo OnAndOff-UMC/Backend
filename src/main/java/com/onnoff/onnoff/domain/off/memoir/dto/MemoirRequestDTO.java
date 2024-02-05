@@ -24,6 +24,7 @@ public class MemoirRequestDTO {
     public static class MemoirWriteAnswerDTO {
         @NotNull
         Long questionId;
+        @NotNull
         @Size(max = 500)
         String answer;
     }
@@ -40,6 +41,7 @@ public class MemoirRequestDTO {
     public static class MemoirUpdateAnswerDTO {
         @NotNull
         Long answerId;
+        @NotNull
         @Size(max = 500)
         String answer;
     }

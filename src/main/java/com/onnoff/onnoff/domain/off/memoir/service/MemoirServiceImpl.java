@@ -49,7 +49,7 @@ public class MemoirServiceImpl implements MemoirService {
 
         List<MemoirAnswer> newMemoirAnswerList = request.getMemoirAnswerList().stream()
                 .map(memoirAnswer -> MemoirAnswer.builder()
-                        .answer(memoirAnswer.getAnswer())
+                        .answer(memoirAnswer.getAnswer().trim())
                         .memoirQuestion(memoirQuestionRepository.findById(memoirAnswer.getQuestionId()).orElseThrow(() -> new GeneralException(ErrorStatus.QUESTION_NOT_FOUND)))
                         .memoir(newMemoir)
                         .build())
@@ -93,7 +93,7 @@ public class MemoirServiceImpl implements MemoirService {
             if (findMemoirAnswer.getMemoir() != memoir) {
                 throw new GeneralException(ErrorStatus.ANSWER_BAD_MATCH);
             }
-            findMemoirAnswer.setAnswer(memoirAnswer.getAnswer());
+            findMemoirAnswer.setAnswer(memoirAnswer.getAnswer().trim());
         }
 
         return memoir;
