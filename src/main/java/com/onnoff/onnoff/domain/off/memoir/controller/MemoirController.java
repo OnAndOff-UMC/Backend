@@ -52,7 +52,7 @@ public class MemoirController {
     }
 
     @PatchMapping("/memoirs/{memoirId}")
-    @Operation(summary = "회고 내용 수정 API", description = "기존의 회고 내용을 수정하는 API입니다.")
+    @Operation(summary = "회고 내용 수정 API", description = "회고의 이모티콘과 답변을 수정하는 API입니다.")
     public ApiResponse<MemoirResponseDTO.MemoirDTO> modifyMemoir(@PathVariable(name = "memoirId") Long memoirId,
                                                                        @RequestBody @Valid MemoirRequestDTO.MemoirUpdateDTO request) {
         Memoir memoir = memoirService.modifyMemoir(memoirId, request);
@@ -67,7 +67,7 @@ public class MemoirController {
     }
 
     @DeleteMapping("/memoirs/{memoirId}")
-    @Operation(summary = "회고 삭제 API", description = "기존의 회고를 삭제하는 API입니다.")
+    @Operation(summary = "회고 삭제 API", description = "회고를 삭제하는 API입니다.")
     public ApiResponse<Long> deleteMemoir(@PathVariable(name = "memoirId") Long memoirId) {
         return ApiResponse.onSuccess(memoirService.deleteMemoir(memoirId));
     }

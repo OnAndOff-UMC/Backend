@@ -24,7 +24,7 @@ public class FeedImageController {
     }
 
     @GetMapping("/feed-images")
-    @Operation(summary = "워라벨 피드 사진 조회 API",description = "워라벨 피드의 사진을 조회하는 API입니다. 생성 날짜 기준 오래된 순으로 정렬된 결과가 반환됩니다.")
+    @Operation(summary = "워라벨 피드 사진 조회 API",description = "워라벨 피드의 사진을 조회하는 API입니다. 업로드한 지 오래된 순으로 정렬된 결과가 반환됩니다.")
     public ApiResponse<List<FeedImageResponseDTO.FeedImageDTO>> getFeedImage() {
         return ApiResponse.onSuccess(feedImageService.getFeedImage());
     }
