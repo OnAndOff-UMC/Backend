@@ -47,7 +47,7 @@ public class UserResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UserInfoResponseDTO {
+    public static class UserInformationResponseDTO {
         private String nickname;
         private FieldOfWork fieldOfWork;
         private ExperienceYear experienceYear;

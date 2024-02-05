@@ -6,12 +6,10 @@ import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.on.resolution.converter.ResolutionConverter;
 import com.onnoff.onnoff.domain.user.converter.UserConverter;
 import com.onnoff.onnoff.domain.user.dto.EnumInquiryResponseDTO;
+import com.onnoff.onnoff.domain.user.dto.UserRequestDTO;
 import com.onnoff.onnoff.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,13 +19,18 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/info")
-    public ApiResponse getUserInfo(){
-        return ApiResponse.onSuccess(UserConverter.toUserInfoResponseDTO(UserContext.getUser()));
+    @GetMapping("/information")
+    public ApiResponse getUserInformation(){
+        return ApiResponse.onSuccess(UserConverter.toUserInformationResponseDTO(UserContext.getUser()));
     }
 
     @PutMapping("/withdraw")
     public ApiResponse withdrawUser(){
         return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(userService.withdrawUser()));
+    }
+
+    @PutMapping("/")
+    public ApiResponse modifyUser(@RequestBody UserRequestDTO.ModifyUserDTO modifyUserDTO) {
+        return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(userService.modifyUser(modifyUserDTO)));
     }
 }
