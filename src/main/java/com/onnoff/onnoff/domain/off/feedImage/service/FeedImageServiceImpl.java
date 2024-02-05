@@ -32,6 +32,9 @@ public class FeedImageServiceImpl implements FeedImageService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    @Value("${cloud.aws.s3.path.feed-image}")
+    private String path;
+
     private final AmazonS3Client amazonS3Client;
     private final FeedImageRepository feedImageRepository;
 
@@ -73,7 +76,7 @@ public class FeedImageServiceImpl implements FeedImageService {
     }
 
     public String uploadImage(MultipartFile multipartFile) {
-        String fileName = createFileName(multipartFile.getOriginalFilename());
+        String fileName = path + "/" + createFileName(multipartFile.getOriginalFilename());
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
