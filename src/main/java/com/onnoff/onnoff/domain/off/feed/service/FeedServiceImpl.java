@@ -39,7 +39,7 @@ public class FeedServiceImpl implements FeedService {
     @Transactional
     public Feed modifyFeed(Long feedId, FeedRequestDTO.ModifyFeedDTO request) {
         Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_NOT_FOUND));
-        feed.setContent(request.getContent());
+        feed.setContent(request.getContent().trim());
 
         return feed;
     }

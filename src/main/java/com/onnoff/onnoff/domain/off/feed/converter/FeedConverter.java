@@ -10,7 +10,7 @@ public class FeedConverter {
     public static Feed toFeed(FeedRequestDTO.AddFeedDTO request, User user) {
         return Feed.builder()
                 .date(request.getDate())
-                .content(request.getContent())
+                .content(request.getContent().trim())
                 .isChecked(false)
                 .user(user)
                 .build();
