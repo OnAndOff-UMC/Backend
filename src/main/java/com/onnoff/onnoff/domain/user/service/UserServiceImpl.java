@@ -2,6 +2,7 @@ package com.onnoff.onnoff.domain.user.service;
 
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
+import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,15 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByOauthId(oauthId).orElseThrow( () ->
                 new GeneralException(ErrorStatus.USER_NOT_FOUND)
         );
+        return user;
+    }
+
+    @Transactional
+    @Override
+    public User withdrawUser(){
+        User user = UserContext.getUser();
+        user.setUserStatusInactive();
+        userRepository.save(user);
         return user;
     }
 }

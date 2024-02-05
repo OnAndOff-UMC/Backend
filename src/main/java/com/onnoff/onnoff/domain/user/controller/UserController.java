@@ -9,6 +9,7 @@ import com.onnoff.onnoff.domain.user.dto.EnumInquiryResponseDTO;
 import com.onnoff.onnoff.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,4 +26,8 @@ public class UserController {
         return ApiResponse.onSuccess(UserConverter.toUserInfoResponseDTO(UserContext.getUser()));
     }
 
+    @PutMapping("/withdraw")
+    public ApiResponse withdrawUser(){
+        return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(userService.withdrawUser()));
+    }
 }

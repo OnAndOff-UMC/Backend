@@ -97,4 +97,9 @@ public class User extends BaseEntity {
     public void setAppleRefreshToken(String appleRefreshToken) {
         this.appleRefreshToken = appleRefreshToken;
     }
+
+    public void setUserStatusInactive(){
+        this.status = Status.INACTIVE;
+        this.inactiveDate = LocalDateTime.now();
+    }
 }

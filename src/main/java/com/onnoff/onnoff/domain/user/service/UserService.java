@@ -14,4 +14,6 @@ public interface UserService {
     public boolean isExistByOauthId(String oauthId);
 
     public User getUserByOauthId(String oauthId);
+
+    public User withdrawUser();
 }
