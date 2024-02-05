@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
+import com.onnoff.onnoff.apiPayload.exception.handler.FeedImageHandler;
 import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.off.feedImage.converter.FeedImageConverter;
 import com.onnoff.onnoff.domain.off.feedImage.dto.FeedImageResponseDTO;
@@ -67,7 +68,7 @@ public class FeedImageServiceImpl implements FeedImageService {
     @Override
     @Transactional
     public Long deleteFeedImage(Long feedImageId) {
-        FeedImage feedImage = feedImageRepository.findById(feedImageId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_IMAGE_NOT_FOUND));
+        FeedImage feedImage = feedImageRepository.findById(feedImageId).orElseThrow(() -> new FeedImageHandler(ErrorStatus.FEED_IMAGE_NOT_FOUND));
 
         deleteImage(feedImage.getImageKey());
         feedImageRepository.delete(feedImage);
@@ -100,7 +101,7 @@ public class FeedImageServiceImpl implements FeedImageService {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
-            throw new GeneralException(ErrorStatus.FEED_IMAGE_BAD_REQUEST);
+            throw new FeedImageHandler(ErrorStatus.FEED_IMAGE_BAD_REQUEST);
         }
     }
 

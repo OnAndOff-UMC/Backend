@@ -1,7 +1,7 @@
 package com.onnoff.onnoff.domain.off.feed.service;
 
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
-import com.onnoff.onnoff.apiPayload.exception.GeneralException;
+import com.onnoff.onnoff.apiPayload.exception.handler.FeedHandler;
 import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.off.feed.converter.FeedConverter;
 import com.onnoff.onnoff.domain.off.feed.dto.FeedRequestDTO;
@@ -38,7 +38,7 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Transactional
     public Feed modifyFeed(Long feedId, FeedRequestDTO.ModifyFeedDTO request) {
-        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_NOT_FOUND));
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new FeedHandler(ErrorStatus.FEED_NOT_FOUND));
         feed.setContent(request.getContent().trim());
 
         return feed;
@@ -47,7 +47,7 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Transactional
     public Feed delayFeed(Long feedId) {
-        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_NOT_FOUND));
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new FeedHandler(ErrorStatus.FEED_NOT_FOUND));
         feed.setDate(LocalDate.now().plusDays(1));
 
         return feed;
@@ -56,7 +56,7 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Transactional
     public Feed checkFeed(Long feedId) {
-        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_NOT_FOUND));
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new FeedHandler(ErrorStatus.FEED_NOT_FOUND));
         feed.setIsChecked(feed.getIsChecked().equals(false));
 
         return feed;
@@ -65,7 +65,7 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Transactional
     public Long deleteFeed(Long feedId) {
-        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_NOT_FOUND));
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new FeedHandler(ErrorStatus.FEED_NOT_FOUND));
         feedRepository.delete(feed);
 
         return feed.getId();
