@@ -13,7 +13,7 @@ public class WeekdayResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class WeekdayResultDTO {
+    public static class WeekdayDTO {
         LocalDate monday;
         LocalDate tuesday;
         LocalDate wednesday;

@@ -6,5 +6,5 @@ import java.time.LocalDate;
 
 public interface WeekdayService {
 
-    WeekdayResponseDTO.WeekdayResultDTO getWeekday(LocalDate date);
+    WeekdayResponseDTO.WeekdayDTO getWeekday(LocalDate date);
 }
