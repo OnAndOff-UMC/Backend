@@ -4,11 +4,14 @@ import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.user.User;
+import com.onnoff.onnoff.domain.user.enums.Status;
 import com.onnoff.onnoff.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -57,5 +60,13 @@ public class UserServiceImpl implements UserService{
         user.setUserStatusInactive();
         userRepository.save(user);
         return user;
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 탈퇴 후 1달 지난 유저 디비 삭제
+    public void deleteInactiveUsers() {
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+        List<User> inactiveUsers = userRepository.findByStatusAndInactiveDateBefore(Status.INACTIVE, oneMonthAgo);
+        inactiveUsers.forEach(userRepository::delete);
     }
 }
