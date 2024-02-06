@@ -2,14 +2,37 @@ package com.onnoff.onnoff.domain.user.controller;
 
 
 import com.onnoff.onnoff.apiPayload.ApiResponse;
-import com.onnoff.onnoff.domain.user.dto.EnumInquiryResponseDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.onnoff.onnoff.auth.UserContext;
+import com.onnoff.onnoff.domain.user.converter.UserConverter;
+import com.onnoff.onnoff.domain.user.dto.UserRequestDTO;
+import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
+import com.onnoff.onnoff.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
+@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
 
+    @GetMapping("/information")
+    @Operation(summary = "마이페이지 유저 정보 조회 API",description = "마이페이지의 유저 정보를 가져오는 API 입니다.")
+    public ApiResponse<UserResponseDTO.UserInformationResponseDTO> getUserInformation(){
+        return ApiResponse.onSuccess(UserConverter.toUserInformationResponseDTO(UserContext.getUser()));
+    }
+
+    @PutMapping("/withdraw")
+    @Operation(summary = "회원 탈퇴 API",description = "유저 회원 탈퇴 API입니다(SOFT DELETE)")
+    public ApiResponse<UserResponseDTO.UserDetailDTO> withdrawUser(){
+        return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(userService.withdrawUser()));
+    }
+
+    @PutMapping("/")
+    @Operation(summary = "회원 정보 수정 API" , description = "회원 정보 수정 API입니다.")
+    public ApiResponse<UserResponseDTO.UserDetailDTO> modifyUser(@RequestBody UserRequestDTO.ModifyUserDTO modifyUserDTO) {
+        return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(userService.modifyUser(modifyUserDTO)));
+    }
 }
