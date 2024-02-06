@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
+import com.onnoff.onnoff.apiPayload.exception.handler.FeedImageHandler;
 import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.domain.off.feedImage.converter.FeedImageConverter;
 import com.onnoff.onnoff.domain.off.feedImage.dto.FeedImageResponseDTO;
@@ -32,6 +33,9 @@ public class FeedImageServiceImpl implements FeedImageService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    @Value("${cloud.aws.s3.path.feed-image}")
+    private String path;
+
     private final AmazonS3Client amazonS3Client;
     private final FeedImageRepository feedImageRepository;
 
@@ -64,7 +68,7 @@ public class FeedImageServiceImpl implements FeedImageService {
     @Override
     @Transactional
     public Long deleteFeedImage(Long feedImageId) {
-        FeedImage feedImage = feedImageRepository.findById(feedImageId).orElseThrow(() -> new GeneralException(ErrorStatus.FEED_IMAGE_NOT_FOUND));
+        FeedImage feedImage = feedImageRepository.findById(feedImageId).orElseThrow(() -> new FeedImageHandler(ErrorStatus.FEED_IMAGE_NOT_FOUND));
 
         deleteImage(feedImage.getImageKey());
         feedImageRepository.delete(feedImage);
@@ -73,7 +77,7 @@ public class FeedImageServiceImpl implements FeedImageService {
     }
 
     public String uploadImage(MultipartFile multipartFile) {
-        String fileName = createFileName(multipartFile.getOriginalFilename());
+        String fileName = path + "/" + createFileName(multipartFile.getOriginalFilename());
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
@@ -97,7 +101,7 @@ public class FeedImageServiceImpl implements FeedImageService {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
-            throw new GeneralException(ErrorStatus.FEED_IMAGE_BAD_REQUEST);
+            throw new FeedImageHandler(ErrorStatus.FEED_IMAGE_BAD_REQUEST);
         }
     }
 

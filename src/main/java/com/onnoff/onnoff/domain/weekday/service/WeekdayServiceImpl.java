@@ -11,10 +11,10 @@ import java.time.LocalDate;
 public class WeekdayServiceImpl implements WeekdayService {
 
     @Override
-    public WeekdayResponseDTO.WeekdayResultDTO getWeekday(LocalDate date) {
+    public WeekdayResponseDTO.WeekdayDTO getWeekday(LocalDate date) {
         LocalDate monday = date.minusDays(date.getDayOfWeek().getValue() - 1);
 
-        return WeekdayResponseDTO.WeekdayResultDTO.builder()
+        return WeekdayResponseDTO.WeekdayDTO.builder()
                 .monday(monday)
                 .tuesday(monday.plusDays(1))
                 .wednesday(monday.plusDays(2))

@@ -35,7 +35,7 @@ public class FeedController {
     }
 
     @PatchMapping("/feeds/{feedId}")
-    @Operation(summary = "워라벨 피드 수정 API", description = "워라벨 피드의 내용을 수정하는 API입니다.")
+    @Operation(summary = "워라벨 피드 내용 수정 API", description = "워라벨 피드의 내용을 수정하는 API입니다.")
     public ApiResponse<FeedResponseDTO.FeedDTO> modifyFeed(@PathVariable(name = "feedId") Long feedId, @RequestBody @Valid FeedRequestDTO.ModifyFeedDTO request) {
         Feed feed = feedService.modifyFeed(feedId, request);
         return ApiResponse.onSuccess(FeedConverter.toFeedDTO(feed));
