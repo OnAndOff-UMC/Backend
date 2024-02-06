@@ -18,12 +18,7 @@ import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.converter.UserConverter;
 import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
 import com.onnoff.onnoff.domain.user.service.UserService;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.InvalidClaimException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -77,7 +72,8 @@ public class LoginController {
     4. 응답 헤더에 Jwt 토큰 추가
      */
 
-    @Operation(summary = "소셜 토큰 검증 API",description = "토큰을 검증 하고 이에 대한 결과를 응답합니다. 추가 정보 입력 여부도 같이 응답 합니다.")
+    @Operation(summary = "카카오 소셜 토큰 검증 API",description = "추가정보와 ID토큰을 받으면 ID토큰을 검증하고 통과 시" +
+            "서버에서 발급한 토큰을 받습니다. 회원가입을 하지 않은 사용자의 경우 회원가입을 시킵니다.")
     @ResponseBody
     @PostMapping("/oauth2/kakao/token/validate")
     public ApiResponse<UserResponseDTO.LoginDTO> validateKakoToken(@RequestBody LoginRequestDTO.KakaoTokenValidateDTO requestDTO)  {
@@ -106,11 +102,14 @@ public class LoginController {
         return ApiResponse.onSuccess(UserConverter.toLoginDTO(token.getAccessToken(), token.getRefreshToken()));
     }
 
+    @Operation(summary = "애플 소셜 토큰 검증 API",description = "추가정보와 ID토큰을 받으면 ID토큰을 검증하고 통과 시" +
+            "액세스/리프레시 토큰을 얻어서 저장시키고. 응답으로 서버에서 발급한 토큰을 받습니다. 회원가입을 하지 않은 사용자의 경우 회원가입을 시킵니다.")
     @ResponseBody
     @PostMapping("/oauth2/apple/token/validate")
     public ApiResponse<UserResponseDTO.LoginDTO> validateAppleToken(@RequestBody LoginRequestDTO.AppleTokenValidateDTO requestDTO)  {
         // 검증하기
         appleLoginService.validate(requestDTO.getIdentityToken());
+        log.info("애플 ID 토큰 검증 성공");
         // 검증 성공 시 리프레시 토큰 발급받아 저장(기한 무제한, 회원탈퇴 시 필요)
         TokenResponse tokenResponse = appleLoginService.getAccessTokenByCode(requestDTO.getAuthorizationCode());
         // 유저 정보 조회 및 저장
@@ -124,7 +123,7 @@ public class LoginController {
             user.setAppleRefreshToken(tokenResponse.getRefreshToken());
             user = userService.create(user);
         }
-        // 응답헤더에 토큰 추가
+        // 응답본문에 토큰 추가
         JwtToken token = jwtUtil.generateToken(String.valueOf(user.getId()));
         return ApiResponse.onSuccess(UserConverter.toLoginDTO(token.getAccessToken(), token.getRefreshToken()));
     }
