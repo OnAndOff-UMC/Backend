@@ -96,8 +96,7 @@ public class AppleLoginService implements LoginService{
         return null;
     }
     private PrivateKey getPrivateKey() throws IOException {
-        ClassPathResource resource = new ClassPathResource(keyPath);
-        String privateKey = new String(Files.readAllBytes(Paths.get(resource.getURI())));
+        String privateKey = new String(Files.readAllBytes(Paths.get(keyPath) ) );
 
         Reader pemReader = new StringReader(privateKey);
         PEMParser pemParser = new PEMParser(pemReader);
