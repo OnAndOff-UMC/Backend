@@ -46,8 +46,6 @@ public class AppleLoginService implements LoginService{
     private String iss;
     @Value("${apple.team-id}")
     private String teamId;
-    @Value("${apple.redirect-uri}")
-    private String redirectUri;
     @Override
     public TokenResponse getAccessTokenByCode(String code) {
         // client secret 만들기
@@ -56,9 +54,8 @@ public class AppleLoginService implements LoginService{
         MultiValueMap<String, String> urlEncoded = TokenRequest.builder()
                 .clientId(clientId)
                 .clientSecret(clientSecret)
-                .code("authorization_code_value")
+                .code(code)
                 .grantType("authorization_code")
-                .redirectUri(redirectUri)
                 .build().toUrlEncoded();
         return appleAuthClient.getToken(urlEncoded);
     }
@@ -94,7 +91,6 @@ public class AppleLoginService implements LoginService{
                 .clientSecret(clientSecret)
                 .refreshToken(appleRefreshToken)
                 .grantType("refresh_token")
-                .redirectUri(redirectUri)
                 .build().toUrlEncoded();
         TokenResponse response = appleAuthClient.getToken(urlEncoded);
         return null;
