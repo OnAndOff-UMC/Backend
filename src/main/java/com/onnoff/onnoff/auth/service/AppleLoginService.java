@@ -11,6 +11,7 @@ import com.onnoff.onnoff.domain.user.enums.SocialType;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
@@ -33,6 +34,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AppleLoginService implements LoginService{
     private final AppleAuthClient appleAuthClient;
     private final SocialTokenValidator validator;
@@ -66,6 +68,8 @@ public class AppleLoginService implements LoginService{
         jwtHeader.put("alg", "ES256");
 
         try {
+            log.info("teamId = {}", teamId);
+            log.info("kid = {}", kid);
             return Jwts.builder()
                     .setHeaderParams(jwtHeader)
                     .setIssuer(teamId) // 토큰 발행자 = 우리 팀
@@ -97,7 +101,7 @@ public class AppleLoginService implements LoginService{
     }
     private PrivateKey getPrivateKey() throws IOException {
         String privateKey = new String(Files.readAllBytes(Paths.get(keyPath) ) );
-
+        log.info("privateKey = {}", privateKey);
         Reader pemReader = new StringReader(privateKey);
         PEMParser pemParser = new PEMParser(pemReader);
         JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
