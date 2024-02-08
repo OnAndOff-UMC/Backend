@@ -91,18 +91,14 @@ public class StatsServiceImpl implements StatsService{
 
             if(memoir.getEmoticon() != null){
                 rate++;
-                System.out.println(memoir.getId());
             }
 
             List<MemoirAnswer> memoirAnswerList = memoirAnswerRepository.findAllByMemoirId(memoir.getId()).stream().toList();
             for(MemoirAnswer memoirAnswer: memoirAnswerList){
                 if(!memoirAnswer.getAnswer().equals("")){
                     rate++;
-                    System.out.println("notBlank");
                 }
             }
-            System.out.println(rate);
-            System.out.println(memoirAnswerList.size() + 1);
 
             StatsResponseDTO.MonthStatsDTO stats = StatsResponseDTO.MonthStatsDTO.builder()
                     .date(localDate.plusDays(i))
