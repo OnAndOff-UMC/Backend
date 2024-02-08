@@ -4,6 +4,7 @@ import com.onnoff.onnoff.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Entity
@@ -30,4 +31,24 @@ public class AlarmSetting {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public static boolean isMatchingDay(AlarmSetting alarmSetting, DayOfWeek today) {
+        switch (today) {
+            case MONDAY:
+                return alarmSetting.isMonday();
+            case TUESDAY:
+                return alarmSetting.isTuesday();
+            case WEDNESDAY:
+                return alarmSetting.isWednesday();
+            case THURSDAY:
+                return alarmSetting.isThursday();
+            case FRIDAY:
+                return alarmSetting.isFriday();
+            case SATURDAY:
+                return alarmSetting.isSaturday();
+            case SUNDAY:
+                return alarmSetting.isSunday();
+            default:
+                return false;  // 예외 처리 등을 추가할 수 있음
+        }
+    }
 }
