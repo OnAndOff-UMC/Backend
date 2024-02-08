@@ -12,7 +12,7 @@ public class EnumInquiryResponseDTO {
     public static class FieldOfWorkResponseDTO{
         public static List<String> getAllField() {
             return Arrays.stream(FieldOfWork.values())
-                    .map(Enum::name)
+                    .map(FieldOfWork::getValue)
                     .collect(Collectors.toList());
         }
     }
