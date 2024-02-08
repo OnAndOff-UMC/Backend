@@ -77,7 +77,7 @@ public class StatsServiceImpl implements StatsService{
         List<StatsResponseDTO.MonthStatsDTO> monthStatsList = new ArrayList<>();
         LocalDate localDate = date.minusDays(date.getDayOfMonth() - 1);
         for(int i=0; i<date.lengthOfMonth(); i++){
-            int rate =0;
+            double rate =0.0;
 
             Memoir memoir = memoirRepository.findByUserAndDate(user, localDate.plusDays(i)).orElse(null);
             if(memoir == null){
@@ -91,18 +91,22 @@ public class StatsServiceImpl implements StatsService{
 
             if(memoir.getEmoticon() != null){
                 rate++;
+                System.out.println(memoir.getId());
             }
 
             List<MemoirAnswer> memoirAnswerList = memoirAnswerRepository.findAllByMemoirId(memoir.getId()).stream().toList();
             for(MemoirAnswer memoirAnswer: memoirAnswerList){
-                if(memoirAnswer.getAnswer() != null){
+                if(!memoirAnswer.getAnswer().equals("")){
                     rate++;
+                    System.out.println("notBlank");
                 }
             }
+            System.out.println(rate);
+            System.out.println(memoirAnswerList.size() + 1);
 
             StatsResponseDTO.MonthStatsDTO stats = StatsResponseDTO.MonthStatsDTO.builder()
                     .date(localDate.plusDays(i))
-                    .rate(rate / 4.0)
+                    .rate(rate / (memoirAnswerList.size() + 1))
                     .build();
             monthStatsList.add(stats);
 
