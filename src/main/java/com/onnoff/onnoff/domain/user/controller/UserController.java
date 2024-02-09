@@ -8,6 +8,7 @@ import com.onnoff.onnoff.domain.user.dto.UserRequestDTO;
 import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
 import com.onnoff.onnoff.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,5 +35,11 @@ public class UserController {
     @Operation(summary = "회원 정보 수정 API" , description = "회원 정보 수정 API입니다.")
     public ApiResponse<UserResponseDTO.UserDetailDTO> modifyUser(@RequestBody UserRequestDTO.ModifyUserDTO modifyUserDTO) {
         return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(userService.modifyUser(modifyUserDTO)));
+    }
+
+    @PostMapping("/nickname")
+    @Operation(summary = "닉네임 중복 체크 API")
+    public ApiResponse<String> checkNickname(@Valid @RequestBody UserRequestDTO.getNicknameDTO nicknameDTO){
+        return ApiResponse.onSuccess(userService.isExistByNickname(nicknameDTO));
     }
 }

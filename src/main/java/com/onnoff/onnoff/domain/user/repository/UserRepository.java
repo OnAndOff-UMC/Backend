@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByOauthId(String oauthId);
 
+    Optional<User> findByNickname(String nickname);
+
     List<User> findByPushNotificationTimeBetween(LocalTime startTime, LocalTime endTime);
 
     List<User> findByStatusAndInactiveDateBefore(Status status, LocalDateTime oneMonthAgo);
