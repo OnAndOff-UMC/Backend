@@ -2,7 +2,6 @@ package com.onnoff.onnoff.domain.user.service;
 
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.dto.UserRequestDTO;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,5 +17,7 @@ public interface UserService {
     public User getUserByOauthId(String oauthId);
 
     public User withdrawUser();
+
+    public void deleteInactiveUsers();
     public User modifyUser(UserRequestDTO.ModifyUserDTO modifyUserDTO);
 }

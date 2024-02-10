@@ -3,8 +3,11 @@ package com.onnoff.onnoff.domain.user.service;
 import com.onnoff.onnoff.apiPayload.code.status.ErrorStatus;
 import com.onnoff.onnoff.apiPayload.exception.GeneralException;
 import com.onnoff.onnoff.auth.UserContext;
+import com.onnoff.onnoff.auth.service.AppleLoginService;
+import com.onnoff.onnoff.auth.service.KakaoLoginService;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.dto.UserRequestDTO;
+import com.onnoff.onnoff.domain.user.enums.SocialType;
 import com.onnoff.onnoff.domain.user.enums.Status;
 import com.onnoff.onnoff.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
+    private final AppleLoginService appleLoginService;
+    private final KakaoLoginService kakaoLoginService;
+
+
     @Transactional
     @Override
     public User create(User user) {
@@ -59,7 +66,6 @@ public class UserServiceImpl implements UserService{
     public User withdrawUser(){
         User user = UserContext.getUser();
         user.setUserStatusInactive();
-        userRepository.save(user);
         return user;
     }
 
@@ -78,5 +84,19 @@ public class UserServiceImpl implements UserService{
         LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
         List<User> inactiveUsers = userRepository.findByStatusAndInactiveDateBefore(Status.INACTIVE, oneMonthAgo);
         inactiveUsers.forEach(userRepository::delete);
+        inactiveUsers.forEach(this::disconnectApp);
     }
+    // 유저 소셜계정 앱 연동 해지
+    private void disconnectApp(User user){
+        SocialType socialType = user.getSocialType();
+        if(SocialType.isApple(socialType)) {
+            String appleRefreshToken = user.getAppleRefreshToken();
+            appleLoginService.revokeTokens(appleRefreshToken);
+        }
+        else {
+            String oauthId = user.getOauthId();
+            kakaoLoginService.revokeTokens(oauthId);
+        }
+    }
+
 }
