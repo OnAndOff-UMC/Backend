@@ -8,7 +8,7 @@ package com.onnoff.onnoff.auth.jwt.filter;
  */
 
 
-import com.onnoff.onnoff.auth.jwt.service.JwtTokenProvider;
+import com.onnoff.onnoff.auth.jwt.service.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -24,7 +23,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenProvider tokenProvider;
     private final static String[] ignorePrefix = {"/swagger-ui", "/v3/api-docs", "/oauth2", "/health", "/token/validate" , "/message", "/enums"};
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -43,7 +42,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             accessToken = authHeader.substring(7);
         }
-        if (jwtTokenProvider.verifyToken(accessToken)){
+        if (tokenProvider.verifyToken(accessToken)){
             log.info("인증성공");
             filterChain.doFilter(request, response);
         }
