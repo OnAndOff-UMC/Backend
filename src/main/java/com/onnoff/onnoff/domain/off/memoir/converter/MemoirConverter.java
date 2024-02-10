@@ -16,13 +16,15 @@ public class MemoirConverter {
     public static MemoirResponseDTO.MemoirPreviewDTO toMemoirPreviewDTO(Memoir memoir) {
         if (memoir == null) {
             return MemoirResponseDTO.MemoirPreviewDTO.builder()
-                    .memoirId(null)
                     .written(false)
+                    .memoirId(null)
+                    .emoticonUrl(null)
                     .build();
         } else {
             return MemoirResponseDTO.MemoirPreviewDTO.builder()
-                    .memoirId(memoir.getId())
                     .written(true)
+                    .memoirId(memoir.getId())
+                    .emoticonUrl(memoir.getEmoticon().getImageUrl())
                     .build();
         }
     }

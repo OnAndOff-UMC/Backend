@@ -40,6 +40,7 @@ public class MemoirResponseDTO {
     public static class MemoirPreviewDTO {
         Boolean written;
         Long memoirId;
+        String emoticonUrl;
     }
 
     @Builder
