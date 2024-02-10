@@ -10,8 +10,8 @@ import com.onnoff.onnoff.auth.dto.LoginRequestDTO;
 import com.onnoff.onnoff.auth.feignClient.dto.TokenResponse;
 import com.onnoff.onnoff.auth.feignClient.dto.kakao.KakaoOauth2DTO;
 import com.onnoff.onnoff.auth.jwt.dto.JwtToken;
-import com.onnoff.onnoff.auth.jwt.service.JwtTokenProvider;
 import com.onnoff.onnoff.auth.jwt.service.JwtUtil;
+import com.onnoff.onnoff.auth.jwt.service.TokenProvider;
 import com.onnoff.onnoff.auth.service.AppleLoginService;
 import com.onnoff.onnoff.auth.service.KakaoLoginService;
 import com.onnoff.onnoff.domain.user.User;
@@ -34,7 +34,7 @@ public class LoginController {
     private final KakaoLoginService kakaoLoginService;
     private final AppleLoginService appleLoginService;
     private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenProvider tokenProvider;
     private final JwtUtil jwtUtil;
 
     @Value("${kakao.redirect-uri}")
@@ -135,14 +135,14 @@ public class LoginController {
     public ApiResponse<UserResponseDTO.LoginDTO> validateServerToken(@RequestBody JwtToken tokenDTO){
         String accessToken = tokenDTO.getAccessToken();
         String refreshToken = tokenDTO.getRefreshToken();
-        if( jwtTokenProvider.verifyToken(accessToken) ){
+        if( tokenProvider.verifyToken(accessToken) ){
             // accessToken 유효
             String userId = jwtUtil.getUserId(accessToken);
             User user = userService.getUser(Long.valueOf(userId));
             UserResponseDTO.LoginDTO loginDTO = UserConverter.toLoginDTO(accessToken, refreshToken);
             return ApiResponse.onSuccess(loginDTO);
         }
-        if (jwtTokenProvider.verifyToken(refreshToken)) {
+        if ( tokenProvider.verifyToken(refreshToken)) {
             //refreshToken 유효
             String userId = jwtUtil.getUserId(refreshToken);
             User user = userService.getUser(Long.valueOf(userId));
