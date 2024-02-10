@@ -2,7 +2,6 @@ package com.onnoff.onnoff.domain.user.service;
 
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.dto.UserRequestDTO;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +13,8 @@ public interface UserService {
     public User getUser(Long id);
 
     public boolean isExistByOauthId(String oauthId);
+
+    String isExistByNickname(UserRequestDTO.getNicknameDTO nicknameDTO);
 
     public User getUserByOauthId(String oauthId);
 
