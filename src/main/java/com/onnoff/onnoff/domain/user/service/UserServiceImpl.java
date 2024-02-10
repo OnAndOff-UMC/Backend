@@ -52,6 +52,14 @@ public class UserServiceImpl implements UserService{
         return userRepository.findByOauthId(oauthId).isPresent();
     }
 
+    @Override
+    public String isExistByNickname(UserRequestDTO.getNicknameDTO nicknameDTO) {
+        if(userRepository.findByNickname(nicknameDTO.getNickname()).isPresent()){
+            throw new GeneralException(ErrorStatus.NICKNAME_EXIST);
+        }
+        return "사용 가능한 닉네임입니다.";
+    }
+
     @Transactional(readOnly = true)
     @Override
     public User getUserByOauthId(String oauthId) {

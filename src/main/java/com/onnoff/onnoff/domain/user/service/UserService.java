@@ -14,6 +14,8 @@ public interface UserService {
 
     public boolean isExistByOauthId(String oauthId);
 
+    String isExistByNickname(UserRequestDTO.getNicknameDTO nicknameDTO);
+
     public User getUserByOauthId(String oauthId);
 
     public User withdrawUser();

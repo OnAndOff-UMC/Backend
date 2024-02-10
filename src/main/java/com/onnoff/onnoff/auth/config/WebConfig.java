@@ -36,6 +36,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(userInterceptor)
                 .addPathPatterns("/**") // 스프링 경로는 /*와 /**이 다름
                 .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**", "/oauth2/**", "/health", "/token/**" ,
-                        "/message/**", "/enums/**");
+                        "/message/**", "/enums/**", "/users/nickname");
     }
 }

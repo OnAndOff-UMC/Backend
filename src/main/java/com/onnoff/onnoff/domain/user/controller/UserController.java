@@ -8,6 +8,7 @@ import com.onnoff.onnoff.domain.user.dto.UserRequestDTO;
 import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
 import com.onnoff.onnoff.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,5 +43,11 @@ public class UserController {
     public ApiResponse<String> hardDeleteTest(){
         userService.deleteInactiveUsers() ;
         return ApiResponse.onSuccess("삭제완");
+    }
+
+    @PostMapping("/nickname")
+    @Operation(summary = "닉네임 중복 체크 API")
+    public ApiResponse<String> checkNickname(@Valid @RequestBody UserRequestDTO.getNicknameDTO nicknameDTO){
+        return ApiResponse.onSuccess(userService.isExistByNickname(nicknameDTO));
     }
 }
