@@ -35,4 +35,12 @@ public class UserController {
     public ApiResponse<UserResponseDTO.UserDetailDTO> modifyUser(@RequestBody UserRequestDTO.ModifyUserDTO modifyUserDTO) {
         return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(userService.modifyUser(modifyUserDTO)));
     }
+
+    //테스트용
+    @PutMapping("/hard-delete")
+    @Operation(summary = "회원 완전 탈퇴 테스트 API",description = "30일 뒤에 자동 완전삭제 수동 테스트")
+    public ApiResponse<String> hardDeleteTest(){
+        userService.deleteInactiveUsers() ;
+        return ApiResponse.onSuccess("삭제완");
+    }
 }
