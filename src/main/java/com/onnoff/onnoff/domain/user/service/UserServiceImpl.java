@@ -94,6 +94,13 @@ public class UserServiceImpl implements UserService{
         inactiveUsers.forEach(userRepository::delete);
         inactiveUsers.forEach(this::disconnectApp);
     }
+    @Transactional
+    public void deleteInactiveUsersTest() {
+        LocalDateTime oneMonthAgo = LocalDateTime.now();
+        List<User> inactiveUsers = userRepository.findByStatusAndInactiveDateBefore(Status.INACTIVE, oneMonthAgo);
+        inactiveUsers.forEach(userRepository::delete);
+        inactiveUsers.forEach(this::disconnectApp);
+    }
     // 유저 소셜계정 앱 연동 해지
     private void disconnectApp(User user){
         SocialType socialType = user.getSocialType();

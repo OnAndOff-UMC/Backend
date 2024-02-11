@@ -21,5 +21,7 @@ public interface UserService {
     public User withdrawUser();
 
     public void deleteInactiveUsers();
+
+    public void deleteInactiveUsersTest();
     public User modifyUser(UserRequestDTO.ModifyUserDTO modifyUserDTO);
 }

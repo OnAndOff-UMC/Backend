@@ -41,7 +41,7 @@ public class UserController {
     @PutMapping("/hard-delete")
     @Operation(summary = "회원 완전 탈퇴 테스트 API",description = "30일 뒤에 자동 완전삭제 수동 테스트")
     public ApiResponse<String> hardDeleteTest(){
-        userService.deleteInactiveUsers() ;
+        userService.deleteInactiveUsersTest();
         return ApiResponse.onSuccess("삭제완");
     }
 
