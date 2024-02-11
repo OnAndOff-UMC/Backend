@@ -23,7 +23,7 @@ import java.util.Date;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class JwtTokenProvider {
+public class JwtTokenProvider implements TokenProvider {
     @Value("${spring.jwt.secret}")
     private String secret;
     private SecretKey secretkey;

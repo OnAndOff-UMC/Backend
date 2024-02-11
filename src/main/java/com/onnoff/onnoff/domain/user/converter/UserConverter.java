@@ -14,26 +14,20 @@ import java.util.EnumSet;
 
 public class UserConverter {
     public static User toUser(KakaoOauth2DTO.UserInfoResponseDTO response, LoginRequestDTO.AdditionalInfo additionalInfo){
-        String fieldOfWork = additionalInfo.getFieldOfWork();
-        try{
-            FieldOfWork.valueOf(fieldOfWork);
-        }
-        catch (IllegalArgumentException e){
-            throw new GeneralException(ErrorStatus.INVALID_ENUM_VALUE);
-        }
-
+        FieldOfWork fieldOfWork = FieldOfWork.fromValue(additionalInfo.getFieldOfWork());
         ExperienceYear experienceYear = ExperienceYear.fromValue(additionalInfo.getExperienceYear());
         return User.builder()
                 .oauthId(response.getSub())
                 .email(response.getEmail())
                 .name(response.getNickname())
                 .socialType(SocialType.KAKAO)
-                .fieldOfWork(Enum.valueOf(FieldOfWork.class ,additionalInfo.getFieldOfWork() ) )
+                .fieldOfWork(fieldOfWork)
                 .job(additionalInfo.getJob())
                 .experienceYear(experienceYear)
                 .build();
     }
     public static User toUser(LoginRequestDTO.AppleTokenValidateDTO request, LoginRequestDTO.AdditionalInfo additionalInfo){
+        FieldOfWork fieldOfWork = FieldOfWork.fromValue(additionalInfo.getFieldOfWork());
         ExperienceYear experienceYear = ExperienceYear.fromValue(additionalInfo.getExperienceYear());
         String fullName = request.getFullName().getFamilyName() + request.getFullName().getGivenName();
         return User.builder()
@@ -41,7 +35,7 @@ public class UserConverter {
                 .email(request.getEmail())
                 .name(fullName)
                 .socialType(SocialType.APPLE)
-                .fieldOfWork(Enum.valueOf(FieldOfWork.class ,additionalInfo.getFieldOfWork() ) )
+                .fieldOfWork(fieldOfWork)
                 .job(additionalInfo.getJob())
                 .experienceYear(experienceYear)
                 .build();

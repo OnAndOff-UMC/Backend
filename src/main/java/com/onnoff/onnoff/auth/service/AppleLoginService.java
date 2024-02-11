@@ -3,6 +3,7 @@ package com.onnoff.onnoff.auth.service;
 
 import com.onnoff.onnoff.auth.UserContext;
 import com.onnoff.onnoff.auth.feignClient.client.AppleAuthClient;
+import com.onnoff.onnoff.auth.feignClient.dto.apple.RevokeTokenReqeust;
 import com.onnoff.onnoff.auth.feignClient.dto.apple.TokenRequest;
 import com.onnoff.onnoff.auth.feignClient.dto.TokenResponse;
 import com.onnoff.onnoff.auth.service.tokenValidator.SocialTokenValidator;
@@ -27,8 +28,6 @@ import java.security.PrivateKey;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -116,4 +115,15 @@ public class AppleLoginService implements LoginService{
         String cleanedIdentityToken = cleanToken(identityToken);
         validator.validate(cleanedIdentityToken, SocialType.APPLE);
     }
+
+    public void revokeTokens(String refreshToken) {
+        String clientSecret = createClientSecret();
+        MultiValueMap<String, String> urlEncoded = RevokeTokenReqeust.builder()
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .token(refreshToken)
+                .build().toUrlEncoded();
+        appleAuthClient.revokeTokens(urlEncoded);
+    }
+
 }

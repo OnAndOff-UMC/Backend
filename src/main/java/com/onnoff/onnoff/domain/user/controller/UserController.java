@@ -37,6 +37,14 @@ public class UserController {
         return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(userService.modifyUser(modifyUserDTO)));
     }
 
+    //테스트용
+    @PutMapping("/hard-delete")
+    @Operation(summary = "회원 완전 탈퇴 테스트 API",description = "30일 뒤에 자동 완전삭제 수동 테스트")
+    public ApiResponse<String> hardDeleteTest(){
+        userService.deleteInactiveUsersTest();
+        return ApiResponse.onSuccess("삭제완");
+    }
+
     @PostMapping("/nickname")
     @Operation(summary = "닉네임 중복 체크 API")
     public ApiResponse<String> checkNickname(@Valid @RequestBody UserRequestDTO.getNicknameDTO nicknameDTO){

@@ -23,6 +23,7 @@ public class LoginRequestDTO {
 
     @Getter
     public static class AdditionalInfo{
+        private String nickname;
         private String fieldOfWork;
         private String job;
         private String experienceYear;
