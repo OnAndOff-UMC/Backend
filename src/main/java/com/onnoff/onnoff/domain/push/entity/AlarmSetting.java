@@ -19,12 +19,25 @@ public class AlarmSetting {
 
     private LocalTime pushNotificationTime;
 
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean monday;
+
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean tuesday;
+
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean wednesday;
+
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean thursday;
+
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean friday;
+
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean saturday;
+
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean sunday;
 
     @OneToOne
