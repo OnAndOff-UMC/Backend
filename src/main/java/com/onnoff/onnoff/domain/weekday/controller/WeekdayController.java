@@ -19,19 +19,19 @@ public class WeekdayController {
 
     @GetMapping("/weekdays/init")
     @Operation(summary = "초기 요일 조회 API", description = "오늘 날짜를 기준으로 일주일을 조회하는 API입니다.")
-    public ApiResponse<WeekdayResponseDTO.WeekdayResultDTO> getInitWeekday() {
+    public ApiResponse<WeekdayResponseDTO.WeekdayDTO> getInitWeekday() {
         return ApiResponse.onSuccess(weekdayService.getWeekday(LocalDate.now()));
     }
 
     @GetMapping("/weekdays/prev")
     @Operation(summary = "이전 주 요일 조회 API", description = "입력된 날짜를 기준으로 이전 일주일을 조회하는 API입니다. Query String으로 날짜를 입력해 주세요.")
-    public ApiResponse<WeekdayResponseDTO.WeekdayResultDTO> getPrevWeekday(@RequestParam(name = "date") LocalDate date) {
+    public ApiResponse<WeekdayResponseDTO.WeekdayDTO> getPrevWeekday(@RequestParam(name = "date") LocalDate date) {
         return ApiResponse.onSuccess(weekdayService.getWeekday(date.minusDays(7)));
     }
 
     @GetMapping("/weekdays/next")
     @Operation(summary = "다음 주 요일 조회 API", description = "입력된 날짜를 기준으로 다음 일주일을 조회하는 API입니다. Query String으로 날짜를 입력해 주세요.")
-    public ApiResponse<WeekdayResponseDTO.WeekdayResultDTO> getNextWeekday(@RequestParam(name = "date") LocalDate date) {
+    public ApiResponse<WeekdayResponseDTO.WeekdayDTO> getNextWeekday(@RequestParam(name = "date") LocalDate date) {
         return ApiResponse.onSuccess(weekdayService.getWeekday(date.plusDays(7)));
     }
 }

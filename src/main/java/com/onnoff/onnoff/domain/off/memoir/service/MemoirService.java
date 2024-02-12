@@ -16,7 +16,7 @@ public interface MemoirService {
 
     Memoir getMemoirPreview(LocalDate date);
 
-    Memoir getMemoir(Long memoirId);
+    Memoir getMemoir(LocalDate date);
 
     Page<Memoir> getBookmarkedMemoir(Integer pageNumber);
 

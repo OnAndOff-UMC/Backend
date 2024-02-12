@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
-
 @SpringBootTest
 @Transactional
 class UserServiceImplTest {
+    private final UserService userService;
 
-    @Autowired UserService userService;
+    public UserServiceImplTest(@Autowired UserService userService) {
+        this.userService = userService;
+    }
     @Test
     void 생성_및_조회() {
         User user = User.builder().name("우성").nickname("우스").build();
@@ -24,5 +26,4 @@ class UserServiceImplTest {
         Assertions.assertThat(user.getName()).isEqualTo(findUser.getName());
 
     }
-
 }

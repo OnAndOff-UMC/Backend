@@ -17,6 +17,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 멤버 관련 에러
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자가 없습니다."),
+    NICKNAME_EXIST(HttpStatus.BAD_REQUEST, "USER4002", "이미 존재하는 닉네임입니다."),
 
     // 오늘의 다짐 관련 에러
     RESOLUTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "RESOLUTION4001", "해당하는 오늘의 다짐이 없습니다."),

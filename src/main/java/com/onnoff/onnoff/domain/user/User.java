@@ -7,6 +7,7 @@ import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
 import com.onnoff.onnoff.domain.push.entity.PushNotificationSetting;
+import com.onnoff.onnoff.domain.user.dto.UserRequestDTO;
 import com.onnoff.onnoff.domain.user.enums.ExperienceYear;
 import com.onnoff.onnoff.domain.user.enums.FieldOfWork;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
@@ -89,8 +90,20 @@ public class User extends BaseEntity {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private PushNotificationSetting pushNotificationSetting;
+
     public void setAppleRefreshToken(String appleRefreshToken) {
         this.appleRefreshToken = appleRefreshToken;
     }
 
+    public void setUserStatusInactive(){
+        this.status = Status.INACTIVE;
+        this.inactiveDate = LocalDateTime.now();
+    }
+
+    public void updateUser(UserRequestDTO.ModifyUserDTO modifyUserDTO) {
+        this.nickname = modifyUserDTO.getNickname();
+        this.fieldOfWork = modifyUserDTO.getFieldOfWork();
+        this.job = modifyUserDTO.getJob();
+        this.experienceYear = modifyUserDTO.getExperienceYear();
+    }
 }

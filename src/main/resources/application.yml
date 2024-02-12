@@ -19,7 +19,7 @@ apple:
   team-id: ${APPLE_TEAM_ID} # =  ID prefix
   key:
     id: ${APPLE_KEY_ID}
-    path: classpath:/apple/AuthKey_${APPLE_KEY_ID}.p8 # 나중에 src/main/resources/apple/에 키 파일 저장, 그냥 문자열로 가져와도 될 것 같기도
+    path: /var/app/current/src/main/resources/AuthKey_${APPLE_KEY_ID}.p8 # 나중에 src/main/resources/apple/에 키 파일 저장
 kakao:
   redirect-uri: ${KAKAO_REDIRECT_URI}
   iss: https://kauth.kakao.com

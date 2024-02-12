@@ -22,6 +22,8 @@ cloud:
   aws:
     s3:
       bucket: ${S3_BUCKET}
+      path:
+        feed-image: feedImages
     credentials:
       access-key: ${S3_ACCESS_KEY}
       secret-key: ${S3_SECRET_KEY}
