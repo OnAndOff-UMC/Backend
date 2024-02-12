@@ -61,7 +61,6 @@ public class MemoirResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class BookmarkedMemoirDTO {
-        Long memoirId;
         LocalDate date;
         String emoticonUrl;
         Integer remain;
