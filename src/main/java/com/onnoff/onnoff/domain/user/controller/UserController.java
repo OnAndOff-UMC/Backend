@@ -25,4 +25,10 @@ public class UserController {
         return ApiResponse.onSuccess(pushNotificationSettingService.setPushNotification(pushNotificationSettingRequestDTO));
     }
 
+    @GetMapping("/pushNotification")
+    @Operation(summary = "유저 푸시알람 설정 조회", description = "유저의 푸시알람 설정을 조회하는 API입니다.")
+    public ApiResponse<PushNotificationSettingResponseDTO> getPushNotificationSetting(){
+        return ApiResponse.onSuccess(pushNotificationSettingService.getPushNotification());
+    }
+
 }

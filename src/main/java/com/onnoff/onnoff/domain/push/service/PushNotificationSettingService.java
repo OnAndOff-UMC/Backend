@@ -31,4 +31,17 @@ public class PushNotificationSettingService {
         }
         return PushNotificationConverter.toPushNotificationResponseDTO(pushNotificationSetting.get());
     }
+    @Transactional(readOnly = true)
+    public PushNotificationSettingResponseDTO getPushNotification(){
+        User user = UserContext.getUser();
+        Optional<PushNotificationSetting> pushNotificationSetting = pushNotificationSettingRepository.findByUser(user);
+        if (pushNotificationSetting.isPresent()){
+            return PushNotificationConverter.toPushNotificationResponseDTO(pushNotificationSetting.get());
+        }
+        else {
+            return PushNotificationConverter.toPushNotificationResponseDTO(PushNotificationSetting.builder().
+                    receivePushNotification(false).
+                    build());
+        }
+    }
 }
