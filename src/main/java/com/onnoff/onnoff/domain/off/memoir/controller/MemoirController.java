@@ -37,10 +37,10 @@ public class MemoirController {
         return ApiResponse.onSuccess(MemoirConverter.toMemoirPreviewDTO(memoir));
     }
 
-    @GetMapping("/memoirs/{memoirId}")
-    @Operation(summary = "회고 조회 API", description = "특정 회고를 조회하는 API입니다.")
-    public ApiResponse<MemoirResponseDTO.MemoirDTO> getMemoir(@PathVariable(name = "memoirId") Long memoirId) {
-        Memoir memoir = memoirService.getMemoir(memoirId);
+    @GetMapping("/memoirs")
+    @Operation(summary = "회고 조회 API", description = "특정 회고를 조회하는 API입니다. Query String으로 날짜를 입력해 주세요.")
+    public ApiResponse<MemoirResponseDTO.MemoirDTO> getMemoir(@RequestParam(name = "date") LocalDate date) {
+        Memoir memoir = memoirService.getMemoir(date);
         return ApiResponse.onSuccess(MemoirConverter.toMemoirDTO(memoir));
     }
 
