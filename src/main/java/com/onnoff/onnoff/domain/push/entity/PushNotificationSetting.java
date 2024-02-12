@@ -1,6 +1,6 @@
 package com.onnoff.onnoff.domain.push.entity;
 
-import com.onnoff.onnoff.domain.push.dto.PushNotificationRequestDTO;
+import com.onnoff.onnoff.domain.push.dto.PushNotificationSettingRequestDTO;
 import com.onnoff.onnoff.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +21,8 @@ public class PushNotificationSetting {
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean receivePushNotification;
 
-    private LocalTime pushNotificationTime;
+    @Column(columnDefinition = "TIME DEFAULT '00:00:00'")
+    private LocalTime pushNotificationTime = LocalTime.of(0, 0);
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean monday;
@@ -61,14 +62,16 @@ public class PushNotificationSetting {
         };
     }
 
-    public void setPushNotification(PushNotificationRequestDTO pushNotificationRequestDTO) {
-        this.pushNotificationTime = pushNotificationRequestDTO.getPushNotificationTime();
-        this.monday = pushNotificationRequestDTO.isMonday();
-        this.tuesday = pushNotificationRequestDTO.isTuesday();
-        this.wednesday = pushNotificationRequestDTO.isWednesday();
-        this.thursday = pushNotificationRequestDTO.isThursday();
-        this.friday = pushNotificationRequestDTO.isFriday();
-        this.saturday = pushNotificationRequestDTO.isSaturday();
-        this.sunday = pushNotificationRequestDTO.isSunday();
+    public void setPushNotification(PushNotificationSettingRequestDTO pushNotificationSettingRequestDTO) {
+        this.pushNotificationTime = (pushNotificationSettingRequestDTO.getPushNotificationTime() != null) ? pushNotificationSettingRequestDTO.getPushNotificationTime() : LocalTime.of(0, 0);
+        this.receivePushNotification = pushNotificationSettingRequestDTO.isReceivePushNotification();
+        this.monday = pushNotificationSettingRequestDTO.isMonday();
+        this.tuesday = pushNotificationSettingRequestDTO.isTuesday();
+        this.wednesday = pushNotificationSettingRequestDTO.isWednesday();
+        this.thursday = pushNotificationSettingRequestDTO.isThursday();
+        this.friday = pushNotificationSettingRequestDTO.isFriday();
+        this.saturday = pushNotificationSettingRequestDTO.isSaturday();
+        this.sunday = pushNotificationSettingRequestDTO.isSunday();
     }
+
 }
