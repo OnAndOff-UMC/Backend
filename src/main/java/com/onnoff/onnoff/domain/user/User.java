@@ -6,7 +6,7 @@ import com.onnoff.onnoff.domain.off.feedImage.entity.FeedImage;
 import com.onnoff.onnoff.domain.off.memoir.entity.Memoir;
 import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
-import com.onnoff.onnoff.domain.push.entity.AlarmSetting;
+import com.onnoff.onnoff.domain.push.entity.PushNotificationSetting;
 import com.onnoff.onnoff.domain.user.enums.ExperienceYear;
 import com.onnoff.onnoff.domain.user.enums.FieldOfWork;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
@@ -16,7 +16,6 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,10 +65,6 @@ public class User extends BaseEntity {
 
     private LocalDateTime inactiveDate;
 
-    //@Column(columnDefinition = "BOOLEAN DEFAULT false") //h2 테스트 전용
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean receivePushNotification;
-
     private String fcmToken;
 
     private String appleRefreshToken;
@@ -93,8 +88,9 @@ public class User extends BaseEntity {
     private List<Worklog> worklogList = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private AlarmSetting alarmSetting;
+    private PushNotificationSetting pushNotificationSetting;
     public void setAppleRefreshToken(String appleRefreshToken) {
         this.appleRefreshToken = appleRefreshToken;
     }
+
 }
