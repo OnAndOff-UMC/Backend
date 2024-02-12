@@ -39,7 +39,6 @@ public class MemoirResponseDTO {
     @AllArgsConstructor
     public static class MemoirPreviewDTO {
         Boolean written;
-        Long memoirId;
         String emoticonUrl;
     }
 
@@ -62,7 +61,6 @@ public class MemoirResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class BookmarkedMemoirDTO {
-        Long memoirId;
         LocalDate date;
         String emoticonUrl;
         Integer remain;

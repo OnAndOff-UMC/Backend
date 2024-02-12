@@ -17,13 +17,11 @@ public class MemoirConverter {
         if (memoir == null) {
             return MemoirResponseDTO.MemoirPreviewDTO.builder()
                     .written(false)
-                    .memoirId(null)
                     .emoticonUrl(null)
                     .build();
         } else {
             return MemoirResponseDTO.MemoirPreviewDTO.builder()
                     .written(true)
-                    .memoirId(memoir.getId())
                     .emoticonUrl(memoir.getEmoticon().getImageUrl())
                     .build();
         }
@@ -55,7 +53,6 @@ public class MemoirConverter {
 
         List<MemoirResponseDTO.BookmarkedMemoirDTO> memoirDTOList = memoirList.stream()
                 .map(memoir -> MemoirResponseDTO.BookmarkedMemoirDTO.builder()
-                        .memoirId(memoir.getId())
                         .date(memoir.getDate())
                         .emoticonUrl(memoir.getEmoticon().getImageUrl())
                         .remain(index.getAndIncrement() % 2)

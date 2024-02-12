@@ -70,8 +70,9 @@ public class MemoirServiceImpl implements MemoirService {
 
     @Override
     @Transactional(readOnly = true)
-    public Memoir getMemoir(Long memoirId) {
-        return memoirRepository.findById(memoirId).orElseThrow(() -> new MemoirHandler(ErrorStatus.MEMOIR_NOT_FOUND));
+    public Memoir getMemoir(LocalDate date) {
+        User user = UserContext.getUser();
+        return memoirRepository.findByUserAndDate(user, date).orElseThrow(() -> new MemoirHandler(ErrorStatus.MEMOIR_NOT_FOUND));
     }
 
     @Override
