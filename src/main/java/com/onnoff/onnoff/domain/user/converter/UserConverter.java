@@ -66,7 +66,6 @@ public class UserConverter {
                 .infoSet(user.isInfoSet())
                 .status(user.getStatus())
                 .inactiveDate(user.getInactiveDate())
-                .receivePushNotification(user.isReceivePushNotification())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
