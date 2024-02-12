@@ -17,13 +17,11 @@ public class MemoirConverter {
         if (memoir == null) {
             return MemoirResponseDTO.MemoirPreviewDTO.builder()
                     .written(false)
-                    .memoirId(null)
                     .emoticonUrl(null)
                     .build();
         } else {
             return MemoirResponseDTO.MemoirPreviewDTO.builder()
                     .written(true)
-                    .memoirId(memoir.getId())
                     .emoticonUrl(memoir.getEmoticon().getImageUrl())
                     .build();
         }

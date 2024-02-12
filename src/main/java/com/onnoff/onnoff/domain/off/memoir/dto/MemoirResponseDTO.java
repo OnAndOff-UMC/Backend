@@ -39,7 +39,6 @@ public class MemoirResponseDTO {
     @AllArgsConstructor
     public static class MemoirPreviewDTO {
         Boolean written;
-        Long memoirId;
         String emoticonUrl;
     }
 
