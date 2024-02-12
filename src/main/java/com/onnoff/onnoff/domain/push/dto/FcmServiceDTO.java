@@ -5,15 +5,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class FcmServiceDto {
+public class FcmServiceDTO {
     private String username;
     private Long contentId;
     private NotificationType type;
     private String title;
     private String content;
 
-    public static FcmServiceDto of(String username, Long contentId, NotificationType type, String title, String content){
-        FcmServiceDto dto = new FcmServiceDto();
+    public static FcmServiceDTO of(String username, Long contentId, NotificationType type, String title, String content){
+        FcmServiceDTO dto = new FcmServiceDTO();
         dto.username = username;
         dto.contentId = contentId;
         dto.type = type;
