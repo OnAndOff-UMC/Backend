@@ -20,7 +20,8 @@ public class CustomErrorDecoder implements ErrorDecoder {
         ObjectMapper objectMapper = new ObjectMapper();
         ErrorResponseDTO errorResponseDTO = null;
         try {
-            errorResponseDTO = objectMapper.readValue(response.body().asInputStream(), ErrorResponseDTO.class);
+            if( response.body() != null)
+                errorResponseDTO = objectMapper.readValue(response.body().asInputStream(), ErrorResponseDTO.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

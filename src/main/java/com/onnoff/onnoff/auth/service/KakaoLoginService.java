@@ -53,9 +53,8 @@ public class KakaoLoginService implements LoginService{
                 .targetId(oauthId)
                 .build()
                 .toUrlEncoded();
-        adminKey = "KakaoAK " + adminKey;
         log.info("adminkey = {}", adminKey);
-        ResponseEntity responseEntity = kakaoApiClient.unlink(adminKey, urlEncoded);
+        ResponseEntity responseEntity = kakaoApiClient.unlink("KakaoAK " + adminKey, urlEncoded);
         log.info("삭제된 회원 정보 = {}", responseEntity.getBody());
     }
 
