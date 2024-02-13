@@ -4,6 +4,8 @@ import com.onnoff.onnoff.domain.push.dto.PushNotificationSettingRequestDTO;
 import com.onnoff.onnoff.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -11,6 +13,8 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Builder
+@DynamicInsert
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class PushNotificationSetting {

@@ -17,28 +17,28 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PushNotificationSettingService {
     public final PushNotificationSettingRepository pushNotificationSettingRepository;
+
     @Transactional
-    public PushNotificationSettingResponseDTO setPushNotification(PushNotificationSettingRequestDTO pushNotificationSettingRequestDTO){
+    public PushNotificationSettingResponseDTO setPushNotification(PushNotificationSettingRequestDTO pushNotificationSettingRequestDTO) {
         User user = UserContext.getUser();
-        Optional<PushNotificationSetting> pushNotificationSetting = pushNotificationSettingRepository.findByUser(user);
-        if (pushNotificationSetting.isPresent()){
-            pushNotificationSetting.get().setPushNotification(pushNotificationSettingRequestDTO);
-            pushNotificationSettingRepository.save(pushNotificationSetting.get());
+        PushNotificationSetting pushNotificationSetting = pushNotificationSettingRepository.findByUser(user)
+                .orElseGet(() -> PushNotificationConverter.toPushNotificationSetting(pushNotificationSettingRequestDTO, user));
+        if (pushNotificationSetting.getId() != null) {
+            // 기존에 존재하는 설정인 경우에만 업데이트
+            pushNotificationSetting.setPushNotification(pushNotificationSettingRequestDTO);
         }
-        else {
-            pushNotificationSetting = Optional.ofNullable(PushNotificationConverter.toPushNotificationSetting(pushNotificationSettingRequestDTO, user));
-            pushNotificationSettingRepository.save(pushNotificationSetting.get());
-        }
-        return PushNotificationConverter.toPushNotificationResponseDTO(pushNotificationSetting.get());
+        pushNotificationSettingRepository.save(pushNotificationSetting);
+        return PushNotificationConverter.toPushNotificationResponseDTO(pushNotificationSetting);
     }
+
+
     @Transactional(readOnly = true)
-    public PushNotificationSettingResponseDTO getPushNotification(){
+    public PushNotificationSettingResponseDTO getPushNotification() {
         User user = UserContext.getUser();
         Optional<PushNotificationSetting> pushNotificationSetting = pushNotificationSettingRepository.findByUser(user);
-        if (pushNotificationSetting.isPresent()){
+        if (pushNotificationSetting.isPresent()) {
             return PushNotificationConverter.toPushNotificationResponseDTO(pushNotificationSetting.get());
-        }
-        else {
+        } else {
             return PushNotificationConverter.toPushNotificationResponseDTO(PushNotificationSetting.builder().
                     receivePushNotification(false).
                     build());
