@@ -37,6 +37,7 @@ public class MemoirServiceImpl implements MemoirService {
     @Transactional
     public Memoir writeMemoir(MemoirRequestDTO.MemoirWriteDTO request) {
         User user = UserContext.getUser();
+
         if (memoirRepository.findByUserAndDate(user, request.getDate()).isPresent()) {
             throw new MemoirHandler(ErrorStatus.MEMOIR_EXIST);
         }
@@ -45,20 +46,29 @@ public class MemoirServiceImpl implements MemoirService {
                 .date(request.getDate())
                 .emoticon(emoticonRepository.findById(request.getEmoticonId()).orElseThrow(() -> new MemoirHandler(ErrorStatus.EMOTICON_NOT_FOUND)))
                 .isBookmarked(false)
+                .user(user)
+                .memoirAnswerList(new ArrayList<>())
                 .build();
 
-        List<MemoirAnswer> newMemoirAnswerList = request.getMemoirAnswerList().stream()
-                .map(memoirAnswer -> MemoirAnswer.builder()
-                        .answer(memoirAnswer.getAnswer().trim())
-                        .memoirQuestion(memoirQuestionRepository.findById(memoirAnswer.getQuestionId()).orElseThrow(() -> new MemoirHandler(ErrorStatus.QUESTION_NOT_FOUND)))
-                        .memoir(newMemoir)
-                        .build())
-                .collect(Collectors.toList());
+        memoirRepository.save(newMemoir);
 
-        newMemoir.setUser(user);
-        newMemoir.setMemoirAnswerList(newMemoirAnswerList);
+        for (MemoirRequestDTO.MemoirAnswerDTO memoirAnswer : request.getMemoirAnswerList()) {
+            MemoirQuestion memoirQuestion = memoirQuestionRepository.findById(memoirAnswer.getQuestionId()).orElseThrow(() -> new MemoirHandler(ErrorStatus.QUESTION_NOT_FOUND));
 
-        return memoirRepository.save(newMemoir);
+            if (memoirAnswerRepository.findByMemoirAndMemoirQuestion(newMemoir, memoirQuestion).isPresent()) {
+                throw new MemoirHandler(ErrorStatus.ANSWER_EXIST);
+            }
+
+            MemoirAnswer newMemoirAnswer = MemoirAnswer.builder()
+                    .answer(memoirAnswer.getAnswer().trim())
+                    .memoirQuestion(memoirQuestion)
+                    .build();
+
+            newMemoirAnswer.setMemoir(newMemoir);
+            memoirAnswerRepository.save(newMemoirAnswer);
+        }
+
+        return newMemoir;
     }
 
     @Override

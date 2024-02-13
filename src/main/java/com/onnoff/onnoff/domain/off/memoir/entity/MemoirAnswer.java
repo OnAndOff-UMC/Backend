@@ -29,4 +29,9 @@ public class MemoirAnswer extends BaseEntity {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
+
+    public void setMemoir(Memoir memoir) {
+        this.memoir = memoir;
+        memoir.getMemoirAnswerList().add(this);
+    }
 }
