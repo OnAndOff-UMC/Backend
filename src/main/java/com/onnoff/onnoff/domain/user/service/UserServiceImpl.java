@@ -11,6 +11,7 @@ import com.onnoff.onnoff.domain.user.enums.SocialType;
 import com.onnoff.onnoff.domain.user.enums.Status;
 import com.onnoff.onnoff.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
@@ -96,10 +98,12 @@ public class UserServiceImpl implements UserService{
     }
     @Transactional
     public void deleteInactiveUsersTest() {
-        LocalDateTime oneMonthAgo = LocalDateTime.now();
-        List<User> inactiveUsers = userRepository.findByStatusAndInactiveDateBefore(Status.INACTIVE, oneMonthAgo);
+        LocalDateTime now = LocalDateTime.now();
+        List<User> inactiveUsers = userRepository.findByStatusAndInactiveDateBefore(Status.INACTIVE, now);
+        log.info("inactiveUsers = {}", inactiveUsers);
         inactiveUsers.forEach(userRepository::delete);
         inactiveUsers.forEach(this::disconnectApp);
+
     }
     // 유저 소셜계정 앱 연동 해지
     private void disconnectApp(User user){
