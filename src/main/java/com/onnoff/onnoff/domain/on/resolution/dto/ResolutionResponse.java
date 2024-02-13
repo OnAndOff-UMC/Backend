@@ -16,6 +16,7 @@ public class ResolutionResponse {
     @AllArgsConstructor
     public static class AddResultDTO{
         Long resolutionId;
+        LocalDate date;
         Integer order;
         String content;
         LocalDateTime createdAt;
