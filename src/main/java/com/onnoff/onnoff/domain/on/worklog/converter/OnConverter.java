@@ -37,6 +37,7 @@ public class OnConverter {
         List<WorklogResponse.WorklogDTO> worklogDTOList = worklogList.stream()
                 .map(worklog -> WorklogResponse.WorklogDTO.builder()
                         .worklogId(worklog.getId())
+                        .date(worklog.getDate())
                         .content(worklog.getContent())
                         .isChecked(worklog.getIsChecked())
                         .build())
