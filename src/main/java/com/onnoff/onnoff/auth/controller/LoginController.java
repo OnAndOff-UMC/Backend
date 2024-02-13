@@ -19,6 +19,7 @@ import com.onnoff.onnoff.domain.user.converter.UserConverter;
 import com.onnoff.onnoff.domain.user.dto.UserResponseDTO;
 import com.onnoff.onnoff.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,7 +77,7 @@ public class LoginController {
             "서버에서 발급한 토큰을 받습니다. 회원가입을 하지 않은 사용자의 경우 회원가입을 시킵니다.")
     @ResponseBody
     @PostMapping("/oauth2/kakao/token/validate")
-    public ApiResponse<UserResponseDTO.LoginDTO> validateKakoToken(@RequestBody LoginRequestDTO.KakaoTokenValidateDTO requestDTO)  {
+    public ApiResponse<UserResponseDTO.LoginDTO> validateKakoToken(@RequestBody @Valid LoginRequestDTO.KakaoTokenValidateDTO requestDTO)  {
         // identity 토큰 검증
         kakaoLoginService.validate(requestDTO.getIdentityToken());
         // ok -> 유저 정보 가져오기
@@ -106,7 +107,7 @@ public class LoginController {
             "액세스/리프레시 토큰을 얻어서 저장시키고. 응답으로 서버에서 발급한 토큰을 받습니다. 회원가입을 하지 않은 사용자의 경우 회원가입을 시킵니다.")
     @ResponseBody
     @PostMapping("/oauth2/apple/token/validate")
-    public ApiResponse<UserResponseDTO.LoginDTO> validateAppleToken(@RequestBody LoginRequestDTO.AppleTokenValidateDTO requestDTO)  {
+    public ApiResponse<UserResponseDTO.LoginDTO> validateAppleToken(@RequestBody @Valid LoginRequestDTO.AppleTokenValidateDTO requestDTO)  {
         // 검증하기
         appleLoginService.validate(requestDTO.getIdentityToken());
         log.info("애플 ID 토큰 검증 성공");
