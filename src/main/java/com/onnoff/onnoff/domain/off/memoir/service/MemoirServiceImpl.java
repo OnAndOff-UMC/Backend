@@ -61,10 +61,11 @@ public class MemoirServiceImpl implements MemoirService {
 
             MemoirAnswer newMemoirAnswer = MemoirAnswer.builder()
                     .answer(memoirAnswer.getAnswer().trim())
+                    .memoir(newMemoir)
                     .memoirQuestion(memoirQuestion)
                     .build();
 
-            newMemoirAnswer.setMemoir(newMemoir);
+            newMemoir.getMemoirAnswerList().add(newMemoirAnswer);
             memoirAnswerRepository.save(newMemoirAnswer);
         }
 
