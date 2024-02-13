@@ -13,12 +13,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class WorklogServiceImpl implements WorklogService{
     private final WorklogRepository worklogRepository;
+
+    @Override
+    @Transactional
+    public List<Worklog> getWorklog(LocalDate date){
+        User user = UserContext.getUser();
+
+        return worklogRepository.findAllByUserAndDateOrderByCreatedAt(user, date);
+    }
 
     @Override
     @Transactional

@@ -11,11 +11,22 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/on/worklog")
 public class WorklogController {
     private final WorklogService worklogService;
+
+
+    @GetMapping("/")
+    @Operation(summary = "업무일지 조회 API")
+    public ApiResponse<List<WorklogResponse.WorklogDTO>> getWorklog(@RequestParam(name = "date") LocalDate date){
+        List<Worklog> worklogList = worklogService.getWorklog(date);
+        return ApiResponse.onSuccess(WorklogConverter.toWorklogViewDTO(worklogList));
+    }
 
 
     @PostMapping("/")
