@@ -11,6 +11,7 @@ public class LoginRequestDTO {
     @Getter
     public static class AppleTokenValidateDTO{
         private String oauthId;
+        @Valid
         private Fullname fullName;
         private String email;
         private String identityToken;
