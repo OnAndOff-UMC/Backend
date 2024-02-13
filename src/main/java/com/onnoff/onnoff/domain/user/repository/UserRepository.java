@@ -14,7 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByNickname(String nickname);
 
-    List<User> findByPushNotificationTimeBetween(LocalTime startTime, LocalTime endTime);
-
     List<User> findByStatusAndInactiveDateBefore(Status status, LocalDateTime oneMonthAgo);
 }
