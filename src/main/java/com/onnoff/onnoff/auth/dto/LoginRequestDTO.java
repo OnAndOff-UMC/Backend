@@ -29,6 +29,7 @@ public class LoginRequestDTO {
     public static class AdditionalInfo{
         @NotNull
         @NotBlank
+        @Size(max = 10)
         private String nickname;
         private String fieldOfWork;
         @Size(max = 30)
