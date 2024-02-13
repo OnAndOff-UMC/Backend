@@ -23,6 +23,7 @@ public class ResolutionConverter {
     public static ResolutionResponse.AddResultDTO toAddResolutionResultDTO(Resolution resolution){
         return ResolutionResponse.AddResultDTO.builder()
                 .resolutionId(resolution.getId())
+                .date(resolution.getDate())
                 .order(resolution.getOrder())
                 .content(resolution.getContent())
                 .createdAt(resolution.getCreatedAt())
