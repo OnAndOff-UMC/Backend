@@ -17,16 +17,7 @@ public class MemoirRequestDTO {
         @NotNull
         Long emoticonId;
         @NotNull
-        List<@Valid MemoirWriteAnswerDTO> memoirAnswerList;
-    }
-
-    @Getter
-    public static class MemoirWriteAnswerDTO {
-        @NotNull
-        Long questionId;
-        @NotNull
-        @Size(max = 500)
-        String answer;
+        List<@Valid MemoirAnswerDTO> memoirAnswerList;
     }
 
     @Getter
@@ -34,13 +25,13 @@ public class MemoirRequestDTO {
         @NotNull
         Long emoticonId;
         @NotNull
-        List<@Valid MemoirUpdateAnswerDTO> memoirAnswerList;
+        List<@Valid MemoirAnswerDTO> memoirAnswerList;
     }
 
     @Getter
-    public static class MemoirUpdateAnswerDTO {
+    public static class MemoirAnswerDTO {
         @NotNull
-        Long answerId;
+        Long questionId;
         @NotNull
         @Size(max = 500)
         String answer;

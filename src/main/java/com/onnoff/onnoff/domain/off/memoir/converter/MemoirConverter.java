@@ -40,7 +40,7 @@ public class MemoirConverter {
     public static List<MemoirResponseDTO.MemoirAnswerDTO> toMemoirAnswerDTOList(List<MemoirAnswer> memoirAnswerList) {
         return memoirAnswerList.stream()
                 .map(memoirAnswer -> MemoirResponseDTO.MemoirAnswerDTO.builder()
-                        .answerId(memoirAnswer.getId())
+                        .questionId(memoirAnswer.getMemoirQuestion().getId())
                         .question(memoirAnswer.getMemoirQuestion().getQuestion())
                         .summary(memoirAnswer.getMemoirQuestion().getSummary())
                         .answer(memoirAnswer.getAnswer())

@@ -43,12 +43,4 @@ public class Memoir extends BaseEntity {
     public void setIsBookmarked(Boolean isBookmarked) {
         this.isBookmarked = isBookmarked;
     }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setMemoirAnswerList(List<MemoirAnswer> memoirAnswerList) {
-        this.memoirAnswerList = memoirAnswerList;
-    }
 }
