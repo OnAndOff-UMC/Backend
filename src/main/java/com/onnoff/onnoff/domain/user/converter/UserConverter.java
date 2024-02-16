@@ -30,11 +30,11 @@ public class UserConverter {
     public static User toUser(LoginRequestDTO.AppleTokenValidateDTO request, LoginRequestDTO.AdditionalInfo additionalInfo){
         FieldOfWork fieldOfWork = FieldOfWork.fromValue(additionalInfo.getFieldOfWork());
         ExperienceYear experienceYear = ExperienceYear.fromValue(additionalInfo.getExperienceYear());
-        String fullName = request.getFullName().getFamilyName() + request.getFullName().getGivenName();
+        // String fullName = request.getFullName().getFamilyName() + request.getFullName().getGivenName();
         return User.builder()
                 .oauthId(request.getOauthId())
-                .email(request.getEmail())
-                .name(fullName)
+                //.email(request.getEmail())
+                //.name(fullName)
                 .nickname(additionalInfo.getNickname())
                 .socialType(SocialType.APPLE)
                 .fieldOfWork(fieldOfWork)
