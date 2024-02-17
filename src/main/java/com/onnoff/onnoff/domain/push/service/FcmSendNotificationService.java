@@ -39,6 +39,7 @@ public class FcmSendNotificationService {
         List<User> users = pushNotificationSettings.stream()
                 .filter(alarmSetting -> isMatchingDay(alarmSetting, today))
                 .map(PushNotificationSetting::getUser)
+                .distinct()
                 .toList();
         users.forEach(user -> {
             NotificationMessage notificationMessage = NotificationMessage.toGoHomeNotification(user);
