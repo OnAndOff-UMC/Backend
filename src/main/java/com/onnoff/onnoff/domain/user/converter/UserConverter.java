@@ -74,5 +74,12 @@ public class UserConverter {
                 .fieldOfWork(user.getFieldOfWork())
                 .build();
     }
-
+    public static UserResponseDTO.UserModificationResponseDTO toUserModificationResponseDTO(User user){
+        return UserResponseDTO.UserModificationResponseDTO.builder()
+                .nickname(user.getNickname())
+                .experienceYear(user.getExperienceYear().getValue())
+                .fieldOfWork(user.getFieldOfWork().getValue())
+                .job(user.getJob())
+                .build();
+    }
 }
