@@ -52,5 +52,14 @@ public class UserResponseDTO {
         private FieldOfWork fieldOfWork;
         private ExperienceYear experienceYear;
     }
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserModificationResponseDTO {
+        private String nickname;
+        private String fieldOfWork;
+        private String experienceYear;
+        private String job;
+    }
 }

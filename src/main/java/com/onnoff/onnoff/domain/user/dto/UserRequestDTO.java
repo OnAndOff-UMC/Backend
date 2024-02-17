@@ -23,9 +23,9 @@ public class UserRequestDTO {
     @AllArgsConstructor
     public static class ModifyUserDTO{
         private String nickname;
-        private FieldOfWork fieldOfWork;
+        private String fieldOfWork;
         private String job;
-        private ExperienceYear experienceYear;
+        private String experienceYear;
     }
 
     @Getter

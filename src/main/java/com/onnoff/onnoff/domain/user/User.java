@@ -101,9 +101,12 @@ public class User extends BaseEntity {
     }
 
     public void updateUser(UserRequestDTO.ModifyUserDTO modifyUserDTO) {
+        FieldOfWork fieldOfWork = FieldOfWork.fromValue(modifyUserDTO.getFieldOfWork());
+        ExperienceYear experienceYear = ExperienceYear.fromValue(modifyUserDTO.getExperienceYear());
+
         this.nickname = modifyUserDTO.getNickname();
-        this.fieldOfWork = modifyUserDTO.getFieldOfWork();
         this.job = modifyUserDTO.getJob();
-        this.experienceYear = modifyUserDTO.getExperienceYear();
+        this.fieldOfWork = fieldOfWork;
+        this.experienceYear = experienceYear;
     }
 }

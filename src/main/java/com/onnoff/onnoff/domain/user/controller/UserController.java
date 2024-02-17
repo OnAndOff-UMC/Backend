@@ -37,8 +37,8 @@ public class UserController {
 
     @PutMapping("/")
     @Operation(summary = "회원 정보 수정 API" , description = "회원 정보 수정 API입니다.")
-    public ApiResponse<UserResponseDTO.UserDetailDTO> modifyUser(@RequestBody UserRequestDTO.ModifyUserDTO modifyUserDTO) {
-        return ApiResponse.onSuccess(UserConverter.toUserDetailDTO(userService.modifyUser(modifyUserDTO)));
+    public ApiResponse<UserResponseDTO.UserModificationResponseDTO> modifyUser(@RequestBody UserRequestDTO.ModifyUserDTO modifyUserDTO) {
+        return ApiResponse.onSuccess(UserConverter.toUserModificationResponseDTO(userService.modifyUser(modifyUserDTO)));
     }
 
     //테스트용
