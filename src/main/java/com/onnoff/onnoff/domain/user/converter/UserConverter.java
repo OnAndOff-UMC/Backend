@@ -70,14 +70,15 @@ public class UserConverter {
     public static UserResponseDTO.UserInformationResponseDTO toUserInformationResponseDTO(User user){
         return UserResponseDTO.UserInformationResponseDTO.builder()
                 .nickname(user.getNickname())
-                .experienceYear(user.getExperienceYear())
-                .fieldOfWork(user.getFieldOfWork())
+                .experienceYear(user.getExperienceYear().getMypageValue())
+                .fieldOfWork(user.getFieldOfWork().getValue())
+                .job(user.getJob())
                 .build();
     }
     public static UserResponseDTO.UserModificationResponseDTO toUserModificationResponseDTO(User user){
         return UserResponseDTO.UserModificationResponseDTO.builder()
                 .nickname(user.getNickname())
-                .experienceYear(user.getExperienceYear().getValue())
+                .experienceYear(user.getExperienceYear().getMypageValue())
                 .fieldOfWork(user.getFieldOfWork().getValue())
                 .job(user.getJob())
                 .build();
