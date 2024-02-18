@@ -19,7 +19,7 @@ public class EnumInquiryResponseDTO {
     public static class ExperienceYearResponseDTO{
         public static List<String> getAllExperience() {
             return Arrays.stream(ExperienceYear.values())
-                    .map(ExperienceYear::getValue)
+                    .map(ExperienceYear::getSignupValue)
                     .collect(Collectors.toList());
         }
     }
