@@ -20,12 +20,41 @@ jobs:
           java-version: 17 # (5).자바 설치
           distribution: 'adopt'
 
+      - name: Set Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./src/main/resources/application.yml
+        env:
+          spring.jwt.secret: ${{ secrets.JWT_SECRET }}
+          apple.redirect-uri: ${{ secrets.APPLE_REDIRECT_URI }}
+          apple.client-id: ${{ secrets.APPLE_CLIENT_ID }}
+          apple.team-id: ${{ secrets.APPLE_TEAM_ID }}
+          apple.key.id: ${{ secrets.APPLE_KEY_ID }}
+          apple.key.path: /var/app/current/src/main/resources/AuthKey_${{ secrets.APPLE_KEY_ID }}.p8
+          kakao.redirect-uri: ${{ secrets.KAKAO_REDIRECT_URI }}
+          kakao.client-id: ${{ secrets.KAKAO_CLIENT_ID }}
+          kakao.admin-key: ${{ secrets.KAKAO_ADMIN_KEY }}
+          fcm.firebase-sdk-path: /var/app/current/src/main/resources/${{ secrets.FIREBASE_SDK_PATH }}
+          fcm.project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Set Dev Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./src/main/resources/application-dev.yml
+        env:
+          spring.datasource.url: jdbc:mysql://${{ secrets.DEV_DB_URI }}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+          spring.datasource.username: ${{ secrets.DEV_DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DEV_DB_PASSWORD }}
+          cloud.aws.s3.bucket: ${{ secrets.DEV_S3_BUCKET }}
+          cloud.aws.credentials.access-key: ${{ secrets.DEV_S3_ACCESS_KEY }}
+          cloud.aws.credentials.secret-key: ${{ secrets.DEV_S3_SECRET_KEY }}
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash # (6).권한 부여
 
       - name: Build with Gradle
-        run: ./gradlew clean build -x test
+        run: ./gradlew clean build
         shell: bash # (7).build 시작
 
       - name: Get current time
