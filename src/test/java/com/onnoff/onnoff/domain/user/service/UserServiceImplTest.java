@@ -20,7 +20,7 @@ class UserServiceImplTest {
     void 생성_및_조회() {
         User user = User.builder().name("우성").nickname("우스").build();
 
-        User createdUser = userService.create(user);
+        User createdUser =  userService.create(user);
 
         User findUser = userService.getUser(createdUser.getId());
         Assertions.assertThat(user.getName()).isEqualTo(findUser.getName());

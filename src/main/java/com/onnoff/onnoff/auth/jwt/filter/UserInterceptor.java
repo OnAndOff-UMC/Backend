@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 @RequiredArgsConstructor
 public class UserInterceptor implements HandlerInterceptor {
-    private final UserService userService;
     private final JwtUtil jwtUtil;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -28,11 +27,10 @@ public class UserInterceptor implements HandlerInterceptor {
         }
         try{
             // 얻은 아이디로 유저 조회하기
-            String userId = jwtUtil.getUserId(accessToken);
-            User user = userService.getUser(Long.valueOf(userId));
+            Long userId = Long.valueOf(jwtUtil.getUserId(accessToken));
 
-            // 조회한 유저 ThreadLocal에 저장하기
-            UserContext.setUser(user);
+            // 조회한 유저id ThreadLocal에 저장하기
+            UserContext.setUserId(userId);
             return true;
         }
         catch (IllegalArgumentException exception){
@@ -46,6 +44,6 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         // 요청 작업 끝나면 ThreadLocal 자원 해제
-        UserContext.clearUser();
+        UserContext.clearUserId();
     }
 }

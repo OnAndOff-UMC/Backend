@@ -7,6 +7,7 @@ import com.onnoff.onnoff.domain.push.dto.PushNotificationSettingResponseDTO;
 import com.onnoff.onnoff.domain.push.entity.PushNotificationSetting;
 import com.onnoff.onnoff.domain.push.repository.PushNotificationSettingRepository;
 import com.onnoff.onnoff.domain.user.User;
+import com.onnoff.onnoff.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +18,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PushNotificationSettingService {
     public final PushNotificationSettingRepository pushNotificationSettingRepository;
+    private final UserService userService;
 
     @Transactional
     public PushNotificationSettingResponseDTO setPushNotification(PushNotificationSettingRequestDTO pushNotificationSettingRequestDTO) {
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
         PushNotificationSetting pushNotificationSetting = pushNotificationSettingRepository.findByUser(user)
                 .orElseGet(() -> PushNotificationConverter.toPushNotificationSetting(pushNotificationSettingRequestDTO, user));
         if (pushNotificationSetting.getId() != null) {
@@ -34,7 +37,8 @@ public class PushNotificationSettingService {
 
     @Transactional(readOnly = true)
     public PushNotificationSettingResponseDTO getPushNotification() {
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
         Optional<PushNotificationSetting> pushNotificationSetting = pushNotificationSettingRepository.findByUser(user);
         if (pushNotificationSetting.isPresent()) {
             return PushNotificationConverter.toPushNotificationResponseDTO(pushNotificationSetting.get());

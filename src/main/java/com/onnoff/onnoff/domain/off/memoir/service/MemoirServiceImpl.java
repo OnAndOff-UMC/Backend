@@ -13,6 +13,7 @@ import com.onnoff.onnoff.domain.off.memoir.repository.EmoticonRepository;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirQuestionRepository;
 import com.onnoff.onnoff.domain.off.memoir.repository.MemoirRepository;
 import com.onnoff.onnoff.domain.user.User;
+import com.onnoff.onnoff.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +32,13 @@ public class MemoirServiceImpl implements MemoirService {
     private final MemoirAnswerRepository memoirAnswerRepository;
     private final MemoirQuestionRepository memoirQuestionRepository;
     private final EmoticonRepository emoticonRepository;
+    private final UserService userService;
 
     @Override
     @Transactional
     public Memoir writeMemoir(MemoirRequestDTO.MemoirWriteDTO request) {
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
 
         if (memoirRepository.findByUserAndDate(user, request.getDate()).isPresent()) {
             throw new MemoirHandler(ErrorStatus.MEMOIR_EXIST);
@@ -75,21 +77,24 @@ public class MemoirServiceImpl implements MemoirService {
     @Override
     @Transactional(readOnly = true)
     public Memoir getMemoirPreview(LocalDate date) {
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
         return memoirRepository.findByUserAndDate(user, date).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Memoir getMemoir(LocalDate date) {
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
         return memoirRepository.findByUserAndDate(user, date).orElseThrow(() -> new MemoirHandler(ErrorStatus.MEMOIR_NOT_FOUND));
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<Memoir> getBookmarkedMemoir(Integer pageNumber) {
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
         return memoirRepository.findByUserAndIsBookmarkedOrderByDateDesc(user, true, PageRequest.of(pageNumber, 10));
     }
 

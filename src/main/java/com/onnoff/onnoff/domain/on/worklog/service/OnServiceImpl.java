@@ -8,6 +8,7 @@ import com.onnoff.onnoff.domain.on.worklog.dto.OnResponse;
 import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
 import com.onnoff.onnoff.domain.on.worklog.repository.WorklogRepository;
 import com.onnoff.onnoff.domain.user.User;
+import com.onnoff.onnoff.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +23,14 @@ import java.util.Objects;
 public class OnServiceImpl implements OnService{
     private final ResolutionRepository resolutionRepository;
     private final WorklogRepository worklogRepository;
+    private final UserService userService;
 
     @Override
     public OnResponse.OnViewDTO getOn(LocalDate date){
         LocalDate localDate = Objects.requireNonNullElseGet(date, LocalDate::now);
 
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
 
         List<Resolution> resolutionList = resolutionRepository.findAllByUserAndDateOrderByOrder(user, localDate);
 

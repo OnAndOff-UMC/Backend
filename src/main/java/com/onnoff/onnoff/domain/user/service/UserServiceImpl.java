@@ -74,7 +74,8 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public User withdrawUser(){
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = this.getUser(userId);
         user.setUserStatusInactive();
         return user;
     }
@@ -82,7 +83,8 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public User modifyUser(UserRequestDTO.ModifyUserDTO modifyUserDTO){
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = this.getUser(userId);
         user.updateUser(modifyUserDTO);
         userRepository.save(user);
         return user;

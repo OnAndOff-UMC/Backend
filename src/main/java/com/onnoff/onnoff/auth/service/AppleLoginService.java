@@ -9,6 +9,7 @@ import com.onnoff.onnoff.auth.feignClient.dto.TokenResponse;
 import com.onnoff.onnoff.auth.service.tokenValidator.SocialTokenValidator;
 import com.onnoff.onnoff.domain.user.User;
 import com.onnoff.onnoff.domain.user.enums.SocialType;
+import com.onnoff.onnoff.domain.user.service.UserService;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +36,9 @@ import java.util.Date;
 public class AppleLoginService implements LoginService{
     private final AppleAuthClient appleAuthClient;
     private final SocialTokenValidator validator;
-    @Value("${apple.key.id}")
+        @Value("${apple.key.id}")
     private String kid;
-    @Value("${apple.key.path}")
+    @Value("    ${apple.key.path}")
     private String keyPath;
     @Value("${apple.client-id}")
     private String clientId;
@@ -82,22 +83,6 @@ public class AppleLoginService implements LoginService{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-    public String getAccessTokenByRfToken(String code) {
-        // client secret 만들기
-        String clientSecret = createClientSecret();
-        // refreshToken 가져오기
-        User user = UserContext.getUser();
-        String appleRefreshToken = user.getAppleRefreshToken();
-        // 요청
-        MultiValueMap<String, String> urlEncoded = TokenRequest.builder()
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .refreshToken(appleRefreshToken)
-                .grantType("refresh_token")
-                .build().toUrlEncoded();
-        TokenResponse response = appleAuthClient.getToken(urlEncoded);
-        return null;
     }
     private PrivateKey getPrivateKey() throws IOException {
         String privateKey = new String(Files.readAllBytes(Paths.get(keyPath) ) );

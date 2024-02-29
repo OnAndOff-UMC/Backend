@@ -26,7 +26,7 @@ public class UserController {
     @GetMapping("/information")
     @Operation(summary = "마이페이지 유저 정보 조회 API",description = "마이페이지의 유저 정보를 가져오는 API 입니다.")
     public ApiResponse<UserResponseDTO.UserInformationResponseDTO> getUserInformation(){
-        return ApiResponse.onSuccess(UserConverter.toUserInformationResponseDTO(UserContext.getUser()));
+        return ApiResponse.onSuccess(UserConverter.toUserInformationResponseDTO(userService.getUser(UserContext.getUserId() ) ) );
     }
 
     @PutMapping("/withdraw")

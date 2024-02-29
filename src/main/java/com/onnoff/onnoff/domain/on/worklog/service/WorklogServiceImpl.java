@@ -8,6 +8,7 @@ import com.onnoff.onnoff.domain.on.worklog.dto.WorklogRequest;
 import com.onnoff.onnoff.domain.on.worklog.entity.Worklog;
 import com.onnoff.onnoff.domain.on.worklog.repository.WorklogRepository;
 import com.onnoff.onnoff.domain.user.User;
+import com.onnoff.onnoff.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +21,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorklogServiceImpl implements WorklogService{
     private final WorklogRepository worklogRepository;
+    private final UserService userService;
 
     @Override
     @Transactional
     public List<Worklog> getWorklog(LocalDate date){
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
 
         return worklogRepository.findAllByUserAndDateOrderByCreatedAt(user, date);
     }
@@ -32,7 +35,8 @@ public class WorklogServiceImpl implements WorklogService{
     @Override
     @Transactional
     public Worklog addWorklog(WorklogRequest.AddWorklogDTO request){
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
 
         Worklog worklog = WorklogConverter.toAddWorklog(request);
         worklog.setUser(user);
