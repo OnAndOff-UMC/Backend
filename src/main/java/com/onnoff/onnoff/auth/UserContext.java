@@ -1,17 +1,15 @@
 package com.onnoff.onnoff.auth;
 
-import com.onnoff.onnoff.domain.user.User;
-
 public class UserContext {
-    private static final ThreadLocal<User> authenticatedUser = new ThreadLocal<>();
+    private static final ThreadLocal<Long> authenticatedUser = new ThreadLocal<>();
 
-    public static void setUser(User user){
-        authenticatedUser.set(user);
+    public static void setUserId(Long userId){
+        authenticatedUser.set(userId);
     }
-    public static User getUser(){
+    public static Long getUserId(){
         return authenticatedUser.get();
     }
-    public static void clearUser(){
+    public static void clearUserId(){
         authenticatedUser.remove();
     }
 }

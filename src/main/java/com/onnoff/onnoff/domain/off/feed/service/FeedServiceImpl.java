@@ -8,6 +8,7 @@ import com.onnoff.onnoff.domain.off.feed.dto.FeedRequestDTO;
 import com.onnoff.onnoff.domain.off.feed.entity.Feed;
 import com.onnoff.onnoff.domain.off.feed.repository.FeedRepository;
 import com.onnoff.onnoff.domain.user.User;
+import com.onnoff.onnoff.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,18 +21,21 @@ import java.util.List;
 public class FeedServiceImpl implements FeedService {
 
     private final FeedRepository feedRepository;
+    private final UserService userService;
 
     @Override
     @Transactional
     public Feed addFeed(FeedRequestDTO.AddFeedDTO request) {
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
         return feedRepository.save(FeedConverter.toFeed(request, user));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Feed> getFeed(LocalDate date) {
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
         return feedRepository.findAllByUserAndDateOrderByCreatedAtAsc(user, date);
     }
 

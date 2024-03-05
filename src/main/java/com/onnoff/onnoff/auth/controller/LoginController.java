@@ -161,7 +161,7 @@ public class LoginController {
     @Operation(summary = "UserContext Test  API",description = "jwt 토큰 검증 성공 시 유저 객체 저장한 거 조회 가능한지 테스트")
     @GetMapping("/test")
     public ResponseEntity<String> testAfterGetToken(){
-        log.info("authenticatedUser = {}", UserContext.getUser()); // 테스트 성공
+        log.info("authenticatedUser = {}", UserContext.getUserId()); // 테스트 성공
         return ResponseEntity.ok("");
     }
 }

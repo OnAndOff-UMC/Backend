@@ -14,7 +14,7 @@ import com.onnoff.onnoff.domain.off.feedImage.dto.FeedImageResponseDTO;
 import com.onnoff.onnoff.domain.off.feedImage.entity.FeedImage;
 import com.onnoff.onnoff.domain.off.feedImage.repository.FeedImageRepository;
 import com.onnoff.onnoff.domain.user.User;
-import com.onnoff.onnoff.domain.user.repository.UserRepository;
+import com.onnoff.onnoff.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,11 +38,13 @@ public class FeedImageServiceImpl implements FeedImageService {
 
     private final AmazonS3Client amazonS3Client;
     private final FeedImageRepository feedImageRepository;
+    private final UserService userService;
 
     @Override
     @Transactional
     public FeedImageResponseDTO.FeedImageDTO uploadFeedImage(MultipartFile multipartFile) {
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
 
         FeedImage feedImage = FeedImage.builder()
                 .user(user)
@@ -57,7 +59,8 @@ public class FeedImageServiceImpl implements FeedImageService {
     @Override
     @Transactional(readOnly = true)
     public List<FeedImageResponseDTO.FeedImageDTO> getFeedImage() {
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
         List<FeedImage> feedImageList = feedImageRepository.findByUserOrderByCreatedAtAsc(user);
 
         return feedImageList.stream()

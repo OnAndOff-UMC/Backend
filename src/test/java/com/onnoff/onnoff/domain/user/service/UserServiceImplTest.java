@@ -18,9 +18,14 @@ class UserServiceImplTest {
     }
     @Test
     void 생성_및_조회() {
-        User user = User.builder().name("우성").nickname("우스").build();
+        User user = User.builder()
+                .oauthId("asd")
+                .name("우성")
+                .nickname("우스")
+                .email("jws001228@naver.com")
+                .build();
 
-        User createdUser = userService.create(user);
+        User createdUser =  userService.create(user);
 
         User findUser = userService.getUser(createdUser.getId());
         Assertions.assertThat(user.getName()).isEqualTo(findUser.getName());

@@ -8,6 +8,7 @@ import com.onnoff.onnoff.domain.on.resolution.dto.ResolutionRequest;
 import com.onnoff.onnoff.domain.on.resolution.entity.Resolution;
 import com.onnoff.onnoff.domain.on.resolution.repository.ResolutionRepository;
 import com.onnoff.onnoff.domain.user.User;
+import com.onnoff.onnoff.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,18 +22,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResolutionServiceImpl implements ResolutionService{
     private final ResolutionRepository resolutionRepository;
+    private final UserService userService;
 
     @Override
     public List<Resolution> getAll(LocalDate date){
-        User user = UserContext.getUser();
-
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
         return resolutionRepository.findAllByUserAndDateOrderByOrder(user, date).stream().toList();
     }
 
     @Override
     @Transactional
     public Resolution addResolution(ResolutionRequest.AddResolutionDTO request){
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
 
         Long order = resolutionRepository.countByUserAndDate(user, request.getDate());
 
@@ -63,7 +66,8 @@ public class ResolutionServiceImpl implements ResolutionService{
                 .orElseThrow(() -> new ResolutionHandler(ErrorStatus.RESOLUTION_NOT_FOUND));
 
         //해당 resolution 아래 객체들 순서 당겨주기
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
         List<Resolution> resolutionList = resolutionRepository.findAllByUserAndDateOrderByOrder(user, date).stream().toList();
 
         for(Resolution resolution : resolutionList){

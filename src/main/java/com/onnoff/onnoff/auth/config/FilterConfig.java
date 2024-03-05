@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class FilterConfig {
     private final TokenProvider tokenProvider;
-    private final UserService userService;
     private final JwtUtil jwtUtil;
 
     @Bean
@@ -23,6 +22,6 @@ public class FilterConfig {
 
     @Bean
     public UserInterceptor userInterceptor() {
-        return new UserInterceptor(userService, jwtUtil);
+        return new UserInterceptor(jwtUtil);
     }
 }

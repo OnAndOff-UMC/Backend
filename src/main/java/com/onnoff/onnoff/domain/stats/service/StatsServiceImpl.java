@@ -10,6 +10,7 @@ import com.onnoff.onnoff.domain.on.worklog.repository.WorklogRepository;
 import com.onnoff.onnoff.domain.stats.converter.StatsConverter;
 import com.onnoff.onnoff.domain.stats.dto.StatsResponseDTO;
 import com.onnoff.onnoff.domain.user.User;
+import com.onnoff.onnoff.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,14 @@ public class StatsServiceImpl implements StatsService{
     private final FeedRepository feedRepository;
     private final MemoirRepository memoirRepository;
     private final MemoirAnswerRepository memoirAnswerRepository;
+    private final UserService userService;
 
     @Override
     public StatsResponseDTO.WeekDTO getWeekStats(){
         LocalDate today = LocalDate.now();
 
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
 
         Double on = worklogRepository.countByUserAndDateAndIsChecked(user, today, true) / worklogRepository.countByUserAndDate(user, today).doubleValue();
         if(on.isNaN()) {
@@ -72,7 +75,8 @@ public class StatsServiceImpl implements StatsService{
 
         Double avg = 0.0;
 
-        User user = UserContext.getUser();
+        Long userId = UserContext.getUserId();
+        User user = userService.getUser(userId);
 
         List<StatsResponseDTO.MonthStatsDTO> monthStatsList = new ArrayList<>();
         LocalDate localDate = date.minusDays(date.getDayOfMonth() - 1);
