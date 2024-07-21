@@ -36,9 +36,9 @@ import java.util.Date;
 public class AppleLoginService implements LoginService{
     private final AppleAuthClient appleAuthClient;
     private final SocialTokenValidator validator;
-        @Value("${apple.key.id}")
+    @Value("${apple.key.id}")
     private String kid;
-    @Value("    ${apple.key.path}")
+    @Value("${apple.key.path}")
     private String keyPath;
     @Value("${apple.client-id}")
     private String clientId;
